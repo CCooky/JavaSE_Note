@@ -5,8 +5,13 @@
 String s1 = "1212"
 s1.getClass().getSimpleName()
 
-// 比较字符串是否相等,有非空校验
+// 比较两个未知对象是否相等,有非空校验。
 Objects.equals(s1, s2)
+ 
+ // 操作集合和数组用Stream流
+  超级好用YYDS
+// 获取对象的类的类型
+  user instanceof Business（判断user对象是否为Business类的，返回值为boolea）
 ```
 
 
@@ -63,13 +68,11 @@ Objects.equals(s1, s2)
 
    
 
-###3. **字面量**
+###**字面量**
 
    即数据在程序中的书写格式。\n------换行；\t-------空格   ![2](Images/2.png)
 
-   
-
-###4. **变量**
+###**变量**
 
    定义格式： double money = 50 或者 double money
 
@@ -79,33 +82,31 @@ Objects.equals(s1, s2)
 
 ![24](Images/24.png)
 
-   
-
-###5. **数据的类型**
+###**数据的类型**
 
    1字节=8位二进制。
 
    **引用类型**主要指数组和字符串（String），因为他们存储的是地址，而不是具体数据。
 
-   ![3](Images/3.png)
+   **基本数据类型**：
 
-   字符串：
+计算机中数据的最小组成单位：8个二进制位为一组，来保存数据，叫做一个字节byte。其中，每个二进制位称为一个比特bit，即1byte = 8bit。
 
-   ​     String  gg = “这是GG”；
+<img src="Images/3.png" alt="3" style="zoom:80%;" />
 
-   
+###**AscII编码表**
 
-###6. **AscII编码表**
+**字符（char类型）**在计算机内的存储是二进制形式；
 
-   字符（char类型）在计算机内的存储是二进制形式；ASCII编码表就是每个字符的约定二进制编号
+ASCII编码表就是每个字符的约定二进制编号
 
-   ![4](Images/4.png)
+![4](Images/4.png)
 
-   
+   并且其他的数据，例如**声音图片视频**均是在计算机里面按照二进制方式存储的。
 
-###7. **关键字，标识符**
+###**关键字，标识符**
 
-   ![5](Images/5.png)
+![5](Images/5.png)
 
 标识符：也就是变量名，类名的命名要求，要以数字，字母，__开头，不能用关键字。 
 
@@ -113,13 +114,17 @@ Objects.equals(s1, s2)
 
 ​		类名称：驼峰，首字母大写，如 HelloWorld.java
 
+### 注释
 
+- 单行注释：//
+- 多行注释：/*    */
+- 文档注释：/**    */
 
-8. **API**
+**API**
 
-   Application Programming Interface（应用程序编程接口）
+Application Programming Interface（应用程序编程接口）
 
-   其实就是指：Java写好的程序（功能代码），我们可以直接调用。
+其实就是指：Java写好的程序（功能代码），我们可以直接调用。
 
 # IDEA
 
@@ -142,12 +147,6 @@ Objects.equals(s1, s2)
 
 <img src="Images/37.png" alt="37" style="zoom:67%;" />
 
-
-
-
-
-
-
 ##快捷语句：
 
 ​	main；sout；
@@ -166,16 +165,19 @@ System.out.println();
 
 ##快捷键：
 
-- ​	crtl+D——直接复制当行语句到下一行；
-- ​	Crtl+ALT+L——格式化；
-- ​	ALT+Shift+↑——上下移动当前代码；
-- ​	Crtl + ALT +T ——先选取代码部分，然后按住，可以将代码用**循环语句**包住66666；
-- ​    ALT + Enter——快速提示，很多地方用到
-- ​    ALT + Insert ——提示插入的东西
-- ​    Shift + F6 ——选择所有同名的变量，一起更改
-- ​    Ctrl + F12 ——查看实体类内在的成员lombok
-- ​    Ctrl + H——查看接口的实现类
+- ​	**crtl+D**——直接复制当行语句到下一行；
+- ​	**Crtl+ALT+L**——格式化；
+- ​	**ALT+Shift+↑**——上下移动当前代码；
+- ​	**Crtl + ALT +T** ——先选取代码部分，然后按住，可以将代码用**循环语句**包住66666；
+- ​    **ALT + Enter**——快速提示，很多地方用到，异常抛出
+- ​    **ALT + Insert** ——提示插入的东西
+- ​    **Shift + F6** ——选择所有同名的变量，一起更改
+- ​    **Ctrl + F12** ——查看实体类内在的成员
+- ​    **Ctrl + H**——查看接口的实现类
+- ​    **Ctrl + O**，展示出Object中可以重写的方法！！！
+- ​    **Ctrl+Alt+V**——自动补全代码
 - ​	for 循环的快速操作：arr是我们定义的数组，arr.for i 就可以直接遍历arr数组所有元素。即 " **变量名.for i** "
+- ​    增强for——即 " **变量名.for**"
 
 
 一键生成类中的有参构造器和Getter、Setter方法：
@@ -221,7 +223,7 @@ open，注意也是找小黑点，是工程文件夹的小黑点
 
 ## 混淆点
 
-### 1. 方法的调用
+### 方法的调用
 
 1. JavaBean里面方法。
 
@@ -231,7 +233,7 @@ open，注意也是找小黑点，是工程文件夹的小黑点
 
    ​		这个类里面的方法，直接调用其方法名就行了。
 
-###2. 方法的修饰符问题
+###方法的修饰符问题
 
 - 完整的方法定义格式为：
 
@@ -481,8 +483,6 @@ sout("随机产生了：" + number)
 
 ![13](Images/13.png)
 
-
-
 1.  初始化时赋值（静态初始化）
 
 ```java
@@ -512,19 +512,19 @@ sout(arr[0]);
 
 
 
-### 1. 方法区
+### 方法区
 
 字节码文件，方法，类，加载时进入的内存
 
-### 2. 栈
+###  栈
 
 方法运行时所进入的**内存变量**在这里
 
-### 3. 堆内存
+### 堆内存
 
 **new出来的东西**（对象）会在这块内存中开辟空间，并产生地址
 
-### 4. 常见问题
+### 常见问题
 
 1. 访问的元素位置超过最大索引。
 2. 数组变量中没有存储数组的地址，而是null，则访问时会出现NullPointerException
@@ -537,7 +537,7 @@ return执行之后，后面的语句均不会再执行。
 
 ![16](Images/16.png)
 
-### 1. 两种基本的定义
+### 两种基本的定义
 
 <img src="Images/17.png" alt="17" style="zoom:67%;" />
 
@@ -555,7 +555,7 @@ public static char getchar(){
 }
 ```
 
-### 2. 方法的内存原理
+###  方法的内存原理
 
 定义的所有方法，包括主方法，还有次方法，运行的时候
 
@@ -567,7 +567,7 @@ public static char getchar(){
 
 ![19](Images/19.png)
 
-### 3. 方法的参数传递机制
+### 方法的参数传递机制
 
 1. 基本类型的参数传递（整数，浮点，字符，布尔）
 
@@ -595,11 +595,11 @@ public static char getchar(){
 
    
 
-###4. 方法重载
+###方法重载
 
 同一个类中，出现多个**方法名称**相同，但是**形参列表**不同，这些方法就是重载方法。（不用管修饰符和返回值类型）
 
-### 5. return关键字的单独使用
+### return关键字的单独使用
 
 return；
 
@@ -666,14 +666,14 @@ Car[] Carshop = new Car[100];//Carshop= [null, null, null, .....]
 
 ## 对象的内存图
 
-###1. 两个对象的内存图：
+### 两个对象的内存图：
 
 ![23](Images/23.png)
 
 1. 对象放在堆内存中。对象里的方法还是放在方法区内。
 2. Car c = new Car();  c变量名存储的是对象在堆内存中的地址。
 
-### 2. 两个变量指向同一个对象
+### 两个变量指向同一个对象
 
 即把一个对象S1，直接赋值给另一个相同的对象类型S2.
 
@@ -685,7 +685,7 @@ Car[] Carshop = new Car[100];//Carshop= [null, null, null, .....]
 
 第一点：前面不是说了，要获得对象，先要创建一个类嘛，然后通过Car mycar = new Car();  获得我们的对象mycar，存储堆内存里面的对象数据的地址。但是这个对象是由这个Car（）类，创建的吗？ 答案是：NO。他是由这个Car（）类里面的构造器创建的。啊，那里有构造器啊，我木有写啊，也没有看到相关的代码啊！那是因为在你创建类的时候，java会自动给你创建一个默认的无参数构造器，并且不会显示出来代码！   它有点类似于Python里面的__init__函数，是用来初始化配置的，只不过python里面的是显式的，这个是隐式的，下面会细讲。 
 
-### 1. 构造器的作用
+### 构造器的作用
 
 用于初始化一个类的对象，并且返回对象的地址。
 
@@ -780,7 +780,7 @@ public class Car(){
 
 快捷键：定义完成员变量后，直接右键generate，选择Getter and Setter 生成所有成员变量的两个方法！
 
-### JavaBean
+## JavaBean
 
 其实就是把前面的类啊，对象啊，构造器，this等 合并上封装全部整合起来，定义了一套标准的实体类的写法，以后所有的类都按照这种写法就行了！
 
@@ -893,7 +893,7 @@ String s = new String("abc");
 
 |                     方法名                      |                             说明                             |
 | :---------------------------------------------: | :----------------------------------------------------------: |
-|     public boolean equals ( String another)     | 该字符串对象与指定字符串对象比较，只关心字符串内容是否完完全全一致，但不能为Null哦 |
+|     public boolean equals ( String another)     | 该字符串对象与指定字符串对象比较，只关心字符串内容是否完完全全一致 |
 | public boolean equalsIgnoreCase(String another) |         也是比较内容，但忽略大小写，常用于验证码！！         |
 
 为什么不用 == 来比较？因为字符串对象是引用类型，不是直接存储数据，再加上其内存的独特性，完全不能用==比较，根本判断不对！
@@ -962,7 +962,7 @@ String s = new String("abc");
 
 # ArrayList 集合
 
-## 1. 快速入门
+## 快速入门
 
 <img src="Images/31.png" alt="31" style="zoom:80%;" />
 
@@ -980,7 +980,7 @@ System.out.println(list);
     [java, 插入中国, 17, 17.5, true]
 ```
 
-## 2. 泛型（统一集合内的元素类型）
+## 泛型（统一集合内的元素类型）
 
 ArrayList<E>：其实就是一个**泛型类**，可以在编译阶段约束集合对象只能操作某种数据类型。并不是所有类都支持泛型，要看类的后面有没有这个<E> .
 
@@ -995,7 +995,7 @@ ArrayList<E>：其实就是一个**泛型类**，可以在编译阶段约束集�
 ArrayList<String> list1 = new ArrayList(); //List1内只能添加String类型
 ```
 
-## 3.ArrayList常用方法
+## ArrayList常用方法
 
 其中E——表示其集合泛型设置的 元素类型。
 
@@ -1011,7 +1011,7 @@ ArrayList<String> list1 = new ArrayList(); //List1内只能添加String类型
 
 注意：直接用其对象调用方法即可，他会修改到其对象的内容。
 
-## 4. ArrayList存储自定义类型（类）
+## ArrayList存储自定义类型（类）
 
 自定义类型是什么？ 类就是一种类型啊，String也是一个类啊！**类就是一种类型！**
 
@@ -1038,7 +1038,7 @@ movie3是我们创建的第一个对象；
             System.out.println("主演：" + movie.getActor());
 ```
 
-## 5. ArrayList遍历删除
+## ArrayList遍历删除
 
 因为集合的大小是随着你的每次删除而变化的，每次删除之后，集合内的数据索引会马上发生变化! 索引在后面的元素会直接放到前面来。
 
@@ -1046,7 +1046,7 @@ movie3是我们创建的第一个对象；
 
 解决办法：**从集合后面遍历然后删除，可以避免漏掉元素。**
 
-## 6. ArrayList应用：元素搜索
+## ArrayList应用：元素搜索
 
 <img src="Images/32.png" alt="32" style="zoom:67%;" />
 
@@ -1129,7 +1129,7 @@ static是静态的意思，可以修饰成员变量和成员方法。静态的�
 
 静态成员变量用于表示：在线人数等需要被共享的信息。
 
-注意哦：对象名也是一个变量哦，它也可以作为静态成员变量！还有静态集合哦，这几个才用的多！
+**注意哦：**对象名也是一个变量哦，它也可以作为静态成员变量！还有静态集合哦，这几个才用的多！
 
 **内存原理：**
 
@@ -1165,7 +1165,7 @@ static是静态的意思，可以修饰成员变量和成员方法。静态的�
 
 ## static的应用
 
-### 1. 工具类
+### 工具类
 
 工具类中定义的都是一些静态方法，每个方法都是以完成一个共用的功能为目的。
 
@@ -1177,9 +1177,9 @@ static是静态的意思，可以修饰成员变量和成员方法。静态的�
 
   实例方法需要创建对象调用，此时用对象只是为了调用方法，这样只会浪费内存。
 
-- 工具类的定义**注意**
+- 工具类的定义注意
 
-  建议将工具类的构造器进行私有，工具类无需创建对象。
+  建议将工具类的**构造器进行私有**，工具类无需创建对象。
 
   里面都是静态方法，直接用类名访问即可。
 
@@ -1210,6 +1210,7 @@ public class VerifyTool {
         return code;
     }
 }
+
 //	测试类
 public class Register {
     public static void main(String[] args) {
@@ -1219,21 +1220,21 @@ public class Register {
 } 
 ```
 
-### 2. 静态代码块
+### 静态代码块
 
-- 代码块是类的5大成分之一（成员变量、构造器，方法，**代码块**，内部类），    定义在**类中方法外**。   
+- 代码块是类的5大成分之一（成员变量、构造器，成员方法，**代码块**，内部类），定义在**类中方法外**。   
 
-- 在Java类下，使用 { } 括起来的代码被称为代码块 。
+- 在Java类下，使用 **{ }** 括起来的代码被称为代码块 。
 
 - 代码块分为 
 
   **静态代码块:** 
-  格式：static{}
+  格式：static{  }
   特点：static关键字修饰，随着类的加载而加载，并且自动触发、**有且仅执行一次**（意			思是这个代码里面的内容，只会自动执行一次，后面不能被调用了，与静态成			员变量，方法不同，他们被加载后，可以被无数次调用）
-  使用场景：类初始化的时候**静态数据**初始化的操作，以便后续使用。（只能处理静态）
+  使用场景：**类初始化的时候静态数据初始化的操作**，以便后续使用。（只能处理静态）
 
-   构造代码块（了解，用的少）：
-  格式：{}
+   **构造代码块**（了解，用的少）：
+  格式：{  }
   特点：每次创建对象，调用构造器执行时，都会执行该代码块中的代码，并且在构造器执行前执行
   使用场景：初始化实例资源。
 
@@ -1295,7 +1296,7 @@ public class StaticCodeTest3 {
 }
 ```
 
-### 3.单例设计模式
+### 单例设计模式
 
 - **什么是设计模式（Design pattern）**
   		开发中经常遇到一些问题，一个问题通常有n种解法的，但其中肯定有一种解法是最优的，这个最优的解法被人总结出来了，称之为设计模式。
@@ -1388,25 +1389,25 @@ public class StaticCodeTest3 {
 
 # 继承
 
-- 关键字：**extends**（**两个类之间的关系**）子类，父类。所以类都是Object的子类。
+- 关键字：**extends**（**两个类之间的关系**）子类，父类。**所以类都是Object的子类。**
 
 - 注意：子类可以继承父类的属性和行为，但是子类不能继承父类的构造器和静态成员。
 
-​			子类可以继承父类的私有成员，只是说不能访问，就像你爸给你了保险箱，但是没有给密码哦，但也					算是你继承下来了呀。父类有两个儿子，一个是对象（多生子，爸爸不喜欢，不想去拿他的东西），					一个是子类（比爸爸流批多了的儿子，把爸爸什么东西都学会了，还自学了很多）
+​	子类可以继承父类的私有成员，只是说不能访问，就像你爸给你了保险箱，但是没有给密码哦，但也算是你继承下来了呀。父类有两个儿子，一个是对象（多生子，爸爸不喜欢，不想去拿他的东西），一个是子类（比爸爸流批多了的儿子，把爸爸什么东西都学会了，还自学了很多）
 
-- 有争议的点：子类是否继承了父类的静态成员？
+- **有争议的点：**子类是否继承了父类的静态成员？
 
   ​	答案是：没有！是共享关系！
 
   ​	前面说了静态成员是属于这个类自己的，是独特的东西，但是子类可以直接使用父类的静态成员，对象也可以直接用类的静态成员，但不要这么搞哦。
 
-## 1. 内存原理
+## 内存原理
 
 子类在创建的时候，会在堆内存里面创建一片区域，然后这片里面会再划分一个父类空间(super)和一个子类空间(this)！
 
 <img src="Images/35.png" alt="35" style="zoom:67%;" />
 
-## 2. 继承后，成员访问的特点
+##  继承后，成员访问的特点
 
 - 就近原则，先找子类里面的，再找父类里面的。
 
@@ -1414,13 +1415,13 @@ public class StaticCodeTest3 {
 
   this.成员——调用子类的成员；
 
-## 3. 方法重写
+## 方法重写
 
 子类出现了和父类中一模一样的方法声明，我们就称子类这个方法是重写的方法。（方法名+形参要一模一样）；但要是**已经继承过来**的方法哦！当你有了之后，你再去重新搞一个一模一样的才叫重写。
 
 **@Override重写注解**
 
-## 4. 继承后，子类构造器的特点
+## 继承后，子类构造器的特点
 
 - 子类中所有的构造器默认都会先访问父类中**无参构造器**，再执行自己。
 
@@ -1432,7 +1433,7 @@ public class StaticCodeTest3 {
 
 当子类想要调用父类的**有参构造器**时，直接用super.(.....)就行，作用是可以初始化继承过来的父类数据。
 
-## 5. this 和super
+## this 和super
 
 this引用的是本类对象，super引用的是父类对象。代码中最好用this，super来明确标识。专业优雅！
 
@@ -1473,7 +1474,7 @@ this引用的是本类对象，super引用的是父类对象。代码中最好�
 
 # 常量
 
-1. 被 public static final 修饰的成员变量，必须有初始值。
+1.  **public static final** 修饰的成员变量，必须有初始值。
 
 2. 命名规范：英文单词全部大	public static final SCHOOL_NAME= ”西南交大“；
 3. 在编译阶段会进行“宏替换”，把使用常量的地方全部替换成真实的字面量。
@@ -1583,7 +1584,7 @@ public class EnumDemo2 {
 
 # **抽象类()**
 
-在Java中abstract是抽象的意思，如果一个类中的某个方法的具体实现不能确定，就可以申明成abstract修饰的抽象方法（**不能写方法体了**，即后面不要再加上{  }了）这个类必须用abstract修饰，被称为抽象类。
+在Java中abstract是抽象的意思，如果一个类中的某个方法的具体实现不能确定，就可以申明成abstract修饰的抽象方法（**不能写方法体了，即后面不要再加上{  }了**）这个类必须用abstract修饰，被称为抽象类。
 
 注意：**抽象类不能创建对象**，他就是一个充当模板的作用！**就是用来被继承的！！**
 
@@ -1591,7 +1592,7 @@ public class EnumDemo2 {
 
 ```java
 public abstract class Animal{
-  public abstract void run()
+  public abstract void run();
 }
 ```
 
@@ -1612,7 +1613,8 @@ final修饰的原因：模板方法是给子类直接使用的，不是让子类
 
 ```java
 public abstract class Animal{
-  public abstract void run()
+  public abstract void run();
+  // 模板方法
   public final void login(){
     ........
   }
@@ -1625,7 +1627,7 @@ public abstract class Animal{
 
 接口就和我们的排插插口一样，是一种规范！
 
-### 定义：
+## 定义：
 
 ```java
 格式：
@@ -1635,11 +1637,11 @@ public interface 接口名 {
 } 
 ```
 
-- JDK8之前接口中只能是**抽象方法**和**常量**，没有其他成分了。
+- JDK8之前接口中只能是**抽象方法和常量**，没有其他成分了。
 - 接口不能实例化。
 - 接口中的成员都是public修饰的，写不写都是，因为规范的目的是为了公开化。
 
-### 用法：多实现
+## 用法：多实现
 
 接口是用来被类**实现（implements）**的，实现接口的类称为**实现类。**实现类可以理解成所谓的子类。
 
@@ -1653,13 +1655,13 @@ public interface 接口名 {
 
 注意哦：前面说了接口是进化的抽象类，所以它依然带着抽象类的基本特征，一个类实现接口，必须重写所有的抽象方法。
 
-### 继承关系：多继承
+## 继承关系：多继承
 
 - 类和类的关系：单继承。
 - 类和接口的关系：多实现。
 - 接口和接口的关系：**多继承**，一个接口可以同时继承多个接口。
 
-### JDK8新增非抽象方法
+## JDK8新增非抽象方法
 
 1. 默认方法
 
@@ -1685,7 +1687,7 @@ public interface 接口名 {
 
 我们自己在开发中很少使用，通常是**Java源码涉及**到的，我们需要理解、识别语法、明白调用关系即可。
 
-### 注意事项
+## 注意事项
 
 1、接口不能创建对象
 
@@ -1761,7 +1763,7 @@ a.run(); // 后续业务行为随对象而变，后续代码无需修改
 
 - 多态下不能使用子类的独有功能
 
-## 多态下引用数据类型的类型转换
+## 多态下引用数据类型的类型转换（一般不用）
 
 **目的：**解决上面多态下不能使用子类的独有功能的问题。
 
@@ -1799,11 +1801,11 @@ a.run(); // 后续业务行为随对象而变，后续代码无需修改
 
 匿名内部类是局部内部类的一种形式。
 
-##  匿名内部类（重点）
+##  匿名内部类
 
-- 本质上是一个没有名字的局部内部类，定义在方法中、代码块中等**执行体**等。
-
+- 本质上是一个没有名字的局部内部类，定义在**方法中、代码块中等执行体**等。
 - 作用：方便创建子类对象，最终目的为了简化代码编写。
+- **在多态的基础，引出**
 
 **Example：** 说不清楚，看用法
 
@@ -1822,6 +1824,7 @@ public class Test {
     }
 }
 
+这是一个内部类
 //class Tiger extends Animal{
 //    @Override
 //    public void run() {
@@ -1830,7 +1833,7 @@ public class Test {
 //}
 
 // 定义一个抽象类（接口也可以）
-abstract class Animal{
+interface Animal{
     public abstract void run();
 }
 ```
@@ -1841,7 +1844,7 @@ abstract class Animal{
 - 匿名内部类写出来就会产生一个匿名内部类的对象。
 - 匿名内部类的对象类型相当于是当前new的那个的类型的子类类型。
 
-### 匿名内部类的使用形式（语法）
+## 匿名内部类的使用形式（语法）
 
 具体使用在后面，现在只是看看语法。
 
@@ -1853,14 +1856,11 @@ abstract class Animal{
 3. 定义游泳的函数（多态形式，可以传任意实现类对象）
 
 ```java
-/**
-    目标：掌握匿名内部类的使用形式（语法）
- */
+interface Swimming{
+    void swim();
+}
 public class Test2 {
   
-      /**
-       学生 老师 运动员可以一起参加游泳比赛
-     */
     public static void go(Swimming s){
         System.out.println("开始。。。");
         s.swim();
@@ -1886,9 +1886,7 @@ public class Test2 {
         });
 }
   
-interface Swimming{
-    void swim();
-}
+
 ```
 
 # 常用API
@@ -1897,16 +1895,16 @@ interface Swimming{
 
 下面Object提供的方法的原因就在于，**让子类去重写**，本身没有什么意义！
 
-快捷键 Ctrl + O，展示出Object中可以重写的方法！！！
+**快捷键 Ctrl + O**，展示出Object中可以重写的方法！！！
 
-![image-20211230134319174](Images/40)
+| 方法名                              |                             说明                             |
+| ----------------------------------- | :----------------------------------------------------------: |
+| public String **toString()**        | 默认是返回当前对象在堆内存中的地址信息:  类的全限名@内存地址 |
+| public boolean **equals(Object o)** | 默认是比较当前对象与另一个对象的地址是否相同，相同返回true，不同返回false |
 
-| 方法名                          |                             说明                             |
-| ------------------------------- | :----------------------------------------------------------: |
-| public String toString()        | 默认是返回当前对象在堆内存中的地址信息:                             类的全限名@内存地址 |
-| public boolean equals(Object o) | 默认是比较当前对象与另一个对象的地址是否相同，相同返回true，不同返回false |
+### toString()
 
-### 1. toString() Alt+Insert
+直接输出**任何引用类型的变量**，都会自动调用其toString（）方法。
 
 ```java
 public static void main(String[] args) {
@@ -1938,7 +1936,7 @@ public String toString() {
 }
 ```
 
-### 2. equals()
+###  equals()
 
 原方法很垃圾啊，要比较地址我们完全可以用 “   ==  ”就可以了啊，搞这么复杂。所以说我们开发中，希望比较的是两个对象的成员内容是否相同！！ 
 
@@ -1957,6 +1955,10 @@ public boolean equals(Object o) {
 }
 ```
 
+### HashCode()
+
+返回对象地址对应的哈希值，就没了，没有什么用，需要重写，因为我们想要对象内容对应的哈希值才行。**主要用于Set集合体系**
+
 ## Objects类
 
 Objects 类是 **final 修饰**的类，不可继承，内部方法都是 **static 方法**，从 jdk1.7 开始才引入了 Objects 类。
@@ -1970,7 +1972,9 @@ Objects 类是 **final 修饰**的类，不可继承，内部方法都是 **stat
 
 ### equals(s1，s2)
 
-这个方法安全性最高！！！！因为它验证了是否为NUll，做了非空校验。所以说我们看到官方重写的equals（）方法里面用到了这个！
+这个方法安全性最高！！！！
+
+因为它验证了s1\s2是否为NUll，做了非空校验。所以说我们看到官方重写的equals（）方法里面用到了这个！
 
 ## StringBuilder类
 
@@ -1981,19 +1985,19 @@ StringBuilder是一个**可变的字符串类**，我们可以把它看成是一
 
 **构造器：**
 
-| 名称                             | 说明                                           |
-| -------------------------------- | ---------------------------------------------- |
-| public StringBuilder()           | 创建一个空白的可变的字符串对象，不包含任何内容 |
-| public StringBuilder(String str) | 创建一个指定字符串内容的可变字符串对象         |
+| 名称                                 | 说明                                           |
+| ------------------------------------ | ---------------------------------------------- |
+| public **StringBuilder()**           | 创建一个空白的可变的字符串对象，不包含任何内容 |
+| public **StringBuilder(String str)** | 创建一个指定字符串内容的可变字符串对象         |
 
 常用方法：
 
-| 方法名称                              | 说明                                                |
-| ------------------------------------- | --------------------------------------------------- |
-| public StringBuilder append(任意类型) | 添加数据并返回StringBuilder对象本身                 |
-| public StringBuilder reverse()        | 将对象的内容反转                                    |
-| public int length()                   | 返回对象内容长度                                    |
-| public String toString()              | 通过toString()就可以实现把StringBuilder转换为String |
+| 方法名称                                    | 说明                                                |
+| ------------------------------------------- | --------------------------------------------------- |
+| public StringBuilder **append(String类型)** | 添加数据并返回StringBuilder对象本身                 |
+| public StringBuilder **reverse()**          | 将对象的内容反转                                    |
+| public int **length()**                     | 返回对象内容长度                                    |
+| public String **toString()**                | 通过toString()就可以实现把StringBuilder转换为String |
 
 ```java
 public class Test {
@@ -2047,7 +2051,7 @@ BigDecimal a1 = BigDecimal.valueOf(0.5)
 
 | 名称                   | 说明                                             |
 | ---------------------- | ------------------------------------------------ |
-| public Date()          | 创建一个Date对象，代表的是系统当前此刻日期时间。 |
+| public Date()          | 创建一个Date对象，存储的是系统当前此刻日期时间。 |
 | public Date(long time) | 把时间毫秒值转换成Date日期对象。                 |
 
 Date的常用方法：
@@ -2071,11 +2075,11 @@ Date的常用方法：
 
 通过调用该类的final方法，将Date对象或者时间毫秒值转换成指定格式的字符串。
 
-1. 将日期对象和时间毫秒值转换**格式化字符串**
+1. 将**日期对象和时间毫秒值转换成自定义格式的字符串**
 
-| 构造器                                  | 说明                                     |
-| --------------------------------------- | ---------------------------------------- |
-| public SimpleDateFormat(String pattern) | 构造一个SimpleDateFormat，使用指定的格式 |
+| 构造器                                      | 说明                                     |
+| ------------------------------------------- | ---------------------------------------- |
+| public **SimpleDateFormat(String pattern)** | 构造一个SimpleDateFormat，使用指定的格式 |
 
 | 格式化方法                                  | 说明                              |
 | ------------------------------------------- | --------------------------------- |
@@ -2096,8 +2100,10 @@ Date的常用方法：
         System.out.println(rs);
 ```
 
-2. **解析字符串时间成为日期对象**。因为计算机只能读取Date对象或者时间毫秒值，才能进行运算。
+2. **解析字符串时间成为日期对象**。
 
+   因为计算机只能读取Date对象或者时间毫秒值，才能进行运算。
+   
    | 解析方法                             | 说明                                 |
    | ------------------------------------ | ------------------------------------ |
    | public Date **parse(String source)** | 从给定字符串的开始解析文本以生成日期 |
@@ -2116,23 +2122,23 @@ Date的常用方法：
 ## Calendar类
 
 - Calendar代表了系统此刻日期对应的日历对象。
-- Calendar是一个**抽象类**，不能直接创建对象。
+- **Calendar是一个抽象类，不能直接创建对象。**
 
 Calendar日历类创建日历对象的方法：
 
-| 方法名                               | 说明             |
-| ------------------------------------ | ---------------- |
-| public static Calendar getInstance() | 获取当前日历对象 |
+| 方法名                                    | 说明             |
+| ----------------------------------------- | ---------------- |
+| public static Calendar **getInstance( )** | 获取当前日历对象 |
 
 然后现在得到的对象，打印出来是一个很长的看不懂的，所以我们要用他的方法取出我们需要的数据。
 
-| 方法名                                | 说明                        |
-| ------------------------------------- | --------------------------- |
-| public int get(int field)             | 取日期中的某个字段信息。    |
-| public void set(int field,int value)  | 修改日历的某个字段信息。    |
-| public void add(int field,int amount) | 为某个字段增加/减少指定的值 |
-| public final Date getTime()           | 拿到此刻日期对象。          |
-| public long getTimeInMillis()         | 拿到此刻时间毫秒值          |
+| 方法名                                    | 说明                        |
+| ----------------------------------------- | --------------------------- |
+| public int **get(int field)**             | 取日期中的某个字段信息。    |
+| public void **set(int field,int value)**  | 修改日历的某个字段信息。    |
+| public void **add(int field,int amount)** | 为某个字段增加/减少指定的值 |
+| public final Date **getTime()**           | 拿到此刻日期对象。          |
+| public long **getTimeInMillis()**         | 拿到此刻时间毫秒值          |
 
 注意：calendar是可变日期对象，一旦修改后其对象本身表示的时间将产生变化。
 
@@ -2185,7 +2191,7 @@ int b = a1;
 Integer b1 = a;
 ```
 
-**包装类的特有功能**:
+## **包装类的特有功能**:
 
 - 包装类的变量的默认值**可以是null**，容错率更高。
 
@@ -2205,13 +2211,22 @@ Integer b1 = a;
         double score = Double.parseDouble(number1);
 ```
 
-# 正则表达式
+# 正则表达式regex
 
 提供的匹配规则，必须一模一样，不能改！！！
 
+**注意：**java对反斜杠特别特别敏感，\ ，也叫转义字符。特别是我们在使用正则表达式的时候，假如我们直接在正则表达式里面写"\d"，则无法识别，他会把\d看出是一个整体，懂吧。解决办法就是，在前面再加一个\，用来告诉java，我这个\后面的\就是一个\，不是什么其他的。
+
+```java
+qqnumber.matches("\d")  //不识别\d
+qqnumber.matches("\\d")  // OK
+"123.abc".matches("\\d{3,10}.[a-z]")	//错误，这里的.被当成了任意字符
+"123.abc".matches("\\d{3,10}\\.[a-z]")
+```
+
 - **字符类(默认匹配一个字符)**
 
-  ```
+  ```java
   [abc]	       		只能是a, b, 或c
   [^abc]	        除了a, b, c之外的任何字符
   [a-zA-Z]        a到z A到Z，包括（范围）
@@ -2219,17 +2234,20 @@ Integer b1 = a;
   [a-z&&[def]]	  d, e, 或f(交集)
   [a-z&&[^bc]]	  a到z，除了b和c：（[ad-z]减法）
   [a-z&&[^m-p]]   a到z，除了m到p：（[a-lq-z]减法）
+  [0-9]						0-9
+    
+  1[3-9]\d{9} 		首位为1，第二位3-9，后面9位随便
   ```
 
-- **预定义的字符类(默认匹配一个字符)**
+- **预定义的字符类(默认匹配一个字符)**（为了便利，给我们提供的，不然按照上面写死）
 
   ```
-  .			任何字符
+  .			任何字符(\\.)
   \d		一个数字： [0-9]
   \D		非数字： [^0-9]
   \s		一个空白字符： [ \t\n\x0B\f\r]
   \S		非空白字符： [^\s]
-  \w（小写的）		[a-zA-Z_0-9] 英文、数字、下划线
+  \w		[a-zA-Z_0-9] 数字、字母、下划线
   \W	 	[^\w] 一个非单词字符
   ```
 
@@ -2244,7 +2262,7 @@ Integer b1 = a;
   X {n,m}			X，至少n但不超过m次
   ```
 
-## 1. 字符串对象
+## 字符串对象
 
 字符串对象提供了匹配正则表达式的方法。
 
@@ -2291,7 +2309,7 @@ System.out.println(qq.matches("\\d{6, }")); //至少6位
 ```
 
 ```java
-				// 校验手机号。首位为1，第二位3-9，第三位随便
+				// 校验手机号。首位为1，第二位3-9，后面9位随便
 				phone.matches("1[3-9]\\d{9}")
         // 校验邮箱格式
         //  3268847dsda878@163.com
@@ -2301,16 +2319,16 @@ email.matches("\\w{1,30}@[a-zA-Z0-9]{2,20}(\\.[a-zA-Z0-9]{2,20}){1,2}")
         tel.matches("0\\d{2,6}-?\\d{5,20}")
 ```
 
-## **2. 正则表达式在字符串方法中的使用**：
+## **正则表达式在字符串方法中的使用**：
 
 | 方法名                                                       | 说明                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| public String replaceAll(String regex,                    String newStr) | 按照正则表达式匹配的内容进行替换                             |
-| public String[ ] split(String regex)                         | 按照正则表达式匹配的内容进行分割字符串，反回一个字符串数组。 |
+| public String **replaceAll(String regex,                    String newStr)** | 对正则表达式匹配到的内容进行替换                             |
+| public String[ ] **split(String regex)**                     | 将正则表达式匹配到的内容作为分割字符串，反回一个字符串数组。 |
 
 ```java
 String names = "小路dhdfhdf342蓉儿43fdffdfbjdfaf小何";
-// 讲匹配到的内容当作分隔符，
+// 匹配到的内容当作分隔符，
 String[] arrs = names.split("\\w+");
 for (int i = 0; i < arrs.length; i++) {
     System.out.println(arrs[i]);
@@ -2320,17 +2338,21 @@ String names2 = names.replaceAll("\\w+", "  ");
 System.out.println(names2);
 ```
 
-## 3. 正则表达式支持爬取信息
+## 正则表达式支持爬取信息
+
+regex中 | 代表或的意思。
 
 ```java
     String rs = "来黑马程序学习Java,电话020-43422424，或者联系邮箱" +
             "itcast@itcast.cn,电话18762832633，0203232323" +
             "邮箱bozai@itcast.cn，400-100-3233 ，4001003232";
 
-    // 需求：从上面的内容中爬取出 电话号码和邮箱。
+    // 需求：从上面的内容中爬取出 电话号码、座机和邮箱。
     // 1、定义爬取规则，字符串形式
-    String regex = "(\\w{1,30}@[a-zA-Z0-9]{2,20}(\\.[a-zA-Z0-9]{2,20}){1,2})|(1[3-9]\\d{9})" +
-            "|(0\\d{2,6}-?\\d{5,20})|(400-?\\d{3,9}-?\\d{3,9})";
+    String regex = "(\\w{1,30}@[a-zA-Z0-9]{2,20}(\\.[a-zA-Z0-9]{2,20}){1,2})|" 
+      + "(1[3-9]\\d{9})|" 
+      + "(0\\d{2,6}-?\\d{5,20})|"
+      + "(400-?\\d{3,9}-?\\d{3,9})";
 
     // 2、把这个爬取规则编译成匹配对象。
     Pattern pattern = Pattern.compile(regex);
@@ -2347,7 +2369,7 @@ System.out.println(names2);
 
 # Arrays类（数组）
 
- **数组操作工具类**，专门用于操作数组元素的。可以是普通的数组也可以是**对象数组哦**。
+ **数组操作工具类**，专门用于操作数组元素的。可以是**普通数组**也可以是**对象数组哦**。
 
 **集合的排序**，用Collections工具类。
 
@@ -2355,10 +2377,10 @@ Arrays类的常用**API**：
 
 | 方法名                                                       | 说明                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| public static String **toString**(类型[] a)                  | 返回数组的内容（字符串形式）                                 |
-| public static void **sort(**类型[] a)                        | 对数组进行默认升序排序                                       |
-| public static <T> void **sort**(类型[]   a, Comparator<? super T>   c) | **(引用类型）**使用比较器对象自定义排序                      |
-| public static int binarySearch(int[] a, int key)             | 前提：数组已经排序。二分搜索数组中的数据，存在返回索引，不存在返回-1 |
+| public static String **toString(类型[] a)**                  | 返回数组的内容（字符串形式）                                 |
+| public static void **sort(类型[] a)**                        | 对数组进行默认升序排序                                       |
+| public static <T> void **sort(类型[]   a, Comparator<? super T>   c)** | **(引用类型）**使用比较器对象自定义排序                      |
+| public static int **binarySearch(int[] a, int key)**         | 前提：数组已经排序。二分搜索数组中的数据，存在返回索引，不存在返回-1 |
 
 ```java
 int[] arr = {10, 2, 55, 23, 24, 100};
@@ -2370,86 +2392,71 @@ Arrays.sort(arr); //数组对象传递的是！！！！地址
 int index = Arrays.binarySearch(arr, 55);
 ```
 
-**重要API：*自定义排序**,只能为引用类型！！
+- **注意注意**
 
-**Comparator比较器**是一个函数式接口！！！！可以用Lambda表达式
+Arrays.toString()用于普通数组的时候，例如in[]，String[]，直接返回的是其数组的内容，但是当是一个对象数组的时候，打印的是地址。原因在于toString的源码是：拿到我这个数组的地址后，取该数组的每一个值出来a[i]然后加上”，”后再append下一个a[i+1].学会看源码。
+
+## Comparator比较器
+
+**重要API：自定义排序**,   只能为引用类型！！因为他觉得如果你是基本类型，那么按照官网的就已经给你排序好了，一般需要自己排序的都是对象，即引用类型的数据。Comparator比较器是**一个函数式接口**！！！！可以用Lambda表达式
+
+按照下面这个官方的规则，则会按照升序排序。
+
+![image-20220115142507454](images/image-20220115142507454.png)
+
+- 有一点看不懂原理，其实没有关系，只要记住一个道理：
+
+  但是注意一定返回的是整数才可以哦，如果遇到double类型，就使用
 
 ```java
-@FunctionalInterface
-public interface Comparator<T> {
-		..........
-}
-
-Comparator<Student> com = new Comparator<Student>(){
-  	@Override
-     public int compare(Student o1, Student o2) {
-     // 自己指定比较规则
-     return o1.getAge() - o2.getAge(); // 按照年龄升序排序！
-     // 比较浮点型可以这样写          
-     return Double.compare(o2.getHeight(), o1.getHeight()); 
-     }
-}
-//lambda 简化
-Comparator<Student> com = (o1, o2) -> {
-  return Double.compare(o2.getHeight(), o1.getHeight())
-}
+return o1 - o2; // 升序	
+return o2 - o1; //  降序
+return Double.compare(o1, o2) //double类型
 ```
 
+Comparator比较器对象简介：
+
 ```java
-//   使用比较器对象自定义排序
+// API
 public static <T> void sort(类型[] a, Comparator<? super T> c)
   
- 
-// 目标：自定义数组的排序规则：Comparator比较器对象。
-        // 1、Arrays的sort方法对于有值特性的数组是默认升序排序
+// Comparator比较器对象。
         int[] ages = {34, 12, 42, 23};
         Arrays.sort(ages);
         System.out.println(Arrays.toString(ages));
 
-        // 2、需求：降序排序！(自定义比较器对象，只能支持引用类型的排序！！)
         Integer[] ages1 = {34, 12, 42, 23};
-        /**
-           参数一：被排序的数组 必须是引用类型的元素
-           参数二：匿名内部类对象，代表了一个比较器对象。
-         */
         Arrays.sort(ages1, new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
-                // return o1 - o2; // 默认升序
                 return o2 - o1; //  降序
             }
         });
+//Lambda简化函数式接口
+        Arrays.sort(ages1,(o1, o2) -> o2-o1);
         System.out.println(Arrays.toString(ages1));
 
 ```
 
-对象数组进行排序：
+**对象数组进行排序：**
 
 ```java
 // 对象数组排序
-        System.out.println("-------------------------");
         Student[] students = new Student[3];
         students[0] = new Student("吴磊",23 , 175.5);
         students[1] = new Student("谢鑫",18 , 185.5);
         students[2] = new Student("王亮",20 , 195.5);
-        System.out.println(Arrays.toString(students));
-
-        // Arrays.sort(students);  // 直接运行奔溃
+        System.out.println(Arrays.toString(students));//记得在Students里面重写toString，否则打印的是地址
         Arrays.sort(students, new Comparator<Student>() {
             @Override
             public int compare(Student o1, Student o2) {
-              
-                return o1.getAge() - o2.getAge(); 
-                // 比较浮点型可以这样写  降序
               	return Double.compare(o2.getHeight(), o1.getHeight()); 
             }
         });
         System.out.println(Arrays.toString(students));
 
 //lambda化简,前提是函数式接口
-				Arrays.sort(students, (o1, o2) ->{
-          		return Double.compare(o1.getHeight() - o2.getHeight())
-        });
+			Arrays.sort(students, (o1, o2) -> Double.compare(o1.getHeight(),o2.getHeight()));
 ```
 
 
@@ -2460,14 +2467,14 @@ public static <T> void sort(类型[] a, Comparator<? super T> c)
 
 -  作用：简化匿名内部类的代码写法。
 
-**Lambda表达式的简化格式**：
+**Lambda表达式的简化格式**：参数类型可省略不写
 
 ```java
 (匿名内部类被重写方法的形参列表) -> {
   被重写方法的方法体代码。
 }
 
-注：-> 是语法形式，无实际含义
+注：-> 是语法形式，无实际含义。
 ```
 
 注意：Lambda表达式只能简化**函数式接口的匿名内部类的写法形式**
@@ -2475,7 +2482,7 @@ public static <T> void sort(类型[] a, Comparator<? super T> c)
 **函数式接口**:  首先必须是接口、其次接口中有且仅有一个抽象方法的形式
 
 ```java
-		//究极简化形式，就是看不懂！
+		//一般简化形式，就是看不懂！
     go(() -> {
       System.out.println("学生游泳很开心~~~")
     });
@@ -2486,77 +2493,90 @@ public static <T> void sort(类型[] a, Comparator<? super T> c)
 interface Swimming{
     void swim();
 }
-
-public static void main(String[] args) {
-
-//        Swimming s1 = new Swimming() {
-//            @Override
-//            public void swim() {
-//                System.out.println("老师游泳贼溜~~~~~");
-//            }
-//        };
-
-//        Swimming s1 = () -> {
-//            System.out.println("老师游泳贼溜~~~~~");
-//        };
-  
-        Swimming s1 = () -> {
-          System.out.println("老师游泳贼溜~~~~~")
-        };
-        go(s1);
-  
-  			//究极简化形式，就是看不懂！
-        go(() -> {
-          System.out.println("学生游泳很开心~~~")
-        });
-}
+//静态方法
 public static void go(Swimming s){
         System.out.println("开始。。。");
         s.swim();
         System.out.println("结束。。。");
 }
-
+//main
+public static void main(String[] args) {
+//正常匿名内部类写法
+       Swimming s1 = new Swimming() {
+           @Override
+            public void swim() {
+               System.out.println("老师游泳贼溜~~~~~");
+           }
+        };
+//Lambda简化后写法
+        Swimming s1 = () -> {
+          System.out.println("老师游泳贼溜~~~~~")
+        };
+        go(s1);
+        go(() -> {
+          System.out.println("学生游泳很开心~~~")
+        });
+}
 ```
 
-### 终极简化规则
+## 终极简化规则
 
-- 参数类型可以省略不写。
-
-- 如果只有一个参数，(   )也可以省略。
-
-- 如果Lambda表达式的方法体代码只有一行代码。可以省略大括号不写,同时要省略分号！
-
-- 如果Lambda表达式的方法体代码只有一行代码。可以省略大括号不写。此时，如果这行代码是return语句，必须省略return不写，同时也必须省略";"不写
+- 如果**只有一个参数**，(   )也可以省略。
 
   ```java
+  lists.forEach(s->{
+    	.........
+  })
   ```
 
-  
+- 如果方法体代码**只有一行代码**。可以省略大括号不写,同时要省略分号！如果这行代码还是一个return语句，则必须扔掉return，否则bug。
+
+  ```java
+  lists.stream().filter(s -> s.startsWith("张"));
+  ```
 
 # 集合
 
-特点：大小不固定、可以动态增删、类型也不确定。是一个容器。
+特点：大小不固定、可以动态增删、类型也不确定。是一个容器。**大小动态变化**
 
 **只能存储对象数据啊！！！！！**即引用类型。（基本类型就是换成包装类）
 
-​															**支持泛型**
+**支持泛型**
 
-## 1. 集合类体系结构
+## 内存原理
+
+集合也是一个对象！！大哥啊。这里关系有三层
+
+- 第一层：集合变量存储的是，一个对象的地址（类似于像数组，但又不是）
+- 第二层：这个类似数组的对象里面存储的是，每一条我Movie对象的地址
+- 第三层：最后每一条Movie对象的地址指向真正的对象内容
+
+所以说，假如均没有重写tostring的话，
+
+打印集合对象变量————输出23afc5；就因为一些实现类的集合已经重写了tostring，所以说我们每次打印出来的是，集合存储的每个对象地址，3aab2c, 2aab2c, 1aab2c。然后如果这个存储的对象，已经重写了tostring，那么我们在打印它的地址的时候，就会输出内容了！
+
+这就是为什么，当我们自己写Javabean的集合时候，直接打印集合对象变量时，输出的是，每个自定义类型的地址。
+
+<img src="images/image-20220115163348298.png" alt="image-20220115163348298" style="zoom:80%;" />
+
+## 集合类体系结构
 
 <img src="Images/43.png" alt="43" style="zoom:80%;" />
 
-​										**前期先掌握Collection集合体系**
+​										
+
+**前期先掌握Collection集合体系**
 
 <img src="Images/44.png" alt="44" style="zoom:80%;" />
 
 ```java
 // 泛型
 Collection<String> list = new ArrayList<>(); // 涉及多态
-// 无泛型
+// 无泛型，随便放什么类型
 Collection list = new ArrayList();
 ```
 
-## 2. 集合的并发修改异常问题
+## 集合的并发修改异常问题
 
 当我们从集合中找出某个元素并删除的时候可能出现一种并发修改异常问题。原因在于因为集合的大小是随着你的每次删除而变化的，每次删除之后，集合内的数据索引会马上发生变化! 索引在后面的元素会直接放到前面来。
 
@@ -2564,18 +2584,32 @@ Collection list = new ArrayList();
 
 - 迭代器    遍历集合且   直接用集合删除元素的时候可能出现。
 - 增强for    循环遍历集合且   直接用集合删除元素的时候可能出现。
+- Lambda表达式遍历，其底层原理就是forEach嘛
 
-**哪种遍历且删除元素不出问题**
+**解决办法**
 
 - 迭代器    遍历集合     但是用迭代器自己的删除方法操作可以解决。
 
-  ​					it.remove() 删除当前迭代器取到的元素。
+  it.remove (  ) 删除当前迭代器取到的元素，并且让迭代器不后移。
 
-- 使用for    循环遍历并删除元素不会存在这个问题。（倒着删除）
+  ```java
+  //迭代器
+   Iterator<String> it = list.iterator();
+   while(it.hasNext()){
+        String ele = it.next();
+        if (Objects.equals(ele,"Java")){
+            it.remove();
+  		}
+  }
+  ```
+
+- forEach  无法解决这个问题！！！
+
+- 对于**List集合**，因为可以使用for循环，所以可以采用for循环，倒着删除的办法解决
 
 # Collection集合
 
-## 1. Collection的常用API
+## Collection的常用API
 
 首先，前面不是说了接口的特点嘛，只有抽象方法和常量，这怎么会有API呢。原因在于JDK8在接口里面加了非抽象方法，分别是默认方法default（实现类调用）和静态方法static（接口调用）。
 
@@ -2583,17 +2617,24 @@ Collection list = new ArrayList();
 
 常用API如下：（注意public是抽象方法哦，）
 
-| 方法名称                                 | 说明                             |
-| ---------------------------------------- | -------------------------------- |
-| public boolean **add (E e)**             | 把给定的对象添加到当前集合中     |
-| public void **clear( )**                 | 清空集合中所有的元素             |
-| public boolean **remove (E e)**          | 把给定的对象在当前集合中删除     |
-| public boolean **contains (Object obj)** | 判断当前集合中是否包含给定的对象 |
-| public boolean **isEmpty ( )**           | 判断当前集合是否为空             |
-| public int **size( )**                   | 返回集合中元素的个数。           |
-| public Object[ ] **toArray ( )**         | 把集合中的元素，存储到数组中     |
+| 方法名称                                       | 说明                             |
+| ---------------------------------------------- | -------------------------------- |
+| public boolean **add (E e)**                   | 把给定的对象添加到当前集合中     |
+| public void **clear( )**                       | 清空集合中所有的元素             |
+| public boolean **remove (E e)**                | 把给定的对象在当前集合中删除     |
+| public boolean **contains (Object obj)**       | 判断当前集合中是否包含给定的对象 |
+| public boolean **isEmpty ( )**                 | 判断当前集合是否为空             |
+| public int **size( )**                         | 返回集合中元素的个数。           |
+| public Object[ ] **toArray ( )**               | 把集合中的元素，存储到数组中     |
+| boolean **addAll(Collection<? extends E> c);** | 将另外一个集合的元素全部拷贝过来 |
 
-## 2. 遍历方式
+- remove (E e)
+
+  只删除第一个相同的集合元素
+
+## 遍历方式
+
+注意哦：遍历是将集合里面的值拷贝给另外一个变量，变量的值发生改变了和集合内部元素无关系啊！
 
 ### 方式一：迭代器
 
@@ -2607,7 +2648,6 @@ Collection list = new ArrayList();
 
 ```java
 Collection<String> list = new ArrayList<>(); 
-//
 Iterator<String> it = list.iterator();
 ```
 
@@ -2624,7 +2664,7 @@ while(it.hasNext()){
 }
 ```
 
-### 方式二：增强for循环
+### 方式二：增强for循环ForEach
 
 既可以遍历集合也可以遍历数组！！！！！！
 
@@ -2646,7 +2686,7 @@ JDK5后面出现的，内部原理相对于一个迭代器，遍历集合相对�
   }
   ```
 
-- **注意：**修改第三方变量的值不会影响到集合中的元素
+- **注意：**修改ele的值不会影响到集合中的元素
 
 ### 方式三：lambda表达式
 
@@ -2669,16 +2709,14 @@ lists.forEach(new Consumer<String>() {
     }
 });
 // 加上lambda表达式后
-list.forEach((String s) -> {
-    sout(s)
-});
-// 满足终极简化规则
 list.forEach( s -> sout(s));
 ```
 
-## 3. 存储自定义类型的对象
+## 存储自定义类型的对象
 
 即我们自己创建的对象。
+
+Collection集合没有重写tostring，但是ArrayList里面重写了toString，注意任何类都是有tostring方法的。
 
 ```java
 public class Movie{
@@ -2690,7 +2728,7 @@ public class Movie{
 // Collection集合
 Collection <Movie> movies = new ArrayList<>();
 movies.add(new Movie(“《肖生克的救赎》”, 9.7 ,  “罗宾斯”));
-System.out.println(movies);//打印对象地址
+System.out.println(movies);//打印的集合里面元素地址。
 
 for (Movie movie : movies) {
   	System.out.println("片名：" + movie.getName());
@@ -2699,14 +2737,16 @@ for (Movie movie : movies) {
 }
 ```
 
-## 4. 使用场景总结
+
+
+## 使用场景总结
 
 1. 如果希望元素可以重复，又有索引，索引查询要快？
 
    ​	**用ArrayList集合，基于数组的。（用的最多）**
 
 2. 如果希望元素可以重复，又有索引，增删首尾操作快？
-      **用LinkedList集合，基于链表的。**
+        **用LinkedList集合，基于链表的。**
 
 3. 如果希望增删改查都快，但是元素不重复、无序、无索引。
        **用HashSet集合，基于哈希表的。**
@@ -2716,10 +2756,235 @@ for (Movie movie : movies) {
 
 5. 如果要对对象进行排序。
       **用TreeSet集合，基于红黑树。后续也可以用List集合实现排序。**
+      
+      
 
+## 常见数据结构（略过）
 
+- 数据结构是计算机底层存储、组织数据的方式。是指数据相互之间是以什么方式排列在一起的。
+- 通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率
 
-# Collections集合工具类
+**常见的数据结构：**栈  队列   数组   链表  二叉树   二叉查找树   平衡二叉树   红黑树
+
+1. **栈**
+
+   ​		先进后出
+
+2. **队列**
+
+   ​		先进先出
+
+3. **数组**
+
+   ​		查询速度快：查询数据通过地址值和索引定位，查询任意数据耗时相同。（元素在								内存中是连续存储的）
+
+   ​		删除效率低：（非动态变化）要将原始数据删除，同时后面每个数据前移。
+
+   ​		添加效率极低：（非动态变化）添加位置后的每个数据后移，再添加元素。
+
+4. **链表**
+
+   ​		链表中的元素是在内存中不连续存储的，每个元素节点包含数据值和下一个元素的地址。
+
+   ​		<img src="Images/45.png" style="zoom:80%;" />
+
+   ​		链表查询慢——无论查询哪个数据都要从头开始找。
+
+   ​		链表增删相对快
+
+   <img src="Images/46.png" alt=" " style="zoom:80%;" />
+
+5. **二叉树**
+
+   <img src="Images/47.png" style="zoom:80%;" />
+
+   
+
+6. **二叉查找树**
+
+   <img src="Images/48.png" alt="image-20220101210209202" style="zoom:80%;" />
+
+   <img src="Images/49.png" alt="image-20220101210313845" style="zoom:80%;" />
+
+7. **平衡二叉树**
+
+   <img src="Images/50.png" alt="image-20220101210514455" style="zoom:80%;" />
+
+8. **红黑树**
+
+   红黑树是一种自平衡的二叉查找树，是计算机科学中用到的一种数据结构。
+
+   每一个节点可以是红或者黑；红黑树不是通过高度平衡的，它的平衡是通过“红黑规则”进行实现的。
+
+   <img src="Images/51.png" alt="image-20220101210738323" style="zoom:80%;" />
+
+## List系列集合
+
+都按照下面这种多态的写法，不要问为什么，这就是Java！Bro！我们只要掌握Collection的API，然后掌握LIst的API，Set的API就行了。
+
+```java
+List<String> list = new ArrayList<>();
+List<String> list = new LinkedList<>();
+```
+
+<img src="Images/44.png" alt="44" style="zoom:80%;" />
+
+### List集合API
+
+List集合因为**支持索引**，所以多了很多索引操作的**独特api**，其他Collection的功能List也都继承了。
+
+| 方法名称                                         | 说明                                   |
+| ------------------------------------------------ | -------------------------------------- |
+| void **add(int index,E element)**                | 在此集合中的指定索引插入指定的元素     |
+| E **remove(int index)**                          | 删除指定索引处的元素，返回被删除的元素 |
+| E **set(int index,E element)**                   | 修改指定索引处的元素，返回被修改的元素 |
+| E **get(int index)**                             | 返回指定索引处的元素                   |
+| List<E> **subList(int fromIndex, int toIndex);** | 按照索引范围截取集合元素               |
+
+- **List的实现类的底层原理**
+
+ ArrayList底层是**基于数组**实现的，根据查询元素快，增删相对慢。
+
+LinkedList底层**基于双链**表实现的，查询元素慢，增删首尾元素是非常快的
+
+**Example：**
+
+```java
+List<String> list = new ArrayList<>();
+```
+
+### 循环方式
+
+迭代器 
+
+增强for循环
+
+Lambda表达式
+
+for循环（因为List集合存在索引）
+
+```java
+        for (int i = 0; i < lists.size(); i++) {
+            System.out.println(lists.get(i));
+        }
+```
+
+### ArraysList
+
+基本使用在前面讲过了，这里只说一下集合的底层原理。
+
+-  ArrayList底层是基于数组实现的：根据索引定位元素快，增删需要做元素的移位操作。（已经自动帮你做了这个工作，但对于数组而言是没有做这个工作的，所以说LIst增删麻烦）
+
+-  第一次创建集合并添加第一个元素的时候，在底层创建一个默认长度为10的数组。
+
+<img src="images/image-20220115232216971.png" alt="image-20220115232216971" style="zoom:80%;" />
+
+​		当你往集合里面添加元素后，例如加了一个a，然后集合长度就会发生变化，知道了吧。那问题来了，假如插入的元素超过10怎么办，java已经给我们想好了，当超过的时候，会直接扩容到1.5倍数。
+
+### LinkedList
+
+底层数据结构是**双链表，查询慢**，首尾操作的速度是极快的，所以多了很多**首尾操作的特有API。**
+
+**LinkedList集合的特有功能：**
+
+| 方法名称                      | 说明                                |
+| ----------------------------- | ----------------------------------- |
+| public void **addFirst(E e)** | 在该列表开头插入指定的元素Push()    |
+| public void **addLast(E e)**  | 将指定的元素追加到此列表的末尾      |
+| public E **getFirst()**       | 返回此列表中的第一个元素            |
+| public E **getLast()**        | 返回此列表中的最后一个元素          |
+| public E **removeFirst()**    | 从此列表中删除并返回第一个元素pop() |
+| public E **removeLast()**     | 从此列表中删除并返回最后一个元素    |
+
+## Set系列集合
+
+**Set集合的功能上基本上与Collection的API一致**
+
+**Set系列集合的底层就是Map实现的**
+
+```java
+Set<String> set = new HashSet<>();
+Set<String> set = new TreeSet<>();
+```
+
+<img src="Images/44.png" alt="44" style="zoom:80%;" />
+
+**无序**：存取顺序不按照你写的顺序
+
+**不重复：**当添加了相同的元素时，会自动过滤，不添加
+
+**无索引：**没有带索引的方法，所以不能使用普通for循环遍历，也不能通过索引来获取元素。
+
+### HashSet
+
+- HashSet集合底层采取**哈希表存储**的数据。
+- **哈希表是一种对于增删改查数据性能都较好的结构。**
+- JDK8开始后，哈希表采用数组+链表+红黑树组成。
+
+**哈希值：**
+
+​		是JDK根据对象的地址，按照某种规则算出来的int类型的数值。
+
+​		Object类已经给我们写好了获取方法 public int hashCode()：返回对象的哈希值。
+
+**JDK7原理：**
+
+<img src="images/image-20220116034246685.png" alt="image-20220116034246685" style="zoom:80%;" />
+
+**如果存放的时候有位置冲突时：**就会形成链表
+
+<img src="images/image-20220116034411938.png" alt="image-20220116034411938" style="zoom:80%;" />
+
+**JDK8的改进**
+
+- 底层结构：哈希表（数组、
+- 链表、红黑树的结合体）当挂在元素下面的数据过多时，查询性能降低，从JDK8开始后，当链表长度超过8的时候，自动转换为红黑树。
+- <img src="images/image-20220116034638989.png" alt="image-20220116034638989" style="zoom:80%;" />
+
+#### **HashSet去重复原理**
+
+前面我们看到了，HashSet去重复是根据地址值得到哈希值，然后相同位置，再调用equals方法进行判断这种。
+
+那这就很没有实际价值。因为我随便创建两个内容一样的对象，他们的地址值肯定不一样啊，得到的哈希值大概率不一样，这不就重复了吗。所以说，我们要重写HashCode方法才行，就想Object里面的tostring一样。
+
+**重写HashCode  和 equals**
+
+```java
+        Set<Student> sets = new HashSet<>();
+
+        Student s1 = new Student("无恙", 20, '男');
+        Student s2 = new Student("无恙", 20, '男');
+        Student s3 = new Student("周雄", 21, '男');
+
+        sets.add(s1);
+        sets.add(s2);
+        sets.add(s3);
+//如果Student类没有重写的话，输出的就是三个人的信息，前两个一模一样
+        System.out.println(sets);
+```
+
+#### LinkedHashSet
+
+是HashSet的子类呀，对于HashSet改变了一个东西，有序指的是保证存储和取出的元素顺序一致
+
+### TreeSet
+
+- 不重复、无索引、可排序
+- 可排序：按照元素的大小默认升序（有小到大）排序。
+- **TreeSet集合底层是基于红黑树的数据结构**实现排序的，增删改查性能都较好。
+- **注意：TreeSet集合是一定要排序的，可以将元素按照指定的规则进行排序。**
+
+**排序规则：**
+
+- 对于数值类型：Integer , Double，官方默认按照大小进行升序
+- 对于字符串类型：默认按照首字符的编号升序排序。
+- 对于自定义类型如Student对象，TreeSet无法直接排序。TreeSet自带有参数构造器，可以设置Comparator接口对应的比较器对象，来定制比较规则。
+
+```java
+Set<Student> set = new TreeSet<>((o1, o2) -> o1.getAge()- o2.getAge());
+```
+
+## Collections集合工具类
 
 - java.utils.Collections:是集合工具类
 - 作用：Collections并不属于集合，是用来操作集合的工具类。
@@ -2760,130 +3025,23 @@ public static void main(String[] args) {
         });
   
 				// Lamdba表达式
-				Collections.sort(apples, (o1,  o2) ->{
-          return Double.compare(o1.getPrice() , o2.getPrice())
-        });
+    Collections.sort(apples, (o1,  o2)->Double.compare(o1.getPrice(), o2.getPrice()));
         System.out.println(apples);
 }
 ```
 
-# 常见数据结构
+## Collection体系的综合案例
 
-- 数据结构是计算机底层存储、组织数据的方式。是指数据相互之间是以什么方式排列在一起的。
-- 通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率
+<img src="images/image-20220116042348471.png" alt="image-20220116042348471" style="zoom:80%;" />
 
-**常见的数据结构：**栈  队列   数组   链表  二叉树   二叉查找树   平衡二叉树   红黑树
 
-1. **栈**
-
-   ​		先进后出
-
-2. **队列**
-
-   ​		先进先出
-
-3. **数组**
-
-   ​		查询速度快：查询数据通过地址值和索引定位，查询任意数据耗时相同。（元素在								内存中是连续存储的）
-
-   ​		删除效率低：要将原始数据删除，同时后面每个数据前移。
-
-   ​		添加效率极低：添加位置后的每个数据后移，再添加元素。
-
-4. **链表**
-
-   ​		链表中的元素是在内存中不连续存储的，每个元素节点包含数据值和下一个元素的地址。
-
-   ​		<img src="Images/45.png" style="zoom:80%;" />
-
-   ​		链表查询慢——无论查询哪个数据都要从头开始找。
-
-   ​		链表增删相对快
-
-   <img src="Images/46.png" alt=" " style="zoom:80%;" />
-
-5. **二叉树**
-
-   <img src="Images/47.png" style="zoom:80%;" />
-
-   
-
-6. **二叉查找树**
-
-   <img src="Images/48.png" alt="image-20220101210209202" style="zoom:80%;" />
-
-   <img src="Images/49.png" alt="image-20220101210313845" style="zoom:80%;" />
-
-7. **平衡二叉树**
-
-   <img src="Images/50.png" alt="image-20220101210514455" style="zoom:80%;" />
-
-8. **红黑树**
-
-   红黑树是一种自平衡的二叉查找树，是计算机科学中用到的一种数据结构。
-
-   每一个节点可以是红或者黑；红黑树不是通过高度平衡的，它的平衡是通过“红黑规则”进行实现的。
-
-   <img src="Images/51.png" alt="image-20220101210738323" style="zoom:80%;" />
-
-# List系列集合
-
-<img src="Images/44.png" alt="44" style="zoom:80%;" />
-
-List集合因为支持索引，所以多了很多索引操作的**独特api**，其他Collection的功能List也都继承了。
-
-| 方法名称                          | 说明                                   |
-| --------------------------------- | -------------------------------------- |
-| void **add(int index,E element)** | 在此集合中的指定位置插入指定的元素     |
-| E **remove(int index)**           | 删除指定索引处的元素，返回被删除的元素 |
-| E **set(int index,E element)**    | 修改指定索引处的元素，返回被修改的元素 |
-| E **get(int index)**              | 返回指定索引处的元素                   |
-
-- **List的实现类的底层原理**
-
- ArrayList底层是**基于数组**实现的，根据查询元素快，增删相对慢。
-
-LinkedList底层**基于双链**表实现的，查询元素慢，增删首尾元素是非常快的
-
-**Example：**
-
-```java
-List<String> list = new ArrayList<>();
-list.add("java");
-list.add("MYSQL");
-```
-
-## 循环方式
-
-迭代器 
-
-增强for循环
-
-Lambda表达式
-
-for循环（因为List集合存在索引）
-
-## LinkedList的特点
-
-底层数据结构是双链表，查询慢，首尾操作的速度是极快的，所以多了很多**首尾操作的特有API。**
-
-**LinkedList集合的特有功能：**
-
-| 方法名称                      | 说明                             |
-| ----------------------------- | -------------------------------- |
-| public void **addFirst(E e)** | 在该列表开头插入指定的元素       |
-| public void **addLast(E e)**  | 将指定的元素追加到此列表的末尾   |
-| public E **getFirst()**       | 返回此列表中的第一个元素         |
-| public E **getLast()**        | 返回此列表中的最后一个元素       |
-| public E **removeFirst()**    | 从此列表中删除并返回第一个元素   |
-| public E **removeLast()**     | 从此列表中删除并返回最后一个元素 |
 
 # 补充：泛型深入
 
 **泛型概述：**
 
 - 泛型：是JDK5中引入的特性，可以在编译阶段约束操作的数据类型，并进行检查。
-- 泛型的格式：<数据类型>; 注意：泛型只能支持引用数据类型。
+- 泛型的格式：<数据类型>;     注意：**泛型只能支持引用数据类型。**
 - 集合体系的全部接口和实现类都是支持泛型的使用的。
 
 **泛型可以在很多地方进行定义:**
@@ -2941,6 +3099,138 @@ public class Test {
 }
 ```
 
+## 自定义泛型方法
+
+- 定义方法时同时定义了泛型的方法就是泛型方法。
+
+- 泛型方法的格式：修饰符 <泛型变量> 方法返回值 方法名称(形参列表) { }
+
+```java
+范例： public <T> void show(T t){ 
+		......
+}
+//此处泛型变量T可以随便写为任意标识，常见的如E、T、K、V等。 
+//在后续操作中把出现泛型变量的地方全部替换成传输的真实数据类型。
+```
+
+**作用：方法中可以使用泛型接收一切实际类型的参数，方法更具备通用性。**
+
+Example:
+
+给你任何一个类型的数组，都能返回它的内容。也就是实现Arrays.toString(数组)的功能！
+
+```java
+public class demo2 {
+    //泛型方法 无返回值
+    public static <T> void MYToString(T[] t){
+        System.out.println(Arrays.toString(t));
+    }
+    //泛型方法 返回值
+    public static <T> T[] MYToString(T[] t){
+        return Arrays.toString(t);
+    }
+  
+    public static void main(String[] args) {
+        String[] s = {"java","asasa"};
+        MYToString(s);
+        
+    }
+
+
+}
+```
+
+## 自定义泛型接口
+
+- 使用了泛型定义的接口就是泛型接口。
+
+- 泛型接口的格式：修饰符 interface 接口名称<泛型变量>{}
+
+  ```java
+  范例： public interface Data<E>{
+    .....
+  }
+  ```
+
+  **作用：泛型接口可以让实现类选择当前功能需要操作的数据类型**
+
+  Example:
+
+  教务系统，提供一个接口可约束一定要完成数据（学生，老师）的增删改查操作
+
+  ```java
+  public interface Data<E> {
+      void add(E e);
+      void delete(int id);
+      void update(E e);
+      E queryById(int id);
+  }
+  ```
+
+## 泛型通配符、上下限
+
+通配符：？——表示可以在“使用泛型”的时候代表一切类型。
+
+泛型的上下限：
+
+-  ? extends Car:     问号必须是Car或者其子类   泛型上限
+
+-  ? super Car ：     必须是Car或者其父类   泛型下限
+
+例子：开发一个极品飞车的游戏，所有的汽车都能一起参与比赛。
+
+- 虽然BMW和BENZ都继承了Car但是ArrayList<BMW>和ArrayList<BENZ>与ArrayList<Car>没有关系的！!
+
+```java
+public class GenericDemo {
+class Dog{
+}
+class BENZ extends Car{
+}
+class BMW extends Car{
+}
+// 父类
+class Car{
+}
+      /**
+       所有车比赛
+     */
+  //第一种情况，大家都不能比赛
+    public static void go(ArrayList<Car> cars){
+    }
+  //第二种情况，只有宝马可以参加
+    public static void go(ArrayList<BMW> cars){
+    }
+  //第三种情况，狗和汽车都可以参加
+    public static void go(ArrayList<?> cars){
+    }
+  //第四种情况，只有汽车都可以参加
+    public static void go(ArrayList<? extends Car> cars){
+    }
+
+  
+    public static void main(String[] args) {
+        ArrayList<BMW> bmws = new ArrayList<>();
+        bmws.add(new BMW());
+        bmws.add(new BMW());
+        go(bmws);
+
+        ArrayList<BENZ> benzs = new ArrayList<>();
+        benzs.add(new BENZ());
+        benzs.add(new BENZ());
+        go(benzs);
+
+        ArrayList<Dog> dogs = new ArrayList<>();
+        dogs.add(new Dog());
+        dogs.add(new Dog());
+        // go(dogs);
+    }
+
+}
+```
+
+
+
 # 补充：可变参数
 
 **可变参数：**
@@ -2981,19 +3271,737 @@ public class Test {
 - 一个形参列表中可变参数只能有一个
 - 可变参数必须放在形参列表的最后面
 
-# Set系列集合
-
-<img src="Images/44.png" alt="44" style="zoom:80%;" />
-
-Set集合的功能上基本上与Collection的API一致
-
-## HashSet特点
-
-- HashSet集合底层采取**哈希表存储**的数据。
-- 哈希表是一种对于增删改查数据性能都较好的结构。
-- JDK8开始后，哈希表采用数组+链表+红黑树组成。
-
 # Map集合体系
 
+Map里面存储的数据类型是？？？，无定义，知道不，根本就不是什么类型。后面Map是单独再弄了一个键值对对象，也就是键值对类型了。
+
 <img src="Images/43.png" alt="43" style="zoom:80%;" />
+
+- Map集合是一种双列集合，每个元素包含两个数据。
+- Map集合的每个元素的格式：**key=value**(键值对元素)。
+- Map集合也被称为**“键值对集合”。**
+
+**格式：**collection集合重写的tostring用的是【】
+
+Collection集合的格式: [元素1,元素2,元素3..]
+
+Map集合的完整格式：{key1=value1 , key2=value2 , key3=value3 , ...}
+
+## 特点
+
+1. Map集合的特点都是由键决定的。
+
+2. **Map集合的键是无序, 不重复，无索引**，值不做要求（可以重复）。
+
+3. Map集合后面重复的键对应的值会覆盖前面键的值。
+
+4. Map集合的键值对都可以为null。
+
+<img src="images/image-20220116143319967.png" alt="image-20220116143319967" style="zoom:80%;" />
+
+- 使**用最多的Map集合是HashMap。**
+- 重点掌握HashMap , LinkedHashMap , TreeMap。其他的后续理解。与LIst集合很相似
+
+**HashMap:** 元素按照键是无序，不重复，无索引，值不做要求。（与Map体系一致）
+
+**LinkedHashMap:** 元素按照键是有序，不重复，无索引，值不做要求。
+
+**TreeMap：**元素按照建是排序，不重复，无索引的，值不做要求。
+
+## 声明方式
+
+```java
+//键——String，值——Integer
+Map<String, Integer> map = new HashMap<>();
+```
+
+## Map的API
+
+```java
+public interface Map<K,V>
+K——键的泛型；V——值的泛型
+```
+
+| 方法名称                                | 说明                                   |
+| --------------------------------------- | -------------------------------------- |
+| V **put(K key,V value)**                | 添加元素                               |
+| V **remove(Object key)**                | 根据键删除键值对元素                   |
+| void **clear()**                        | 移除所有的键值对元素                   |
+| boolean **containsKey(Object key)**     | 判断集合是否包含指定的键               |
+| boolean **containsValue(Object value)** | 判断集合是否包含指定的值               |
+| boolean **isEmpty()**                   | 判断集合是否为空                       |
+| int **size()**                          | 集合的长度，也就是集合中键值对的个数   |
+| V **get(Object key);**                  | 根据键获取值                           |
+| Set<K> **keySet();**                    | 获取Map集合里面的键的集合，返回Set集合 |
+
+| Collection<V> values();                           | 获取Map集合里面的值的集合，返回Collection集合 |
+| ------------------------------------------------- | --------------------------------------------- |
+| void **putAll(Map<? extends K, ? extends V> m);** | 将其他集合并到现在这个集合                    |
+
+## 遍历方式
+
+### 方式一：键找值
+
+- 先获取Map集合的全部键的Set集合。
+
+- 再遍历键的Set集合，然后通过键提取对应值。
+
+用到两个API： keySet ( )和  get(Object key)
+
+### 方式二：键值对类型
+
+- 先把Map集合转换成Set集合，Set集合中每个元素都是**键值对实体类**了。其实就是说，Java给我们定一个类，这个类用来存储Map元素的键和值，然后把这个类的每个对象放到Set集合里面去。这个类名字是   Map.Entry<K,V>——键值对类型
+- 遍历Set集合，然后提取键以及提取值。
+
+用到API：
+
+| 方法名称                            | 说明                     |
+| ----------------------------------- | ------------------------ |
+| Set<Map.Entry<K,V>>  **entrySet()** | 获取所有键值对对象的集合 |
+| K getKey()                          | 获得键值对对象的键       |
+| V getValue()                        | 获取键值对对象的值       |
+
+```java
+        Map<String,Integer> map = new HashMap<>();
+        map.put("周杰伦",10);
+        map.put("刘德华",12);
+        map.put("林宥嘉",1231);
+        Set<Map.Entry<String, Integer>> entrySet = map.entrySet();
+        for (Map.Entry<String, Integer> stringIntegerEntry : entrySet) {
+            System.out.println(stringIntegerEntry.getKey());
+            System.out.println(stringIntegerEntry.getValue());
+        }
+```
+
+### 方式三：Lambda
+
+得益于JDK 8开始的新技术Lambda表达式，提供了一种更简单、更直接的遍历集合的方式。
+
+底层原理是：键值对类型
+
+**Map结合Lambda遍历的API**：也是forEach
+
+| 方法名称                                                     | 说明                  |
+| ------------------------------------------------------------ | --------------------- |
+| default void **forEach(BiConsumer<? super K, ? super V> action)** | 结合lambda遍历Map集合 |
+
+```java
+maps.forEach((k , v) -> {
+  System.out.println(k +"----->" + v);
+});
+```
+
+### HashMap
+
+- 特点都是由键决定的：无序、不重复、无索引
+
+HashMap跟HashSet底层原理是一模一样的，都是**哈希表结构**，只是HashMap的每个元素包含两个值而已。
+
+**实际上：Set系列集合的底层就是Map实现的**，只是Set集合中的元素只要键数据，不要值数据而已。
+
+#### 去重复原理
+
+这里仅仅对键进行了去重复撒。原理和前面的HashSet一样的，均依赖于两个东西，重写的hashCode和equals。我们现在直接用的hashMap集合，还有等等，都是早就重写了的。
+
+但是重点注意**：自定义的对象，一定要重写hashCode和equals方法**，不然用HashMap来存储多个对象，就失效了
+
+#### LinkedHashMap
+
+**原理：**底层数据结构是依然哈希表，只是每个键值对元素又额外的多了一个双链表的机制记录存储的顺序。
+
+对HashMap进行了修改，由键决定：有序、不重复、无索引。
+
+有序指的是保证存储和取出的元素顺序一致
+
+### TreeMap
+
+- 由键决定特性：不重复、无索引、**一定要排序**
+
+- 可排序：按照键数据的大小默认升序（有小到大）排序。只能对键排序
+
+- 注意：TreeMap集合是一定要排序的，可以默认排序，也可以将键按照指定的规则进行排序
+
+- TreeMap跟TreeSet一样底层原理是一样的。
+
+**排序规则：**
+
+他写了一个带有Comparator比较器对象的有参构造器，可以在创建对象的时候重写比较规则。
+
+```java
+Map<String,Integer> map1 = new TreeMap<>((o1, o2) -> o1.getage()-o2.getage())
+```
+
+# 补充：集合嵌套
+
+简单说：就是我一个Map不是有键和值吗，我的键是唯一的，只能是一个数据；但是有可能我这个键对应了有很多个值啊，那怎么办呢，我们就可以将这很多个值放到一起变成一个List集合，然后这个List集合作为该键的值。
+
+```java
+// 集合嵌套
+Map<String, List<String>> data =new HashMap<>();
+
+List<String> s1 = new ArrayList<>();
+Collections.addAll(s1,"A","C","D");
+data.put("周权",s1);
+System.out.println(data);
+```
+
+
+
+# 不可变集合（JDK9）
+
+- 不可变集合，就是不可被修改的集合。不能**添加**，不能**删除**，不能**修改**
+- 集合的数据项在创建的时候提供，并且在整个生命周期中都不可改变。否则报错。
+
+## 创建方式
+
+在List、Set、Map接口中，都存在of方法，可以创建一个不可变的集合。
+
+| 方法名称                                 | 说明                               |
+| ---------------------------------------- | ---------------------------------- |
+| static <E> List<E> of(E…elements)        | 创建一个具有指定元素的List集合对象 |
+| static <E> Set<E> of(E…elements)         | 创建一个具有指定元素的Set集合对象  |
+| static <K , V>  Map<K，V> of(E…elements) | 创建一个具有指定元素的Map集合对象  |
+
+# Stream流
+
+在Java 8中，得益于Lambda所带来的函数式编程， 引入了一个全新的Stream流概念。
+
+**目的：用于简化集合和数组操作的API。**
+
+​			在Stream流中无法直接修改集合、数组中的数据。
+
+**Stream流的三类方法**
+
+- 获取Stream流方法
+
+  创建一条流水线，并把数据放到流水线上准备进行操作
+
+- 中间方法
+
+  流水线上的操作。一次操作完毕之后，还可以继续进行其他操作。
+
+- 终结方法
+
+  一个Stream流只能有一个终结方法，是流水线上的最后一个操作
+
+## 获取Stream流
+
+### **Collection获取Stream流**
+
+别人已经给我们写好了接口，直接调用Collection接口中的默认方法stream（）就可以
+
+| Collection方法名称               | 说明                       |
+| -------------------------------- | -------------------------- |
+| default Stream<E> **stream ( )** | 获取当前集合对象的Stream流 |
+
+支持链式编程，超级好用哦。下面是快速入门。
+
+```java
+// 找出lists集合里面姓张的，并且三个字的人
+List<String> lists = new ArrayList<>();
+Collections.addAll(lists,"张三丰","张无忌","周只能","张强");
+
+//filter----过滤条件，支持Lambda
+List<String> list4 = new ArrayList<>();
+        lists.stream()
+                .filter(s -> s.startsWith("张"))
+                .filter(s -> s.length()==3)
+                .forEach(s -> list4.add(s));
+        System.out.println(list4);
+```
+
+### **Map合获取Stream流**
+
+Map集合里面存储的是什么呢？没有明确的定义，这不是个什么类型，对不对。所以不能直接拿到Stream流。
+
+我们可以分别拿到 **键流** 和 **值流**。或者说直接拿**键值对流**。
+
+```java
+Map<String, Integer> map = new HashMap<>();
+//键流
+Stream<String> keyStream = map.keySet().stream();
+//值流
+Stream<Integer> valueStream = map.values().stream();
+//键值对流
+Stream<Map.Entry<String, Integer>> keyvalueStream = map.entrySet().stream();
+```
+
+### **数组获取Stream流的方式**
+
+借用数组工具类——Arrays。
+
+| 获取方法名称                                      | 说明                            |
+| ------------------------------------------------- | ------------------------------- |
+| public static <T> Stream<T> **stream(T[] array)** | 获取当前数组的Stream流          |
+| public static<T> Stream<T> **of(T... values)**    | 获取当前数组/可变数据的Stream流 |
+
+```java
+String[] name = {"张三丰","张无忌","周只能","张强"};
+Stream<String> stream = Arrays.stream(name);
+```
+
+## Stream流API
+
+也叫做是：中间方法。
+
+| 名称                                                         | 说明                                           |
+| ------------------------------------------------------------ | ---------------------------------------------- |
+| Stream<T> **filter(Predicate<? super T> predicate)**         | 用于对流中的数据进行**过滤。**                 |
+| Stream<T> **limit(long maxSize)**                            | 获取前几个元素                                 |
+| Stream<T> **skip(long n)**                                   | 跳过前几个元素                                 |
+| Stream<T> **distinct()**                                     | 去除流中重复的元素。依赖(hashCode和equals方法) |
+| static <T> Stream<T> **concat(Stream a, Stream b)**          | **合并**a和b两个流为一个流                     |
+| long **count();**                                            | 返回当前stream里面的元素个数                   |
+| void **forEach(Consumer<? super T> action);**                | 对当前Stream流里面的元素进行遍历。             |
+| <R> Stream<R> **map(Function<? super T, ? extends R> mapper);** | Map加工方法，对每个元素进行操作，看下面的使用  |
+| Object[ ] **toArray();**                                     | 将stream流编程一个对象数组，返回Object数组     |
+
+```java
+        List<String> lists = new ArrayList<>();
+        Collections.addAll(lists,"张三丰","张无忌","周只能","张强");
+
+//filter原理，当返回的是false时表示舍弃该数据，一般我们写的是lambda表达式，所以注意一点，里面那行代码的返回值要是boolean类型
+        lists.stream().filter(new Predicate<String>() {
+            @Override
+            public boolean test(String s) {
+                return s.startsWith("张");
+            }
+        });
+lists.stream().filter(s -> s.startsWith("张")).forEach(s -> System.out.println(s));
+
+//map加工方法，给每个元素前面加一个黑马字符串
+lists.stream().map(s -> "黑马"+s).forEach(s -> System.out.println(s));
+
+```
+
+## Stream终结方法
+
+| 名称                              | 说明                         |
+| --------------------------------- | ---------------------------- |
+| void **forEach(Consumer action)** | 对此流的每个元素执行遍历操作 |
+| long **count()**                  | 返回此流中的元素数           |
+
+注意：终结操作方法，调用完成后流就无法继续使用了，原因是不会返回Stream了。
+
+## 综合案例
+
+课程里面
+
+## 收集Stream流
+
+前面不是说了，我们Stream流里面的数据，是从集合或数组里面拷贝过来的嘛，就有一个弊端，原始的集合内容不会被修改，其实这是一个普遍现象，包括for循环里面也是一样的，都是拷贝原理。所以这里提出了收集Stream流，真的不错，这就舒服了。
+
+- **收集Stream流的含义：就是把Stream流操作后的结果数据转回到集合或者数组中去**
+
+Stream流：方便操作集合/数组的手段。
+
+集合/数组：才是开发中的目的。
+
+**stream流里面提供了收集方法：**
+
+| 名称                               | 说明                         |
+| ---------------------------------- | ---------------------------- |
+| R **collect(Collector collector)** | 开始收集Stream流，指定收集器 |
+
+这里Collectors是一个工具类，提供了具体的收集方式！！！返回值值Collector
+
+| 名称                                                         | 说明                   |
+| ------------------------------------------------------------ | ---------------------- |
+| public static <T> Collector **toList()**                     | 把元素收集到List集合中 |
+| public static <T> Collector **toSet()**                      | 把元素收集到Set集合中  |
+| public static Collector **toMap(Function keyMapper , Function valueMapper)** | 把元素收集到Map集合中  |
+
+```java
+List<String> lists = new ArrayList<>();
+Collections.addAll(lists,"张三丰","张无忌","周只能","张强","张三丰");
+//找出姓张的人，
+Stream<String> sss = lists.stream().filter(s -> s.startsWith("张"));
+// 将现在的Stream流收集到List集合
+List<String> newList = sss.collect(Collectors.toList());
+```
+
+# 异常处理
+
+异常：程序在“编译”或者“执行”的过程中可能出现的问题。
+
+注意：语法错误不算在异常体系中。 比如:数组索引越界、空指针异常、 日期格式化异常，等…
+
+**异常体系**：
+
+![image-20220116193308501](images/image-20220116193308501.png)
+
+**Error：**
+
+系统级别问题、JVM退出等，代码无法控制。
+
+**Exception：**java.lang包下，称为异常类，它表示程序本身可以处理的问题
+
+- **RuntimeException及其子类**：运行时异常，编译阶段不会报错。 (空指针异常，数组索引越界异常) 
+
+- **除RuntimeException之外所有的异常**：编译时异常，编译期必须处理的，否则程序不能通过编译。 (日期格式化异常)
+
+## 运行时异常
+
+RuntimeException及其子类，编译不报错，运行时报错。
+
+常见例子：
+
+- 数组索引越界异常:   ArrayIndexOutOfBoundsException
+
+- 空指针异常 :   NullPointerException，直接输出没有问题，但是调用空指针的变量的功能就会报错。
+
+-  数学操作异常：ArithmeticException
+
+- 类型转换异常：ClassCastException
+
+- 数字转换异常： NumberFormatException
+
+运行时异常：一般是程序员业务没有考虑好或者是编程逻辑不严谨引起的程序错误，
+自己的水平有问题！
+
+## 编译时异常
+
+这个很简单，就是我们写了代码，让java自动编译语句，仅仅仅仅只看了语法格式有没有问题，其他的检查不出来。
+
+## Java默认异常处理机制
+
+1. 默认会在出现异常的代码那里自动的创建一个异常对象：ArithmeticException。
+
+2. 异常会从方法中出现的点这里抛出给调用者（main方法），最终抛出给JVM虚拟机。
+
+3. 虚拟机接收到异常对象后，先在控制台直接输出异常栈信息数据。
+
+4. 直接从当前执行的异常点干掉当前程序。
+
+**坏处：后续代码没有机会执行了，因为程序已经死亡。**
+
+## 编译异常处理机制
+
+编译时异常是编译阶段就出错的，所以必须处理，否则代码根本无法通过。
+
+**注意注意：**在方法里面，仅仅只会抛出一个异常，当里面的某行代码运行出现异常时，这个方法会立即抛出该异常，并且终止该方法里后续代码的执行！！！
+
+**编译时异常的处理形式有三种：**
+
+-  出现异常直接抛出去给调用者，调用者也继续抛出去。
+
+-  出现异常自己捕获处理，不麻烦别人。
+
+-   前两者结合，出现异常直接抛出去给调用者，调用者捕获处理
+
+### 方式一：throws
+
+出现异常直接抛出去给调用者，调用者也继续抛出去。最终抛给了虚拟机，
+
+**适用范围：**方法，可以将方法内部出现的异常抛出去给本方法的调用者处理。
+
+**评价：**这种方式并不好，发生异常的方法自己不处理异常，然后就会一层层往外抛，异常最终抛出去给虚拟机，，，将引起程序死亡。没有啥用的垃圾，就是仅仅让我们的编译通过，该有的问题还是有，该死机还是死机！！！
+
+**格式：**Alt + Enter
+
+```java
+// 这样会规定具体是抛出什么类型异常
+方法 throws 异常1 ，异常2 ，异常3 ..{
+}
+//代表可以抛出一切异常，
+方法 throws Exception{
+}
+```
+
+### 方式二：try....catch....
+
+出现异常自己捕获处理，不麻烦别人。
+
+**适用范围**：方法内部；
+
+**评价：**还可以，发生异常的话，会让方法自己去处理，try后续的代码可以往下执行。但注意里面的代码就不执行了哦。但是我调用者，即main方法就无法知道我里面使用的方法有没有发生异常撒，你都自己处理了
+
+```java
+try{
+  // 可能出现异常的代码！
+}catch (Exception e){
+  e.printStackTrace();      // 直接打印异常栈信息
+}
+
+Exception可以捕获处理一切异常类型！
+```
+
+### 方式三：前两者结合
+
+方法直接将异通过throws抛出去给调用者; 调用者收到异常后直接捕获处理。
+
+**评价：**最好，底层的异常抛出去给最外层，最外层集中捕获处理。如果只用第二个，那每个方法都写一个try catch不要写死啊！
+
+简单说：我写的方法均采用throws来把里面的异常抛出来，这个时候就抛给了调用者，即main方法；然后在main方法里面，我们用try....catch....将其调用该方法的代码包起来。晓得了吧。一方面，main方法可以知道是哪个小兔崽子方法写出bug了，其次也不会直接抛给虚拟机，导致死机现象。
+
+**Example：**
+
+```java
+    public static void main(String[] args) {
+        System.out.println("程序开始。。。。");
+        try {
+            parseTime("2011-11-11 11:11:11");
+            System.out.println("功能操作成功~~~");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("功能操作失败~~~");
+        }
+        System.out.println("程序结束。。。。");
+    }
+
+    public static void parseTime(String date) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy、MM-dd HH:mm:ss");
+        Date d = sdf.parse(date);
+        System.out.println(d);
+
+        InputStream is = new FileInputStream("D:/meinv.jpg");
+    }
+```
+
+## 运行时异常处理机制
+
+这种没有什么办法处理。因为他是运行时异常，但编译阶段不会出错，是运行时才可能出错的，所以编译阶段不处理也可以。
+
+**按照规范建议还是**：建议在最外层调用处集中捕获处理即可。但我们不确定哪种方法可能出现异常对不对，讲实话，一般不用管这个的。
+
+## 自定义异常
+
+- **自定义异常的必要？**
+
+Java无法为这个世界上全部的问题提供异常类。
+
+如果企业想通过异常的方式来管理自己的某个业务问题，就需要自定义异常类了。
+
+- **自定义异常的好处**
+
+可以使用异常的机制管理业务问题，如提醒程序员注意。
+
+同时一旦出现bug，可以用异常的形式清晰的指出出错的地方。
+
+### 定义方法
+
+- **自定义编译时异常**    
+
+1. 定义一个异常类继承Exception.
+
+2. 重写构造器。一个无参，一个message的有参
+
+3. 在出现异常的地方用**throw new 自定义对象**抛出，
+
+**作用：**编译时异常是编译阶段就报错，提醒更加强烈，一定需要处理！！！当我们想要强调某个地方一定需要某种格式或参数的情况下，即我一写，java马上就会给我标红，提醒我写的参数有问题；而不会等到我跑起来才出问题。
+
+这里出现了一个新的关键字，throw；他与throws的区别如下：
+
+| throw与throws | 适用范围                                                     |
+| ------------- | ------------------------------------------------------------ |
+| throws        | 用于方法的声明上，和方法参数写在一行，可以抛出方法内部的异常 |
+| throw         | 在方法内部直接创建一个异常对象，并从此点抛出。一般用于自定义异常 |
+
+Example：
+
+```java
+// 自定义一个异常类
+public class MyException extends Exception{
+    public MyException() {
+    }
+    public MyException(String message) {
+        super(message);
+    }
+}
+
+// 测试类
+public class Test {
+    public static void main(String[] args) {
+        try {
+            checkAge(9090);
+        } catch (MyException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public static void checkAge(int age) throws MyException {
+        if (age<0 ||age >200){
+            throw new MyException(age +"is 非法的兄弟");
+        }else {
+            System.out.println("GOOD");
+        }
+    }
+}
+```
+
+- **自定义运行时异常**
+
+1. 定义一个异常类继承RuntimeException.
+
+2. 重写构造器。与前面一样。
+
+3. 在出现异常的地方用throw new 自定义对象抛出!
+
+**作用：**提醒不强烈，编译阶段不报错！！运行时才可能出现！！！一般不写这个，用处比较小。
+
+# 日志框架
+
+作用：系统在开发阶段或者上线后，一旦业务出现问题，需要有信息去定位，如何记录程序的运行信息？那个时候是没有控制台的。
+
+|          | **输出语句**               | **日志技术**                         |
+| -------- | -------------------------- | ------------------------------------ |
+| 输出位置 | 只能是控制台               | 可以将日志信息写入到文件或者数据库中 |
+| 取消日志 | 需要修改代码，灵活性比较差 | 不需要修改代码，灵活性比较好         |
+| 多线程   | 性能较差                   | 性能较好                             |
+
+## 日志技术体系
+
+<img src="images/image-20220117135002761.png" alt="image-20220117135002761" style="zoom:80%;" />
+
+- **日志规范：**一些接口，提供给日志的实现框架设计的标准。
+
+- **日志框架：**牛人或者第三方公司已经做好的日志记录实现代码，后来者直接可以拿去使用。
+
+因为对Commons Logging的接口不满意，有人就搞了SLF4J。因为对Log4j的性能不满意，有人就搞了**Logback**。重点学习这个。
+
+## Logback
+
+Logback是由log4j创始人设计的另一个开源日志组件，性能比log4j要好，也是实现的slf4j接口的功能。
+
+Logback主要分为三个技术模块：
+
+-  **logback-core：** logback-core 模块为其他两个模块奠定了基础，必须有。
+
+-  **logback-classic：**它是log4j的一个改良版本，同时它**完整实现了slf4j API。**
+
+-  **logback-access** 模块与 Tomcat 和 Jetty 等 Servlet 容器集成，以提供 HTTP 访问日志功能
+
+使用Logback需要使用哪几个模块，各自的作用是什么。
+
+​	slf4j-api：日志规范
+
+​	logback-core：基础模块。
+
+​	logback-classic：它是log4j的一个改良版本，同时它完整实现了slf4j
+
+### 快速入门
+
+需求：导入Logback日志技术到项目中，用于纪录系统的日志信息
+
+分析：
+
+①：在项目下新建文件夹lib，导入Logback的相关jar包到该文件夹下，然后右键——add as Library添加到项目依赖库中去，他可不会自己进去啊。
+<img src="images/image-20220117140058933.png" alt="image-20220117140058933" style="zoom:80%;" />
+
+②：将Logback的核心配置文件logback.xml直接拷贝到src目录下（必须是src下)。
+
+③：在代码中获取日志的对象、
+
+```java
+public static final Logger LOGGER = LoggerFactory.getLogger("类对象");
+```
+
+④：使用日志对象LOGGER调用其方法输出不能的日志信息
+
+```java
+public class Test {
+    //
+    public  static final Logger LOOGER = LoggerFactory.getLogger("Test.class");
+
+    public static void main(String[] args) {
+        try {
+            LOOGER.debug("main方法开始执行了");
+            LOOGER.info("sdasdhuysagdayu");
+            int a = 10;
+            int b = 0;
+            LOOGER.trace("a="+a);
+            LOOGER.trace("b="+b);
+            System.out.println("a/b=" + a/b);
+            System.out.println("main方法全部执行完毕");
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOOGER.error("出现异常"+ e);
+        }
+    }
+
+}
+```
+
+### 配置详解
+
+**日志输出位置、格式设置：**
+
+- 通过logback.xml 中的**< append>标签**可以设置输出位置和日志信息的详细格式。
+
+- 通常可以设置2个日志输出位置：一个是控制台、一个是系统文件中
+
+**输出到控制台的配置标志**
+
+```xml
+<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+```
+
+**输出到系统文件的配置标志**
+
+```xml
+<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+```
+
+**日志级别设置:**
+
+可以通过设置日志的输出级别来控制哪些日志信息输出或者不输出。
+
+级别程度依次是：**TRACE < DEBUG < INFO < WARN < ERROR**  ; 默认级别是debug（忽略大小写），对应其方法。
+
+作用：用于控制系统中哪些日志级别是可以输出的，只输出级别不低于设定级别的日志信息。
+
+**ALL  和 OFF**分别是打印全部级别的全部日志信息，及关闭全部日志信息。
+
+<img src="images/image-20220117143155760.png" alt="image-20220117143155760" style="zoom:80%;" />
+
+### 范例：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--
+        CONSOLE ：表示当前的日志信息是可以输出到控制台的。
+    -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!--输出流对象 默认 System.out 改为 System.err-->
+        <target>System.out</target>
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度
+                %msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level]  %c [%thread] : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+          File是输出的方向通向文件的
+    -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>utf-8</charset>
+        </encoder>
+        <!--日志输出路径-->
+        <file>C:/code/itheima-data.log</file>
+        <!--指定日志文件拆分和压缩规则-->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--通过指定压缩文件名称，来确定分割文件方式-->
+            <fileNamePattern>C:/code/itheima-data2-%d{yyyy-MMdd}.log%i.gz</fileNamePattern>
+            <!--文件拆分大小-->
+            <maxFileSize>1MB</maxFileSize>
+        </rollingPolicy>
+    </appender>
+
+    <!--
+
+    level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF
+   ， 默认debug
+    <root>可以包含零个或多个<appender-ref>元素，标识这个输出位置将会被本日志级别控制。
+    -->
+    <root level="ALL">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
+```
 

@@ -4005,3 +4005,1274 @@ public class Test {
 </configuration>
 ```
 
+# File、IO流(TODO)
+
+前面做系统的时候，我们用集合存储数据，都是在内存里面，数据都是临时的，所以，我们希望把数据存储到磁盘里面，这样可以一直保存。
+
+**方法：**
+
+**1、先要定位文件**
+
+​	File类可以定位文件：进行删除、获取文本本身信息等操作。**但是不能读写文件内容。**
+
+**2、读写文件数据**
+
+​	IO流技术可以对硬盘中的文件进行读写
+
+先学会使用File类定位文件以及操作文件本身，然后学习IO流读写文件数据。
+
+<img src="images/image-20220117224656233.png" alt="image-20220117224656233" style="zoom:80%;" />
+
+# File类
+
+- File类在包java.io.File下、代表操作系统的文件对象（**文件、文件夹**）。
+
+- File类提供了：定位文件，获取文件本身的信息、删除文件、创建文件（文件夹）等功能
+
+## **创建File对象**
+
+| 构造器名称                               | 说明                                       |
+| ---------------------------------------- | ------------------------------------------ |
+| public File(String pathname)             | 根据**文件路径**创建文件对象               |
+| public File(String parent, String child) | 从**父路径和子路径**创建文件对象           |
+| public File(File parent, String child)   | 根据**父路径文件对象和子路径**创建文件对象 |
+
+注意：File对象可以是文件或者文件夹
+
+​			File封装的对象仅仅是一个路径名，这个路径可以是存在的，也可以是不存在的。
+
+**Java的相对路径，**是相对于工程而言的，而不是模块，当你使用相对路径时，会直接从该模块的上面工程开始往下找。工程相对于酒店，模块相对于房间。
+
+## File—API
+
+File对象的API
+
+| 方法名称                            | 说明                                       |
+| ----------------------------------- | ------------------------------------------ |
+| public boolean **isDirectory()**    | 测试此抽象路径名表示的File是否为文件夹     |
+| public boolean **isFile()**         | 测试此抽象路径名表示的File是否为文件       |
+| public boolean **exists()**         | 测试此抽象路径名表示的File是否存在         |
+| public String **getAbsolutePath()** | 返回此抽象路径名的绝对路径名字符串         |
+| public String **getPath()**         | 将此抽象路径名转换为路径名字符串           |
+| public String **getName()**         | 返回由此抽象路径名表示的文件或文件夹的名称 |
+| public long **lastModified()**      | 返回文件最后修改的时间毫秒值               |
+
+**File类创建文件的功能**
+
+| 方法名称                            | 说明                 |
+| ----------------------------------- | -------------------- |
+| public boolean **createNewFile( )** | 创建一个新的空的文件 |
+| public boolean **mkdir( )**         | 只能创建一级文件夹   |
+| public boolean **mkdirs( )**        | 可以创建多级文件夹   |
+
+**File类删除文件的功能**
+
+| 方法名称                     | 说明                                   |
+| ---------------------------- | -------------------------------------- |
+| public boolean **delete( )** | 删除由此抽象路径名表示的文件或空文件夹 |
+
+- delete方法默认**只能删除文件和空文件夹。**
+
+- delete方法**直接删除不走回收站**
+
+## 遍历File
+
+| 方法名称                              | 说明                                                         |
+| ------------------------------------- | ------------------------------------------------------------ |
+| public String[] **list()**            | 获取当前目录下所有的"一级文件名称"到一个字符串数组中去返回。 |
+| public File[] **listFiles()**  (常用) | 获取当前目录下所有的"一级文件对象"到一个文件对象数组中去返回（重点） |
+
+listFiles方法注意事项：
+
+- 当调用者不存在时，返回null
+
+- 当调用者是一个文件时，返回null
+
+- 当调用者是一个空文件夹时，返回一个长度为0的数组
+
+- 当调用者是一个有内容的文件夹时，将里面所有文件和文件夹的路径放在File数组中返回
+
+- 当调用者是一个有隐藏文件的文件夹时，将里面所有文件和文件夹的路径放在File数组中返回，包含隐藏内容
+
+- 当调用者是一个需要权限才能进入的文件夹时，返回null
+
+# 线程
+
+## 概述
+
+- 线程(thread)是一个程序内部的一条执行路径。
+- 我们之前启动程序执行后，main方法的执行其实就是一条单独的执行路径
+
+```java
+public static void main(String[] args) {
+  // 代码…
+  for (int i = 0; i < 10; i++) {
+    System.out.println(i);
+  }
+  // 代码...
+}
+
+```
+
+- 程序中如果只有一条执行路径，那么这个程序就是单线程的程序。
+
+<img src="images/image-20220118095414805.png" alt="image-20220118095414805" style="zoom:80%;" />
+
+## 多线程创建
+
+**Thread类**
+
+- Java是通过java.lang.Thread 类来代表线程的。 
+
+- 按照面向对象的思想，Thread类应该提供了实现多线程的方式。
+
+### 方式一：继承Thread类
+
+1. 定义一个子类MyThread继承线程类java.lang.Thread，重写run()方法
+
+2. 创建MyThread类的对象
+
+3. 调用线程对象的start( )方法启动线程（启动后还是执行run方法的）要放在主线程之前哦
+
+**优点：**编码简单
+
+**缺点：**线程类已经继承Thread，无法继承其他类，不利于扩展，无返回值。void方法
+
+```java
+public class demo1 {
+    public static void main(String[] args) {
+        //2. 创建线程的对象
+        Thread mythread = new Mythread();
+        //3. 调用启动该线程的方法
+        mythread.start();
+
+        for (int i = 0; i < 5; i++) {
+            System.out.println("主线程在输出");
+        }
+
+    }
+
+}
+
+/**
+ 1. 定义线程类，一般单独起一个类，这里为了方便就算了
+ */
+class Mythread extends Thread{
+    @Override
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            System.out.println("子线程在输出");
+        }
+    }
+}
+```
+
+**1、为什么不直接调用了run方法，而是调用start启动线程。**
+
+直接调用run方法会当成普通方法执行，此时相当于还是单线程执行。只有调用start方法才是启动一个新的线程执行。
+
+**2、把主线程任务放在子线程之前了。**
+
+这样主线程一直是先跑完的，相当于是一个单线程的效果了。
+
+### 方式二：实现Runnable接口
+
+1. 定义一个线程任务类MyRunnable实现Runnable接口，重写run()方法
+2. 创建MyRunnable**任务对象**
+3. 把MyRunnable任务对象交给Thread处理。
+4. 调用线程对象的start()方法启动线程
+
+**优点：**线程任务类只是实现接口，可以继续继承类和实现接口，扩展性强。
+
+**缺点：**编程多一层对象包装，如果线程有执行结果不可以直接返回的。是void方法
+
+**Thread创建方式**
+
+| 构造器                                            | 说明                                         |
+| ------------------------------------------------- | -------------------------------------------- |
+| public **Thread(String name)**                    | 可以为当前线程指定名称                       |
+| public **Thread(Runnable target)**                | 封装Runnable对象成为线程对象                 |
+| public **Thread(Runnable target ，String name )** | 封装Runnable对象成为线程对象，并指定线程名称 |
+
+```java
+public class demo2 {
+    public static void main(String[] args) {
+        Runnable myRunnable = new MyRunnable();
+        Thread t = new Thread(myRunnable, "新的线程名字");
+        t.start();
+        for (int i = 0; i < 5; i++) {
+            System.out.println("=======主线程");
+        }
+    }
+}
+class MyRunnable implements Runnable{
+    @Override
+    public void run() {
+        for (int i = 0; i < 5; i++) {
+            System.out.println("子线程=====");
+
+        }
+    }
+}
+/**
+* Lambada 化简上面代码
+*/
+public class demo3 {
+    public static void main(String[] args) {
+// 1. 子线程
+        // Lamba化简一
+        Runnable Myrun1 = () ->{
+            for (int i = 0; i < 5; i++) {
+                System.out.println("子线程=====");
+
+            }
+        };
+        Thread t1 = new Thread(Myrun1, "新的线程名字");
+        t1.start();
+				// Lamba化简二
+        Thread t2 = new Thread(()->{
+            for (int i = 0; i < 5; i++) {
+                System.out.println("子线程=====");
+
+            }
+        }, "新的线程名字");
+        t2.start();
+
+// 2. 主线程
+        for (int i = 0; i < 5; i++) {
+            System.out.println("=======主线程");
+        }
+    }
+}
+```
+
+### 方式三：实现Callable和FutureTask接口
+
+解决了前面两种无法得到返回值的问题，即我们是需要得到线程执行完之后的结果的。
+
+Callable——泛型的函数式接口；FutureTask——泛型接口，他实现了**记住要声明返回值的类型哦**
+
+1. 得到任务对象
+
+   - 新定义一个类 实现Callable接口，重写call方法，封装要做的事情。
+
+   - 用FutureTask把Callable对象封装成线程任务对象。
+
+2. 把线程任务对象交给Thread处理。
+
+3. 调用Thread的start方法启动线程，执行任务
+
+4. 线程执行完毕后、通过FutureTask的get方法去获取任务执行的结果。
+
+**FutureTask 的 API**
+
+| 方法名称                               | 说明                                 |
+| -------------------------------------- | ------------------------------------ |
+| public **FutureTask<>(Callable call)** | 把Callable对象封装成FutureTask对象。 |
+| public V **get() throws Exception**    | 获取线程执行call方法返回的结果。     |
+
+```java
+public class demo4 {
+    public static void main(String[] args) {
+        //3. 创建callable的任务对象
+        Callable<String> mycall = new Mythread4(10);
+        //4. 把callable任务对象交给 FutureTask对象
+        //  FutureTask对象的作用1： 是Runnable的对象（实现了Runnable接口），可以交给Thread了
+        //  FutureTask对象的作用2： 可以在线程执行完毕之后通过调用其get方法得到线程执行完成的结果
+        FutureTask<String> f1 = new FutureTask<>(mycall);
+        // 5. 交给线程处理
+        Thread t1 = new Thread(f1);
+        t1.start();
+
+        // 6. 用FutureTask拿去线程执行完毕的结果
+        try {
+            String result = f1.get();
+            System.out.println(result);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+/**
+ * 1. 定义一个任务类，实现Callable接口，并且声明返回值的类型哦
+ */
+class Mythread4 implements Callable<String>{
+    private int n;
+
+    public Mythread4(int n) {
+        this.n = n;
+    }
+    // 2. 重写call（）方法
+    @Override
+    public String call() throws Exception {
+        int sum=0;
+        for (int i = 0; i < n; i++) {
+            sum = sum+i;
+        }
+        return "子线程的结果："+sum;
+
+    }
+}
+```
+
+## Thread-API
+
+| 方法名称                                      | 说明                                                         |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| String **getName()**                          | 获取当前线程的名称，默认线程名称是Thread-索引                |
+| void **setName(String name)**                 | 将此线程的名称更改为指定的名称，通过构造器也可以设置线程名称 |
+| public **static** Thread  **currentThread()** | 返回对当前正在执行的线程对象的引用                           |
+| public **static** void **sleep(long time)**   | 让当前线程休眠指定的时间后再继续执行，单位为毫秒。           |
+| public void **run()**                         | 线程任务方法（被重写的方法）                                 |
+| public void **start()**                       | 线程**启动方法**                                             |
+
+**对于第三个方法：** 
+
+1. 此方法是Thread类的**静态方法**，可以直接使用Thread类调用。
+2. 这个方法是在哪个线程执行中调用的，就会得到哪个线程对象。
+
+| 构造器方法名称                                    | 说明                                         |
+| ------------------------------------------------- | -------------------------------------------- |
+| public **Thread(String name)**                    | 可以为当前线程指定名称                       |
+| public **Thread(Runnable target)**                | 封装Runnable对象成为线程对象                 |
+| public **Thread(Runnable target ，String name )** | 封装Runnable对象成为线程对象，并指定线程名称 |
+
+## 线程安全
+
+**多个线程同时操作同一个共享资源**的时候可能会出现业务安全问题，称为线程安全问题。
+
+举例：
+
+​		需求：小明和小红是一对夫妻，他们有一个共同的账户，余额是10万元。
+
+​		如果小明和小红同时来取钱，而且2人都要取钱10万元，可能出现什么问题呢？
+
+同时操作的话，银行可能被取走20万！！！
+
+**线程安全的原因：**
+
+- 存在多线程并发
+
+- 同时访问共享资源
+
+- 存在修改共享资源
+
+为了解决当前线程安全问题，引出了下面的线程同步办法。
+
+## 线程同步
+
+让多个线程实现先后依次访问共享资源，这样就解决了安全问题。但注意这不是单线程哦，他是这样的，多个线程还是同步在运行，只是在最后我们访问到共享资源的时候才开始排队。就像两个人一起从家里去上厕所，两个人可以分别前往厕所，但是到了厕所门口需要排队。
+
+**线程同步的核心思想**：
+
+- **加锁：**创建一个**锁对象**，把共享资源进行上锁，每次只能一个线程进入访问完毕以后解锁，然后其他线程才能进来。
+
+  <img src="images/image-20220118145053080.png" alt="image-20220118145053080" style="zoom:80%;" />
+
+### 方式一：同步代码块
+
+原理：每次只能一个线程进入，执行完毕后自动解锁，其他线程才可以进来执行。把出现线程安全问题的**核心代码给上锁。**
+
+**同步锁对象的要求：**对于当前同时执行的线程来说是同一个对象即可
+
+- 规范上：建议使用共享资源作为锁对象。（不能随便取哦，否则会影响其他无关线程的进行）
+
+- 对于实例方法建议使用**this**作为锁对象。
+
+- 对于静态方法建议使用**字节码（类名.class）**对象作为锁对象
+
+```java
+synchronized(同步锁对象) {
+  操作共享资源的代码(核心代码)
+}
+
+    public void drawMoney( double money){
+        String name = Thread.currentThread().getName();
+        synchronized (this) {
+            if (this.money>0){
+                System.out.println(name+"来取钱成功,吐出"+money);
+                this.money -=money;
+                System.out.println("余额剩余："+ this.money);
+            }else{
+                System.out.println(name+"来取钱成功余额不足了哦");
+            }
+        }
+
+    }
+```
+
+### 同步方式二：同步方法
+
+作用：把出现线程安全问题的**核心方法给上锁。**
+
+原理：每次只能一个线程进入，执行完毕以后自动解锁，其他线程才可以进来执行。
+
+```java
+修饰符 synchronized 返回值类型 方法名称(形参列表) {
+  操作共享资源的代码
+}
+```
+
+**同步方法底层原理:**
+
+- 同步方法其实底层也是有隐式锁对象的，只是锁的范围是整个方法代码。
+- 如果方法是实例方法：同步方法默认用this作为的锁对象。但是代码要高度面向对象！
+- 如果方法是静态方法：同步方法默认用类名.class作为的锁对象。会锁住所有调用该方法的进程。范围更大
+
+对比两种方法，锁住代码块效果更好，但是写法要复杂一点，其实一般开发还是同步方法比较好，实用。
+
+### 方式三：Lock锁接口
+
+- 为了更清晰的表达如何加锁和释放锁，JDK5以后提供了一个新的锁对象Lock，更加灵活、方便,是自己实现上锁与解锁操作
+
+- Lock实现提供比使用synchronized方法和语句可以获得更广泛的锁定操作。
+
+- Lock是接口不能直接实例化，这里采用它的实现类ReentrantLock来构建Lock锁对象。
+
+  ```java
+  public ReentrantLock()	获得Lock锁的实现类对象
+    
+  //Example: 
+  		Lock lock = new ReentrantLock();
+  ```
+
+**Lock---API**
+
+| 方法名称       | 说明                                   |
+| -------------- | -------------------------------------- |
+| void lock( )   | 上锁                                   |
+| void unlock () | 解锁，这个必须配合try...finally...使用 |
+
+```java
+   public  synchronized void drawMoney( double money){
+        String name = Thread.currentThread().getName();
+     // 上锁
+        lock.lock();
+        try {
+            if (this.money>0){
+                System.out.println(name+"来取钱成功,吐出"+money);
+                this.money -=money;
+                System.out.println("余额剩余："+ this.money);
+            }else{
+                System.out.println(name+"来取钱成功余额不足了哦");
+            }
+        } finally {
+          // 解锁
+            lock.unlock();
+        }
+    }
+```
+
+## 线程池
+
+  线程池就是一个可以复用线程的技术。如果用户每发起一个请求，后台就创建一个新线程来处理，下次新任务来了又要创建新线程，而创建新线程的开销是很大的，这样会严重影响系统的性能。
+
+<img src="images/image-20220118191438414.png" alt="image-20220118191438414" style="zoom:80%;" />
+
+简单解释：首先，工作线程是我系统里面设置的三个固定线程，所有的任务由这三个来执行；任务队列就是我们系统接受到的所有任务，他们按照前后进来的顺序在排队；然后这三个人依次处理下面的任务。
+
+## 线程池实现API
+
+**java里面代表线程池的东西：**
+
+​		JDK 5.0起提供了代表线程池的接口：**ExecutorService**
+
+但注意这只是一个接口撒，基本东西不要忘记，所以我们是不是只能通过他的实现类来得到线程池对象啊！
+
+**得到线程对象的方法：**
+
+- 方式一：使用ExecutorService的实现类**ThreadPoolExecutor**自创建一个线程池对象
+
+  <img src="images/image-20220118192411505.png" alt="image-20220118192411505" style="zoom:80%;" />
+
+- 方式二：使用**Executors**（线程池的工具类）调用方法返回不同特点的线程池对象
+
+### 方式一：ThreadPoolExecutor
+
+- **ThreadPoolExecutor构造器的参数说明**
+
+  ```java
+  public ThreadPoolExecutor(int corePoolSize,
+                            int maximumPoolSize,
+                            long keepAliveTime,
+                            TimeUnit unit,
+                            BlockingQueue<Runnable> workQueue,
+                            ThreadFactory threadFactory,
+                            RejectedExecutionHandler handler)
+  ```
+
+  <img src="images/image-20220118192629083.png" alt="image-20220118192629083" style="zoom:80%;" />
+
+详细解释一下各个参数：以饭店为例子。
+
+```java
+系统相当于是一个五星级大饭店；
+  1. 核心线程——就是我们饭店的长期服务员，绝对不会跑路的，不然我饭店不就垮了嘛
+  2. 临时线程——就是我们饭店的临时工，是不是，当我们饭店到了旺季，几个长期员工肯定忙不过来啊，这个时候就需要找一些临时工过来帮忙。临时线程数=最大线程数-核心线程数
+  3. 最大线程数——就是我们饭店，最多能招的服务员的个数（也就是店里面所有的餐桌数，一个服务员只能招待一个桌子），长期工和临时工都算在里面，因为饭店资金肯定有限啊，不可能招无数个员工吧，对不对。系统硬件条件越好，招的人就越多。
+  4. 临时线程最大存活时间——指的就是临时线程最大的空闲时间，超过了的话就结束这个。我们招的临时工，从他开始休息开始计时，经过这么长时间后，还是没有客人需要接待的话，我们饭店就把他辞了。不然让他在这里不干活，还拿工资那不是亏死洛对不对。
+  5. 存活时间单位——指临时线程最大存活时间的时间单位，例如分，天等
+  6. 任务队列——就是我们饭店外面摆的排队的椅子，当店里面位置全部坐满了后（一个位置对于一个服务员专门接待，跟海底捞似的），新来的客人就需要等待，等某一桌的人走了，就会马上空出来一个服务员，现在再去招待在外面排队的客人。
+  7. 线程工厂——就是饭店的人力资源部门撒，负责去招聘服务员，店里面的服务员都是他招聘的。其实就是封装了前面的三个方法。
+  8. 拒绝经理——饭店门口负责招待客人的经理（不是服务员哦），他负责管理监视着店里面的位置和外面排队的椅子。首先在内外全部都坐满了，然后先来又来了新的客人，拒绝经理就出动了，去指导新来的客人，因为现在没有位置给他坐，会让他走吧，或者提出其他建议，去别的地方啥的。
+```
+
+**注意要点：**
+
+1. 临时线程什么时候创建啊？
+
+   新任务提交时发现核心线程都在忙，任务队列也满了，并且还可以创建临时线程，此时才会创建临时线程。
+
+   （饭店有十个桌子，五个排队椅，现在三个长期工都在招待客人，并且五个排队椅都坐满了，现在饭店才会招聘临时工。很聪明做法，这样可以尽量减少招聘临时工的数量，并且一次只找一个临时工，太尼玛聪明了）
+
+2. 什么时候会开始拒绝任务？
+
+   核心线程和临时线程都在忙，任务队列也满了，新的任务过来的时候才会开始任务拒绝。
+
+   （饭店已经招了7个临时工，店里面全部坐满了，外面五个椅子也肯定是满的。即一起饭店内外有十五个客人，假如现在再来一个客人，就会放出拒绝经理）
+
+**Example：**最后面两个参数是java做好的，我们就用这个就行
+
+```java
+ExecutorService pools = new ThreadPoolExecutor(3, 5, 8 , 
+                           TimeUnit.SECONDS, 
+                           new ArrayBlockingQueue<>(6),                                                Executors.defaultThreadFactory() , 
+                           new ThreadPoolExecutor.AbortPolicy());
+```
+
+#### 处理Runnable任务
+
+| ExecutorServic方法名称                  | 说明                                                         |
+| --------------------------------------- | ------------------------------------------------------------ |
+| void **execute(Runnable command)**      | 执行任务/命令，没有返回值，一般用来执行 Runnable 任务        |
+| Future<T>  **submit(Callable<T> task)** | 执行任务，返回未来任务对象获取线程结果，一般拿来执行 Callable 任务 |
+| void **shutdown()**                     | 等任务执行完毕后关闭线程池                                   |
+| List<Runnable> **shutdownNow()**        | 立刻关闭，停止正在执行的任务，并返回队列中未执行的任务       |
+
+**新任务拒绝策略：**
+
+| 策略                                   | 详解                                                         |
+| -------------------------------------- | ------------------------------------------------------------ |
+| ThreadPoolExecutor.AbortPolicy         | 丢弃任务并抛出RejectedExecutionException异常。**是默认的策略** |
+| ThreadPoolExecutor.DiscardPolicy：     | 丢弃任务，但是不抛出异常 这是不推荐的做法                    |
+| ThreadPoolExecutor.DiscardOldestPolicy | 抛弃队列中等待最久的任务 然后把当前任务加入队列中            |
+| ThreadPoolExecutor.CallerRunsPolicy    | 由主线程负责调用任务的run()方法从而绕过线程池直接执行        |
+
+#### 处理Callable任务
+
+- **ExecutorService的API**
+
+| 方法名称                               | 说明                                                   |
+| -------------------------------------- | ------------------------------------------------------ |
+| void execute(Runnable command)         | 执行任务/命令，没有返回值，一般用来执行 Runnable 任务  |
+| Future<T> **submit(Callable<T> task)** | 执行Callable任务，返回**未来任务对象**获取线程结果     |
+| void shutdown()                        | 等任务执行完毕后关闭线程池                             |
+| List<Runnable> shutdownNow()           | 立刻关闭，停止正在执行的任务，并返回队列中未执行的任务 |
+
+### 方式二：Executors工具类
+
+下面是创建线程池的方法，如何执行看前面的ThreadPoolExecutord的API。
+
+| 方法名称                                                     | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| public static ExecutorService **newCachedThreadPool()**      | 线程数量随着任务增加而增加，如果线程任务执行完毕且空闲了一段时间则会被回收掉。 |
+| public static ExecutorService **newFixedThreadPool(int nThreads)** | 创建固定线程数量的线程池，如果某个线程因为执行异常而结束，那么线程池会补充一个新线程替代它。 |
+| public static ExecutorService **newSingleThreadExecutor ()** | 创建只有一个线程的线程池对象，如果该线程出现异常而结束，那么线程池会补充一个新线程。 |
+| public static ScheduledExecutorService **newScheduledThreadPool(int corePoolSize)** | 创建一个线程池，可以实现在给定的延迟后运行任务，或者定期执行任务。 |
+
+**注意：**Executors的底层其实也是基于线程池的实现类ThreadPoolExecutor创建线程池对象的。
+
+**该方法的缺陷：大型并发系统环境中使用Executors如果不注意可能会出现系统风险。**
+
+| 方法名称                                                     | 存在问题                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| public static ExecutorService newFixedThreadPool(int nThreads) | 允许请求的任务队列长度是Integer.MAX_VALUE，可能出现OOM错误（ java.lang.OutOfMemoryError ） |
+| public static ExecutorService newSingleThreadExecutor()      | 允许请求的任务队列长度是Integer.MAX_VALUE，可能出现OOM错误（ java.lang.OutOfMemoryError ） |
+| public static ExecutorService newCachedThreadPool()          | 创建的线程数量最大上限是Integer.MAX_VALUE，线程数可能会随着任务1:1增长，也可能出现OOM错误（ java.lang.OutOfMemoryError ） |
+| public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize) | 创建的线程数量最大上限是Integer.MAX_VALUE，线程数可能会随着任务1:1增长，也可能出现OOM错误（ java.lang.OutOfMemoryError ） |
+
+<img src="images/image-20220118205104200.png" alt="image-20220118205104200" style="zoom:80%;" />
+
+# 定时器
+
+- 定时器是一种控制任务延时调用，或者周期调用的技术。
+
+- 作用：闹钟、定时邮件发送。
+
+**定时器的实现方式：**
+
+- 方式一：Timer
+
+- 方式二： ScheduledExecutorService
+
+## Timer定时器
+
+| 构造器             | 说明                |
+| ------------------ | ------------------- |
+| public **Timer()** | 创建Timer定时器对象 |
+
+| 方法                                                         | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| public void **schedule(TimerTask task, long delay, long period)** | 开启一个定时器，按照计划重复处理TimerTask任务。delay——延迟...ms后处理任务，period——延迟...ms后再次执行该TimerTask任务） |
+| public void **schedule(TimerTask task, long delay)**         | 开启一个定时器，按照计划重复处理TimerTask任务。delay——延迟...ms后处理任务，不重复，只跑一次，上面那个不停就一直跑） |
+
+**Timer定时器的特点和存在的问题**
+
+1、Timer是单线程，处理多个任务按照顺序执行，存在延时与设置定时器的时间有出入。
+
+2、可能因为其中的某个任务的异常使Timer线程死掉，从而影响后续任务执行。
+
+## ScheduledExecutorService
+
+ScheduledExecutorService是 jdk1.5中引入了并发包，目的是为了弥补Timer的缺陷, ScheduledExecutorService内部为线程池。
+
+ScheduledExecutorService的优点
+
+1. 基于线程池，某个任务的执行情况**不会影响其他定时任务**的执行。
+
+| Executors的方法                                              | 说明           |
+| ------------------------------------------------------------ | -------------- |
+| public static **ScheduledExecutorService** newScheduledThreadPool(int corePoolSize) | 得到线程池对象 |
+
+| ScheduledExecutorService的方法                               | 说明         |
+| ------------------------------------------------------------ | ------------ |
+| public ScheduledFuture<?>    **scheduleAtFixedRate**(Runnable command, long initialDelay,  long period,  TimeUnit unit) | 周期调度方法 |
+
+# 并发、并行
+
+- 正在运行的程序（软件）就是一个独立的**进程**， 线程是属于进程的这个区域的，多个线程其实是并发与并行同时进行的。
+
+**并发的理解：**
+
+- CPU同时处理线程的数量有限。一个CPU的核只能处理一个进程
+
+- CPU的每个核会轮流为系统的每个线程服务，由于CPU切换的速度很快，给我们的感觉这些线程在同时执行，这就是并发。
+
+<img src="images/image-20220118212908124.png" alt="image-20220118212908124" style="zoom:80%;" />
+
+**并行的理解：**
+
+- 在同一个时刻上，同时有多个线程在被CPU的多个核心处理并执行。8核CPU就可以并行处理8个进程
+
+<img src="images/image-20220118213345937.png" alt="image-20220118213345937" style="zoom:80%;" />
+
+简单说说并发和并行的含义
+
+- 并发：CPU分时轮询的执行线程。
+
+- 并行：同一个时刻同时在执行。
+
+# 线程的生命周期
+
+**线程的状态**：
+
+- 线程的状态：也就是线程从生到死的过程，以及中间经历的各种状态及状态转换。
+- 理解线程的状态有利于提升并发编程的理解能力。
+
+**Java线程的状态：**
+
+- Java总共定义了6种状态
+
+- 6种状态都定义在Thread类的内部枚举类中。
+
+```java
+public class Thread{
+     ...
+       public enum State {
+       NEW,
+       RUNNABLE,
+       BLOCKED,
+       WAITING,
+       TIMED_WAITING,
+       TERMINATED;
+     }
+     ...
+}
+```
+
+<img src="images/image-20220118213830933.png" alt="image-20220118213830933" style="zoom:80%;" />
+
+| 线程状态                | 描述                                                         |
+| ----------------------- | ------------------------------------------------------------ |
+| NEW(新建)               | 线程刚被创建，但是并未启动。                                 |
+| Runnable(可运行)        | 线程已经调用了start()等待CPU调度                             |
+| Blocked(锁阻塞)         | 线程在执行的时候未竞争到锁对象，则该线程进入Blocked状态；。  |
+| Waiting(无限等待)       | 一个线程进入Waiting状态，另一个线程调用notify或者notifyAll方法才能够唤醒 |
+| Timed Waiting(计时等待) | 同waiting状态，有几个方法有超时参数，调用他们将进入Timed Waiting状态。带有超时参数的常用方法有Thread.sleep 、Object.wait。 |
+| Teminated(被终止)       | 因为run方法正常退出而死亡，或者因为没有捕获的异常终止了run方法而死亡。 |
+
+# 网络编程
+
+**什么是网络编程？**
+
+- 网络编程可以让程序与网络上的其他设备中的程序进行数据交互。
+
+**网络通信基本模式**
+
+- 常见的通信模式有如下2种形式：Client-Server(CS) 、 Browser/Server(BS)
+
+<img src="images/image-20220118214412533.png" alt="image-20220118214412533" style="zoom:80%;" />
+
+<img src="images/image-20220118214355506.png" alt="image-20220118214355506" style="zoom:80%;" />
+
+**网络编程学习要点：**
+
+<img src="images/image-20220118214511104.png" alt="image-20220118214511104" style="zoom:80%;" />
+
+## 三要素
+
+**IP地址：**设备在网络中的地址，是唯一的标识。
+
+**端口：**应用程序在设备中唯一的标识。
+
+**协议:**   数据在网络中传输的规则，常见的协议有UDP协议和TCP协议
+
+<img src="images/image-20220119225033450.png" alt="image-20220119225033450" style="zoom:80%;" />
+
+### IP地址
+
+IP（Internet Protocol）：全称”互联网协议地址”，是分配给上网设备的唯一标志。
+
+常见的IP分类为：IPv4和IPv6
+
+<img src="images/image-20220119225208426.png" alt="image-20220119225208426" style="zoom:80%;" />
+
+ **IPv6：**128位（16个字节），号称可以为地球每一粒沙子编号。
+
+ **IPv6**分成8个整数，每个整数用四个十六进制位表示， 数之间用冒号（：）分开
+
+<img src="images/image-20220119225249173.png" alt="image-20220119225249173" style="zoom:80%;" />
+
+**IP地址基本寻路：**
+
+<img src="images/image-20220119225413499.png" alt="image-20220119225413499" style="zoom:80%;" />
+
+**IP地址形式：**
+
+- 公网地址、和私有地址(局域网使用)。
+- 192.168. 开头的就是常见的局域网地址，范围即为192.168.0.0--192.168.255.255，专门为组织机构内部使用。
+
+**IP常用命令：**
+
+- ipconfig：查看本机IP地址
+- ping IP地址：检查网络是否连通
+
+**特殊IP地址：**
+
+- 本机IP: 127.0.0.1或者localhost：称为回送地址也可称本地回环地址，只会寻找当前所在本机
+
+#### IP地址操作类-InetAddress
+
+此类表示Internet协议（IP）地址。
+
+| 方法名称                                             | 说明                                             |
+| ---------------------------------------------------- | ------------------------------------------------ |
+| public static InetAddress **getLocalHost()**         | 返回本主机的地址对象                             |
+| public static InetAddress **getByName(String host)** | 得到指定主机的IP地址对象，参数是域名或者IP地址   |
+| public String **getHostName()**                      | 获取此IP地址的主机名                             |
+| public String **getHostAddress()**                   | 返回IP地址字符串                                 |
+| public boolean **isReachable(int timeout)**          | 在指定毫秒内连通该IP地址对应的主机，连通返回true |
+
+## 端口号
+
+**端口号：**准确标识出正在计算机设备上运行的进程（程序），规定为一个 16 位的二进制，范围是 0~65535。
+
+**端口类型：**
+
+- 周知端口：0~1023，被预先定义的知名应用占用（如：HTTP占用 80，FTP占用21） 
+- **注册端口：**1024~49151，分配给用户进程或某些应用程序。（如：Tomcat占 用8080，MySQL占用3306）
+- 动态端口：49152到65535，之所以称为动态端口，是因为它 一般不固定分配某种进程，而是动态分配。
+
+<img src="images/image-20220119230441916.png" alt="image-20220119230441916" style="zoom:80%;" />
+
+## 协议
+
+连接和通信数据的规则被称为网络通信协议
+
+<img src="images/image-20220119230725700.png" alt="image-20220119230725700" style="zoom:80%;" />
+
+**网络通信协议有两套参考模型**
+
+OSI参考模型：世界互联协议标准，全球通信规范，由于此模型过于理想化，未能在因特网上进行广泛推广。 
+
+TCP/IP参考模型(或TCP/IP协议)：事实上的国际标准。
+
+<img src="images/image-20220119230815745.png" alt="image-20220119230815745" style="zoom:80%;" />
+
+**传输层的2个常见协议：**
+
+- TCP(Transmission Control Protocol) ：传输控制协议
+- UDP(User Datagram Protocol)：用户数据报协议
+
+### TCP
+
+**TCP协议特点：**
+
+- 使用TCP协议，必须双方先建立连接，它是一种**面向连接的可靠通信协议**。
+- 传输前，采用“**三次握手**”方式建立连接，所以是可靠的 。
+-  在连接中可进行大数据量的传输 。
+-  连接、发送数据都需要确认，且传输完毕后，还需释放已建立的连接，通信效率较低。
+
+**TCP协议通信场景：**
+
+- 对信息安全要求较高的场景，例如：文件下载、金融等数据通信。
+
+<img src="images/image-20220119231116878.png" alt="image-20220119231116878" style="zoom:80%;" />
+
+<img src="images/image-20220119231150850.png" alt="image-20220119231150850" style="zoom:80%;" />
+
+#### 快速入门：一发一收
+
+<img src="images/image-20220120105228642.png" alt="image-20220120105228642" style="zoom:80%;" />
+
+**一.客户端：代表类—Socket**
+
+| 构造器                                | 说明                                                         |
+| ------------------------------------- | ------------------------------------------------------------ |
+| public Socket(String host , int port) | 创建发送端的Socket对象与服务端连接，参数为服务端程序的ip和端口。 |
+
+| 方法                               | 说明               |
+| ---------------------------------- | ------------------ |
+| OutputStream **getOutputStream()** | 获得字节输出流对象 |
+| InputStream **getInputStream()**   | 获得字节输入流对象 |
+
+**客户端实现步骤**
+
+- 创建客户端的Socket对象，请求与服务端的连接。
+- 使用socket对象调用getOutputStream()方法得到字节输出流。
+- 使用字节输出流完成数据的发送。
+- 释放资源：关闭socket管道。
+
+```java
+/**
+   目标：完成Socket网络编程入门案例的客户端开发，实现1发1收。
+ */
+public class ClientDemo1 {
+    public static void main(String[] args) {
+        try {
+            System.out.println("====客户端启动===");
+            // 1、创建Socket通信管道请求有服务端的连接
+            Socket socket = new Socket("127.0.0.1", 7777);
+
+            // 2、从socket通信管道中得到一个字节输出流 负责发送数据
+            OutputStream os = socket.getOutputStream();
+
+            // 3、把低级的字节流包装成打印流
+            PrintStream ps = new PrintStream(os);
+
+            // 4、发送消息
+            ps.println("我是TCP的客户端，我已经与你对接，并发出邀请：约吗？");
+            ps.flush();
+
+            // 关闭资源。
+            // socket.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+注意：关闭资源不能这样启动的原因在于，TCP通信是非常严格的，建立与关闭双方都需要相互确认，发送消息。如果按照上面那样，可能出现我消息还没有完全发出去，客户端就发送了关闭的请求，出BUG。就像QQ聊天，我们都是在手动点击了X后才关闭，关闭一般都是让用户去点击，才触发。
+
+还有使用println的原因在于与下面的服务端对应。
+
+**二.服务端：代表类—ServerSocket**
+
+| 构造器                        | 说明           |
+| ----------------------------- | -------------- |
+| public ServerSocket(int port) | 注册服务端端口 |
+
+| 方法                       | 说明                                                         |
+| -------------------------- | ------------------------------------------------------------ |
+| public Socket **accept()** | 等待接收客户端的Socket通信连接，连接成功返回Socket对象，与客户端建立端到端通信 |
+
+服务端实现步骤
+
+- 创建ServerSocket对象，注册服务端端口。
+- 调用ServerSocket对象的accept()方法，等待客户端的连接，并得到Socket管道对象。
+- 通过Socket对象调用getInputStream()方法得到字节输入流、完成数据的接收。
+- 释放资源：关闭socket管道
+
+```java
+/**
+   目标：开发Socket网络编程入门代码的服务端，实现接收消息
+ */
+public class ServerDemo2 {
+    public static void main(String[] args) {
+        try {
+            System.out.println("===服务端启动成功===");
+            // 1、注册端口
+            ServerSocket serverSocket = new ServerSocket(7777);
+            // 2、必须调用accept方法：等待接收客户端的Socket连接请求，建立Socket通信管道
+            Socket socket = serverSocket.accept();
+            // 3、从socket通信管道中得到一个字节输入流
+            InputStream is = socket.getInputStream();
+            // 4、把字节输入流包装成缓冲字符输入流进行消息的接收
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            // 5、按照行读取消息
+            String msg;
+            if ((msg = br.readLine()) != null){
+                System.out.println(socket.getRemoteSocketAddress() + "说了：: " + msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+注意：第五步用  if  的原因，因为我们是一发一收，没有弄其他的，假如用while的话，就会一直等，客户端代码写的是跑完了就会结束，所以这里就会报出链接重置的错误，服务端失效。
+
+还有一点，这里读取数据是写的，按行读取，所以对于客户端要按行去发送，也就是为什么用的是println方法。
+
+**总结TCP通信的基本原理：**
+
+- 客户端怎么发，服务端就应该怎么收。
+- 客户端如果没有消息，服务端会进入阻塞等待。
+- Socket一方关闭或者出现异常、对方Socket也会失效或者出错
+
+#### 多发多收
+
+使用TCP通信方式实现：多发多收消息。意思是，可以客户端不断发送，服务端不断接收
+
+**具体思路：**
+
+- 可以使用**死循环**控制服务端收完消息继续等待接收下一个消息。
+- 客户端也可以使用**死循环**等待用户不断输入消息。
+- 客户端一旦**输入了exit**，则关闭客户端程序，并释放资源。
+
+很简单的，就是在前面的一发一收里面加循环。但注意现在都是一个客户端，一个服务端。
+
+```java
+/**
+   目标：完成Socket网络编程入门案例的客户端开发，实现多发多收。
+ */
+public class ClientDemo1 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        try {
+            System.out.println("====客户端启动===");
+            // 1、创建Socket通信管道请求有服务端的连接
+            // public Socket(String host, int port)
+            // 参数一：服务端的IP地址
+            // 参数二：服务端的端口
+            Socket socket = new Socket("127.0.0.1", 7777);
+
+            // 2、从socket通信管道中得到一个字节输出流 负责发送数据
+            OutputStream os = socket.getOutputStream();
+
+            // 3、把低级的字节流包装成打印流
+            PrintStream ps = new PrintStream(os);
+
+            while(true){
+                System.out.println("请说");
+                String msg = sc.nextLine();
+                if (msg.equals("exit")){
+                    return;
+                }
+                // 4、发送消息
+                ps.println(msg);
+                ps.flush();
+            }
+
+            // 关闭资源。
+            // socket.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```java
+/**
+   目标：开发Socket网络编程入门代码的服务端，实现接收消息
+ */
+public class ServerDemo2 {
+    public static void main(String[] args) {
+        try {
+            System.out.println("===服务端启动成功===");
+            // 1、注册端口
+            ServerSocket serverSocket = new ServerSocket(7777);
+            // 2、必须调用accept方法：等待接收客户端的Socket连接请求，建立Socket通信管道
+            Socket socket = serverSocket.accept();
+            // 3、从socket通信管道中得到一个字节输入流
+            InputStream is = socket.getInputStream();
+            // 4、把字节输入流包装成缓冲字符输入流进行消息的接收
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            // 5、按照行读取消息
+            String msg;
+            while ((msg = br.readLine()) != null){
+                System.out.println(socket.getRemoteSocketAddress() + "说了：: " + msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**问题：本案例实现了多发多收，那么是否可以同时接收多个客户端的消息？**
+
+不可以的。因为服务端现在只有一个线程，只能与一个客户端进行通信。
+
+#### 同时接受多个客户端消息[重点]
+
+**1、之前我们的通信是否可以同时与多个客户端通信，为什么？**
+
+​		不可以的
+
+​		单线程每次只能处理一个客户端的Socket通信
+
+**2、如何才可以让服务端可以处理多个客户端的通信需求？**
+
+​		引入多线程。
+
+<img src="images/image-20220120115913666.png" alt="image-20220120115913666" style="zoom:80%;" />
+
+ **在前一个的基础上，客户端不用动撒，只改服务端，这次没有使用线程池，用的是线程。**
+
+```java
+/**
+   目标：实现服务端可以同时处理多个客户端的消息。
+ */
+public class ClientDemo1 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        try {
+            System.out.println("====客户端启动===");
+            // 1、创建Socket通信管道请求有服务端的连接
+            // public Socket(String host, int port)
+            // 参数一：服务端的IP地址
+            // 参数二：服务端的端口
+            Socket socket = new Socket("127.0.0.1", 7777);
+
+            // 2、从socket通信管道中得到一个字节输出流 负责发送数据
+            OutputStream os = socket.getOutputStream();
+
+            // 3、把低级的字节流包装成打印流
+            PrintStream ps = new PrintStream(os);
+
+            while(true){
+                System.out.println("请说");
+                String msg = sc.nextLine();
+                if (msg.equals("exit")){
+                    return;
+                }
+                // 4、发送消息
+                ps.println(msg);
+                ps.flush();
+            }
+            // 关闭资源。
+            // socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```java
+/**
+   目标：实现服务端可以同时处理多个客户端的消息。
+ */
+public class ServerDemo2 {
+    public static void main(String[] args) {
+        try {
+            System.out.println("===服务端启动成功===");
+            // 1、注册端口
+            ServerSocket serverSocket = new ServerSocket(7777);
+            // a.定义一个死循环由主线程负责不断的接收客户端的Socket管道连接。
+            while (true) {
+                // 2、每接收到一个客户端的Socket管道，交给一个独立的子线程负责读取消息
+                Socket socket = serverSocket.accept();
+                System.out.println(socket.getRemoteSocketAddress()+ "它来了，上线了！");
+                // 3、开始创建独立线程处理socket
+                new ServerReaderThread(socket).start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```java
+public class ServerReaderThread extends Thread{
+    private Socket socket;
+    public ServerReaderThread(Socket socket){
+        this.socket = socket;
+    }
+    @Override
+    public void run() {
+        try {
+            // 3、从socket通信管道中得到一个字节输入流
+            InputStream is = socket.getInputStream();
+            // 4、把字节输入流包装成缓冲字符输入流进行消息的接收
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            // 5、按照行读取消息
+            String msg;
+            while ((msg = br.readLine()) != null){
+                System.out.println(socket.getRemoteSocketAddress() + "说了：: " + msg);
+            }
+        } catch (Exception e) {
+            System.out.println(socket.getRemoteSocketAddress() + "下线了！！！");
+        }
+    }
+}
+```
+
+#### 使用线程池优化上面案例
+
+
+
+
+
+
+
+
+
+
+
+### UCP
+
+**UDP协议：** 
+
+- UDP是一种**无连接、不可靠传输的协议**。
+- 将数据源IP、目的地IP和端口封装成数据包，不需要建立连接 
+- **每个数据包的大小限制在64KB内** 
+- 发送不管对方是否准备好，接收方收到也不确认，故是不可靠的 
+-  可以广播发送 ，发送数据结束时无需释放资源，开销小，速度快。
+
+**UDP协议通信场景**
+
+- 语音通话，视频会话等。
+
+#### 快速入门
+
+<img src="images/image-20220119231834130.png" alt="image-20220119231834130" style="zoom:80%;" />
+
+**一：数据包的建立**
+
+**DatagramPacket：数据包对象（韭菜盘子）**
+
+| 构造器                                                       | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| public DatagramPacket(byte[] buf, int length, InetAddress address, int port) | 创建发送端数据包对象buf：要发送的内容，字节数组length：要发送内容的字节长度address：接收端的IP地址对象port：接收端的端口号 |
+| public DatagramPacket(byte[] buf, int length)                | 创建接收端的数据包对象buf：用来存储接收的内容length：能够接收内容的长度 |
+| public synchronized int getPort()                            | 获得当前数据包的地址（IP+端口号）                            |
+| public synchronized int getPort()                            | 获得当前数据包的（端口号）                                   |
+
+String类里面字符串转换成字节数组的方法：
+
+```java
+public  byte[]  getBytes( )
+```
+
+**DatagramPacket常用方法：**
+
+| 方法                   | 说明                     |
+| ---------------------- | ------------------------ |
+| public int getLength() | 获得实际接收到的字节个数 |
+
+**二：发送接收端的建立**
+
+**DatagramSocket：发送端和接收端对象（人）**
+
+| 构造器                          | 说明                                                   |
+| ------------------------------- | ------------------------------------------------------ |
+| public DatagramSocket()         | **创建发送端**的Socket对象，系统会随机分配一个端口号。 |
+| public DatagramSocket(int port) | **创建接收端**的Socket对象并指定端口号                 |
+
+**DatagramSocket类成员方法**
+
+| 方法                                  | 说明               |
+| ------------------------------------- | ------------------ |
+| public void send(DatagramPacket dp)   | 发送数据包         |
+| public void receive(DatagramPacket p) | 接收数据包         |
+| public void close( )                  | 关闭当前发送接收端 |
+
+**Example：**
+
+```java
+/**
+  发送端  一发 一收
+ */
+public class ClientDemo1 {
+    public static void main(String[] args) throws Exception {
+        System.out.println("=====客户端启动======");
+
+        // 1、创建发送端对象：发送端自带默认的端口号（人）
+        DatagramSocket socket = new DatagramSocket(6666);
+
+        // 2、创建一个数据包对象封装数据（韭菜盘子）
+        /**
+         public DatagramPacket(byte buf[], int length,
+         InetAddress address, int port)
+         参数一：封装要发送的数据（韭菜）
+         参数二：发送数据的大小
+         参数三：服务端的主机IP地址
+         参数四：服务端的端口
+         */
+        byte[] buffer = "我是一颗快乐的韭菜，你愿意吃吗？".getBytes();
+        DatagramPacket packet = new DatagramPacket( buffer, buffer.length,
+                InetAddress.getLocalHost() , 8888);
+
+        // 3、发送数据出去
+        socket.send(packet);
+
+        socket.close();
+    }
+}
+```
+
+```java
+/**
+  接收端
+ */
+public class ServerDemo2 {
+    public static void main(String[] args) throws Exception {
+        System.out.println("=====服务端启动======");
+        // 1、创建接收端对象：注册端口（人）
+        DatagramSocket socket = new DatagramSocket(8888);
+
+        // 2、创建一个数据包对象接收数据（韭菜盘子）
+        byte[] buffer = new byte[1024 * 64];
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+
+        // 3、等待接收数据。
+        socket.receive(packet);
+
+        // 4、取出数据即可
+        // 读取多少倒出多少
+        int len = packet.getLength();
+        String rs = new String(buffer,0, len);
+        System.out.println("收到了：" + rs);
+
+        // 获取发送端的ip和端口
+        String ip  =packet.getSocketAddress().toString();
+        System.out.println("对方地址：" + ip);
+
+        int port  = packet.getPort();
+        System.out.println("对方端口：" + port);
+
+        socket.close();
+    }
+}
+```
+
+#### 广播、组播
+
+UDP的三种通信方式
+
+- 单播：单台主机与单台主机之间的通信。
+- 广播：当前主机与所在网络中的所有主机通信。
+- 组播：当前主机与选定的一组主机的通信。
+
+<img src="images/image-20220120115338885.png" alt="image-20220120115338885" style="zoom:80%;" />
+
+即，UDP可以实现多个客户端，给一个服务端发消息。

@@ -1,4 +1,4 @@
-# java常用方法
+#java常用方法
 
 ```java
 // 获取对象的数据类型，是什么对象
@@ -12,6 +12,14 @@ Objects.equals(s1, s2)
   超级好用YYDS
 // 获取对象的类的类型
   user instanceof Business（判断user对象是否为Business类的，返回值为boolea）
+  
+/**
+目前最优雅的定位文件方式
+getResourceAsStream中的/是直接去src下寻找的文件；
+Dom4JHelloWorldDemo1——当前写代码的这个类名；反射原理，舒舒服服
+*/
+        InputStream is = Dom4JHelloWorldDemo1.class.getResourceAsStream("/Contacts.xml");
+        Document document = saxReader.read(is);
 ```
 
 
@@ -56,9 +64,9 @@ Objects.equals(s1, s2)
 
 1. **javac——编译工具；java——执行工具。文件名=类名**
 
-   HelloWorld：javac HelloWorld.java      》》.class文件
+   HelloWorld：javac 	HelloWorld.java      》》.class文件
 
-   ​						java HelloWorld
+   ​						java 	HelloWorld
 
    
 
@@ -1771,7 +1779,7 @@ a.run(); // 后续业务行为随对象而变，后续代码无需修改
 
 自动类型转换（从子到父)：子类对象赋值给父类类型的变量指向。
 
-强制类型转换（从父到子)：
+**强制类型转换（从父到子)：**
 
 ```java
         // 自动类型转换
@@ -2195,11 +2203,11 @@ Integer b1 = a;
 
 - 包装类的变量的默认值**可以是null**，容错率更高。
 
-- 可以把字符串类型的数值转换成真实的数据类型（真的很有用），就是下面两个静态方法，一个Integer的一个Double的
+- **可以把字符串类型的数值转换成真实的数据类型（真的很有用）**，就是下面两个静态方法，一个Integer的一个Double的
 
-  ​		Integer.parseInt(“字符串类型的整数”)
+  ​		Integer:    **public  static int  parseInt**( “字符串类型的整数” )
 
-  ​		Double.parseDouble(“字符串类型的小数”)。
+  ​		Double:	**public  static  double   parseDouble**( “字符串类型的小数” )。
 
 ```java
         String number = "23";
@@ -2210,6 +2218,20 @@ Integer b1 = a;
         //转换成小数
         double score = Double.parseDouble(number1);
 ```
+
+**包装类的重要API**
+
+| 方法                                | 说明                                                         |
+| ----------------------------------- | ------------------------------------------------------------ |
+| public static  包装类  valueOf（ ） | 基本所有的包装类都有这个API，可以把例如字符串转换成返回的包装类的类型 |
+
+```java
+//Example
+integer id = Integer.valueOf("1106");
+//等价于==  new Integer(Integer.parseInt(s))
+```
+
+
 
 # 正则表达式regex
 
@@ -4175,10 +4197,12 @@ class Mythread extends Thread{
 
 这样主线程一直是先跑完的，相当于是一个单线程的效果了。
 
-### 方式二：实现Runnable接口
+### 方式二：Runnable任务对象
+
+**函数式接口**
 
 1. 定义一个线程任务类MyRunnable实现Runnable接口，重写run()方法
-2. 创建MyRunnable**任务对象**
+2. 创建**MyRunnable任务对象**
 3. 把MyRunnable任务对象交给Thread处理。
 4. 调用线程对象的start()方法启动线程
 
@@ -4246,7 +4270,7 @@ public class demo3 {
 }
 ```
 
-### 方式三：实现Callable和FutureTask接口
+### 方式三：Callablere任务对象
 
 解决了前面两种无法得到返回值的问题，即我们是需要得到线程执行完之后的结果的。
 
@@ -4275,7 +4299,7 @@ Callable——泛型的函数式接口；FutureTask——泛型接口，他实�
 public class demo4 {
     public static void main(String[] args) {
         //3. 创建callable的任务对象
-        Callable<String> mycall = new Mythread4(10);
+        Callable<String> mycall = new MyCall(10);
         //4. 把callable任务对象交给 FutureTask对象
         //  FutureTask对象的作用1： 是Runnable的对象（实现了Runnable接口），可以交给Thread了
         //  FutureTask对象的作用2： 可以在线程执行完毕之后通过调用其get方法得到线程执行完成的结果
@@ -4297,7 +4321,7 @@ public class demo4 {
 /**
  * 1. 定义一个任务类，实现Callable接口，并且声明返回值的类型哦
  */
-class Mythread4 implements Callable<String>{
+class MyCall implements Callable<String>{
     private int n;
 
     public Mythread4(int n) {
@@ -4326,6 +4350,7 @@ class Mythread4 implements Callable<String>{
 | public **static** void **sleep(long time)**   | 让当前线程休眠指定的时间后再继续执行，单位为毫秒。           |
 | public void **run()**                         | 线程任务方法（被重写的方法）                                 |
 | public void **start()**                       | 线程**启动方法**                                             |
+|                                               |                                                              |
 
 **对于第三个方法：** 
 
@@ -5128,11 +5153,331 @@ public class ServerReaderThread extends Thread{
 
 #### 使用线程池优化上面案例
 
+客户端不用动，服务端变，新建一个类实现Runnable，做为我们的任务对象，将需要执行的代码放进去；服务端代码内新建一个线程池。
 
+```java
+/**
+    目标：实现服务端可以同时处理多个客户端的消息。
+ */
+public class ClientDemo1 {
+    public static void main(String[] args) {
+        try {
+            System.out.println("====客户端启动===");
+            // 1、创建Socket通信管道请求有服务端的连接
+            // public Socket(String host, int port)
+            // 参数一：服务端的IP地址
+            // 参数二：服务端的端口
+            Socket socket = new Socket("127.0.0.1", 7777);
 
+            // 2、从socket通信管道中得到一个字节输出流 负责发送数据
+            OutputStream os = socket.getOutputStream();
 
+            // 3、把低级的字节流包装成打印流
+            PrintStream ps = new PrintStream(os);
 
+            Scanner sc =  new Scanner(System.in);
+            while (true) {
+                System.out.println("请说：");
+                String msg = sc.nextLine();
+                // 4、发送消息
+                ps.println(msg);
+                ps.flush();
+            }
 
+            // 关闭资源。
+            // socket.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```java
+/**
+   目标：实现服务端可以同时处理多个客户端的消息。
+ */
+public class ServerDemo2 {
+    //3.新建一个线程池,只有一个哦，所以我们放在前面，可以定义成static finally
+    public static final ThreadPoolExecutor pool = new ThreadPoolExecutor(2, 4, 5, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<>(2),
+            Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
+
+    public static void main(String[] args) {
+        try {
+            System.out.println("===服务端启动成功===");
+            // 1、注册端口
+            ServerSocket serverSocket = new ServerSocket(7777);
+            // a.定义一个死循环由主线程负责不断的接收客户端的Socket管道连接。
+            while (true) {
+                // 2、每接收到一个客户端的Socket管道，交给一个独立的子线程负责读取消息
+                Socket socket = serverSocket.accept();
+                System.out.println(socket.getRemoteSocketAddress()+ "它来了，上线了！");
+
+                //4.将socket管道以及后续的执行代码包装成一个Runnable任务对象。
+                MyRunnable myRunnable = new MyRunnable(socket);
+
+                //5. 线程池执行Runnable对象
+                pool.execute(myRunnable);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```java
+public class MyRunnable implements Runnable{
+    // 5. 将前面的socket传过来，并自己写构造器
+    private Socket socket;
+    public MyRunnable(Socket socket){
+        this.socket = socket;
+    }
+
+    @Override
+    public void run() {
+        /**
+         * 拿到管道后，读取管道信息
+         */
+        try {
+            // 1.从socket通信管道中得到一个字节输入流
+            InputStream is = socket.getInputStream();
+            // 2.把字节输入流包装成缓冲字符输入流进行消息的接收
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            // 3. 按照行读取消息
+            String msg;
+            while ((msg = br.readLine()) != null){
+                System.out.println(socket.getRemoteSocketAddress() + "说了：: " + msg + "\t"+"由该线程执行"+ Thread.currentThread());
+            }
+        } catch (IOException e) {
+//            e.printStackTrace();
+            System.out.println(socket.getRemoteSocketAddress()+"下线了哦");
+        }
+    }
+}
+```
+
+#### 综合案例：即时通信
+
+即时通信是什么含义，要实现怎么样的设计？
+
+- 即时通信，是指一个客户端的消息发出去，其他客户端可以接收到
+- 即时通信需要进行端口转发的设计思想。
+- 服务端需要把在线的Socket管道存储起来
+- 一旦收到一个消息要推送给其他管道
+
+<img src="images/image-20220122101836243.png" alt="image-20220122101836243" style="zoom:80%;" />
+
+**思路：**客户首先发消息到服务端，服务端拿到了需要转发给其他的客户端。这里服务端是不是需要先存储所有建立的管道啊，不然他怎么知道要转发给谁呢，所以服务端需要定义一个集合来存储我们的Socket管道；而客户端需要在发消息的基础上面，加一个收消息。
+
+**客户端：**客户端是while循环，一直在等待发消息，对不对，所以说我们需要再新建一个线程来专门收消息啊。
+
+```java
+/**
+    目标：实现即时通信
+    1. 客户端发送
+    2. 客户端收（新建一个线程实现）
+ */
+public class ClientDemo1 {
+    public static void main(String[] args) {
+        try {
+            System.out.println("====客户端启动===");
+            // 1、创建Socket通信管道请求有服务端的连接
+            // public Socket(String host, int port)
+            // 参数一：服务端的IP地址
+            // 参数二：服务端的端口
+            Socket socket = new Socket("127.0.0.1", 7777);
+            /**
+             创建一个独立的线程专门负责这个客户端的读消息
+             */
+            new ClientReaderThread(socket).start();
+
+            // 2、从socket通信管道中得到一个字节输出流 负责发送数据
+            OutputStream os = socket.getOutputStream();
+
+            // 3、把低级的字节流包装成打印流
+            PrintStream ps = new PrintStream(os);
+            Scanner sc =  new Scanner(System.in);
+            while (true) {
+                System.out.println("请说：");
+                String msg = sc.nextLine();
+                // 4、发送消息
+                ps.println(msg);
+                ps.flush();
+            }
+
+            // 关闭资源。
+            // socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+/**
+ 新建一个线程来 处理客户端读服务端发送来的消息
+ */
+class ClientReaderThread extends Thread{
+    private Socket socket;
+    public ClientReaderThread(Socket socket){
+        this.socket = socket;
+    }
+    @Override
+    public void run() {
+        try {
+            // 1、从socket通信管道中得到一个字节输入流
+            InputStream is = socket.getInputStream();
+            // 2、把字节输入流包装成缓冲字符输入流进行消息的接收
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            // 3、按照行读取消息
+            String msg;
+            while ((msg = br.readLine()) != null){
+                System.out.println("收到消息 " + msg);
+            }
+        } catch (Exception e) {
+            System.out.println("服务端把你踢出去了。。。。");
+        }
+    }
+}
+```
+
+```java
+/**
+   目标：实现服务端即时通信
+ */
+public class ServerDemo2 {
+    /**
+     * 定义一个静态的List集合存储全部在线的Socket管道.不需要键值对的形式
+     */
+    public static List<Socket> allOnlineSockets = new ArrayList<>();
+    public static void main(String[] args) {
+        try {
+            System.out.println("===服务端启动成功===");
+            // 1、注册端口
+            ServerSocket serverSocket = new ServerSocket(7777);
+            // a.定义一个死循环由主线程负责不断的接收客户端的Socket管道连接。
+            while (true) {
+                // 2、每接收到一个客户端的Socket管道，交给一个独立的子线程负责读取消息
+                Socket socket = serverSocket.accept();
+                // 客户端上线，添加集合
+                allOnlineSockets.add(socket);
+                System.out.println(socket.getRemoteSocketAddress()+ "它来了，上线了！");
+                //
+                // 3、开始创建独立线程处理socket
+                new ServerReaderThread(socket).start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class ServerReaderThread extends Thread{
+    private Socket socket;
+    public ServerReaderThread(Socket socket){
+        this.socket = socket;
+    }
+    @Override
+    public void run() {
+        try {
+            // 3、从socket通信管道中得到一个字节输入流
+            InputStream is = socket.getInputStream();
+            // 4、把字节输入流包装成缓冲字符输入流进行消息的接收
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            // 5、按照行读取消息
+            String msg;
+            while ((msg = br.readLine()) != null){
+                System.out.println(socket.getRemoteSocketAddress() + "说了：: " + msg);
+                //功能：把收到的这个消息发给所以在线的人
+                sendMsgToAll(msg);
+            }
+        } catch (Exception e) {
+            System.out.println(socket.getRemoteSocketAddress() + "下线了！！！");
+            //客户端下线，移除集合内容
+            ServerDemo2.allOnlineSockets.remove(socket);
+        }
+    }
+
+    private void sendMsgToAll(String msg) {
+        for (Socket socket : ServerDemo2.allOnlineSockets) {
+            try {
+                PrintStream ps = new PrintStream(socket.getOutputStream());
+                ps.println(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+}
+```
+
+#### 综合案例：模拟BS系统
+
+**1、之前的客户端都是什么样的**
+
+其实就是CS架构，客户端实需要我们自己开发实现的。
+
+**2、BS结构是什么样的，需要开发客户端吗？**
+
+浏览器访问服务端，不需要开发客户端。
+
+<img src="images/image-20220122112225507.png" alt="image-20220122112225507" style="zoom:80%;" />
+
+超级牛逼哦，下面的代码，woc
+
+```java
+/**
+ 客户端：浏览器。（无需开发）
+ 服务端：自己开发。
+ 需求：在浏览器中请求本程序，响应一个网页文字给浏览器显示
+ */
+public class BSServer {
+    // 使用静态变量记住一个线程池对象
+    public static ExecutorService pool = new ThreadPoolExecutor(2,4,5, TimeUnit.SECONDS
+            ,new ArrayBlockingQueue<>(2), Executors.defaultThreadFactory(),new ThreadPoolExecutor.AbortPolicy());
+
+    public static void main(String[] args) {
+        try {
+            //1. 注册端口
+            ServerSocket serverSocket = new ServerSocket(8000);
+            //2. 创建一个循环接收多个客户端的请求
+            Socket socket = serverSocket.accept();
+            // 3.交给一个独立的线程来处理！
+            pool.execute(new ServerReaderRunnable(socket));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+class ServerReaderRunnable implements Runnable{
+    private Socket socket;
+    public ServerReaderRunnable(Socket socket){
+        this.socket = socket;
+    }
+    @Override
+    public void run() {
+        try {
+            // 浏览器 已经与本线程建立了Socket管道
+            // 响应消息给浏览器显示
+            PrintStream ps = new PrintStream(socket.getOutputStream());
+            // 必须响应HTTP协议格式数据，否则浏览器不认识消息
+            ps.println("HTTP/1.1 200 OK"); // 协议类型和版本 响应成功的消息！
+            ps.println("Content-Type:text/html;charset=UTF-8"); // 响应的数据类型：文本/网页
+
+            ps.println(); // 必须发送一个空行
+
+            // 才可以响应数据回去给浏览器
+            ps.println("<span style='color:red;font-size:90px'>《最牛的149期》 </span>");
+            ps.close();
+        } catch (Exception e) {
+            System.out.println(socket.getRemoteSocketAddress() + "下线了！！！");
+        }
+    }
+}
+```
 
 
 
@@ -5276,3 +5621,1433 @@ UDP的三种通信方式
 <img src="images/image-20220120115338885.png" alt="image-20220120115338885" style="zoom:80%;" />
 
 即，UDP可以实现多个客户端，给一个服务端发消息。
+
+
+
+# 单元测试
+
+**概述：**单元测试就是针对最小的功能单元编写测试代码，Java程序最小的功能单元是方法，因此，单元测试就是针对Java方法的测试，进而检查方法的正确性。
+
+<img src="images/image-20220122114922141.png" alt="image-20220122114922141" style="zoom:80%;" />
+
+## **Junit单元测试框架**
+
+- JUnit是使用Java语言实现的单元测试框架，它是开源的，Java开发者都应当学习并使用JUnit编写单元测试。
+- 此外，几乎所有的IDE工具都集成了JUnit，这样我们就可以直接在IDE中编写并运行JUnit测试，JUnit目前最新版本是5。
+
+**JUnit优点**
+
+- JUnit可以灵活的选择执行哪些测试方法，可以一键执行全部测试方法。
+-  Junit可以生成全部方法的测试报告。
+-  单元测试中的某个方法测试失败了，不会影响其他测试方法的测试。
+
+## 快速入门
+
+分析：
+
+1. 将JUnit的jar包导入到项目中
+
+2. IDEA通常整合好了Junit框架，一般不需要导入。
+
+3. 如果IDEA没有整合好，需要自己手工导入如下2个JUnit的jar包到模块
+
+   <img src="images/image-20220122115616245.png" alt="image-20220122115616245" style="zoom:50%;" />
+
+4. 编写测试方法：**该测试方法必须是公共的无参数无返回值的非静态方法。**
+
+5. **在测试方法上使用@Test注解**：标注该方法是一个测试方法
+
+6. 在测试方法中完成被测试方法的预期正确性测试。
+
+7. 选中测试方法，选择“JUnit运行” ，如果测试良好则是绿色；如果测试失败，则是红色
+
+```java
+/**
+   业务方法
+ */
+public class UserService {
+    public String loginName(String loginName , String passWord){
+        if("admin".equals(loginName) && "123456".equals(passWord)){
+            return "登录成功";
+        }else {
+            return "用户名或者密码有问题";
+        }
+    }
+
+    public void selectNames(){
+        System.out.println(10/0);
+        System.out.println("查询全部用户名称成功~~");
+    }
+}
+```
+
+```java
+public class TestUserServer {
+    
+    @Test
+    public void testLoginName(){
+        UserService userService = new UserService();
+        String rs = userService.loginName("admin", "123456");
+        //进行预期结果的准确性测试：断言。
+        Assert.assertEquals(rs,"登录成功","您的业务功能出现BUG");
+    }
+
+    @Test
+    public void testSelcetNames(){
+        UserService userService = new UserService();
+        userService.selectNames();
+
+    }
+}
+```
+
+## Junit常用注解
+
+| 注解        | 说明                                                         |
+| ----------- | ------------------------------------------------------------ |
+| @Test       | 测试方法                                                     |
+| @BeforeEach | 用来修饰实例方法，该方法会在每一个测试方法执行之前执行一次。 |
+| @AfterEach  | 用来修饰实例方法，该方法会在每一个测试方法执行之后执行一次。 |
+| @BeforeAll  | 用来静态修饰方法，该方法会在所有测试方法之前只执行一次。     |
+| @AfterAll   | 用来静态修饰方法，该方法会在所有测试方法之后只执行一次。     |
+
+- 开始执行的方法:初始化资源。
+- 执行完之后的方法:释放资源。
+
+# 反射
+
+## **反射概述**
+
+- 反射是指对于任何一个Class类，**在"运行的时候"都可以直接得到这个类全部成分。**
+- 在运行时,可以直接得到这个类的构造器对象：Constructor
+- 在运行时,可以直接得到这个类的成员变量对象：Field
+- 在运行时,可以直接得到这个类的成员方法对象：Method
+- **这种运行时，动态获取类信息以及动态调用类中成分的能力称为Java语言的反射机制。**
+
+**反射的关键：**
+
+反射的第一步都是先得到编译后的**Class类对象**，然后就可以得到Class的全部成分。
+
+<img src="images/image-20220122121726505.png" alt="image-20220122121726505" style="zoom:80%;" />
+
+## 反射获取类对象
+
+首先，整理一些，Java文件的整个生命周期，即执行过程。首先是javac将  .java  编译成Class文件，如何这个文件会运到内存中，创建Class类对象。最后java的运行是java执行工具跑。
+
+<img src="images/image-20220122140456793.png" alt="image-20220122140456793" style="zoom:80%;" />
+
+<img src="images/image-20220122140547684.png" alt="image-20220122140547684" style="zoom: 67%;" />
+
+内存中的Class类对象结构如下：<img src="images/image-20220122140822325.png" alt="image-20220122140822325" style="zoom:67%;" />
+
+所以说我们反射是需要得到——Class类对象，可以从三个过程中获取，如下：
+
+<img src="images/image-20220122140928256.png" alt="image-20220122140928256" style="zoom:80%;" />
+
+**反射的第一步是什么？**
+
+- 获取Class类对象，如此才可以解析类的全部成分
+
+**获取Class类的对象的三种方式**
+
+- 方式一：Class c1 = Class.forName(“全类名”);
+- 方式二：Class c2 = 类名.class
+- 方式三：Class c3 = 对象.getClass( );
+
+```java
+public class reflect1 {
+    public static void main(String[] args) throws ClassNotFoundException {
+        //1. Class类对象的一个静态方法：forName（全限名：包名+类名）
+        Class<?> c = Class.forName("com.CCooky.Student");
+        System.out.println(c);
+
+        //2. 类名.class
+        Class<Student> c1 = Student.class;
+        System.out.println(c1);
+
+        //3. 对象.getClass()  获取该对象对应的Class类对象
+        Student s = new Student();
+        Class<? extends Student> c2 = s.getClass();
+        System.out.println(c2);
+    }
+}
+```
+
+## Class的API
+
+| Class的方法                             | 说明                                 |
+| --------------------------------------- | ------------------------------------ |
+| Constructor<?>[]  **getConstructors()** | 返回public构造器对象的数组           |
+| String  **getName()**                   | 返回此`Class`对象表示的实体的名称。  |
+| String  **getSimpleName()**             | 返回源代码中给出的基础类的简单名称。 |
+
+## 反射类成分共有的API
+
+构造器、成员变量、成员方法等。。。API有特别多，基本上你能想到的都有，不能想到的也有，下面只是几个例子
+
+| API                                | 说明                                       |
+| ---------------------------------- | ------------------------------------------ |
+| public String **getName()**        | 获得当前成分的名字（成员变量名，方法名等） |
+| public int **getParameterCount()** | 获得当前成分的形参总数（构造器、方法）     |
+|                                    |                                            |
+
+
+
+## 反射获取构造器对象
+
+<img src="images/image-20220122142613335.png" alt="image-20220122142613335" style="zoom:80%;" />
+
+**反射的第一步是先得到类对象，然后从类对象中获取类的成分对象。**
+
+**Class类中用于获取构造器的方法**
+
+| Class的方法                                                  | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Constructor<?>[]  **getConstructors()**                      | 返回public构造器对象的数组                                   |
+| Constructor<?>[]  **getDeclaredConstructors()**              | 返回所有构造器对象的数组                                     |
+| Constructor<T>  **getConstructor(Class<?>... parameterTypes)** | 返回public单个构造器对象（按照类中构造器的声明顺序的第一个） |
+| Constructor<T>  **getDeclaredConstructor(Class<?>... parameterTypes)** | 返回单个构造器对象                                           |
+
+```java
+// getConstructor(Class... parameterTypes)
+// 获取某个特定特定的构造器
+@Test
+public void getDeclaredConstructor() throws Exception {
+    // a.第一步：获取类对象
+    Class c = Student.class;
+    // b.定位单个构造器对象 (按照参数定位无参数构造器)
+    Constructor cons = c.getDeclaredConstructor();
+    System.out.println(cons.getName() + "===>" + cons.getParameterCount());
+
+    // c.定位某个有参构造器
+    Constructor cons1 = c.getDeclaredConstructor(String.class, int.class);
+    System.out.println(cons1.getName() + "===>" + cons1.getParameterCount());
+}
+```
+
+**获取构造器的作用依然是初始化一个对象返回**
+
+| Constructor类中用于创建对象的方法           | 说明                                                         |
+| ------------------------------------------- | ------------------------------------------------------------ |
+| T **newInstance(Object... initargs)**       | 根据指定的构造器创建对象                                     |
+| public void **setAccessible(boolean flag)** | 设置为true,表示取消访问检查，进行暴力反射,表明，反射可以破坏封装性 |
+
+```java
+@Test
+public void getDeclaredConstructor() throws Exception {
+    // a.第一步：获取类对象
+    Class c = Student.class;
+    // b.定位单个构造器对象 (按照参数定位无参数构造器)
+    Constructor cons = c.getDeclaredConstructor();
+    System.out.println(cons.getName() + "===>" + cons.getParameterCount());
+
+    // 如果遇到了私有的构造器，可以暴力反射
+    cons.setAccessible(true); // 权限被打开
+
+    Student s = (Student) cons.newInstance();
+    System.out.println(s);
+
+    System.out.println("-------------------");
+
+    // c.定位某个有参构造器
+    Constructor cons1 = c.getDeclaredConstructor(String.class, int.class);
+    System.out.println(cons1.getName() + "===>" + cons1.getParameterCount());
+
+    Student s1 = (Student) cons1.newInstance("孙悟空", 1000);
+    System.out.println(s1);
+}
+```
+
+## 反射获取成员变量对象
+
+**有暴力拆解**
+
+<img src="images/image-20220122145705623.png" alt="image-20220122145705623" style="zoom:80%;" />
+
+**反射的第一步是先得到类对象，然后从类对象中获取类的成分对象。**
+
+| **Class类中用于获取成员变量的方法**     | 说明                                                         |
+| --------------------------------------- | ------------------------------------------------------------ |
+| Field[] **getFields()**                 | 返回所有public成员变量对象的数组                             |
+| Field[] **getDeclaredFields()**         | 返回所有成员变量对象的数组                                   |
+| Field **getField(String name)**         | 返回public的单个成员变量对象（参数是类中成员变量的具体名字） |
+| Field **getDeclaredField(String name)** | 返回单个成员变量对象，存在就能拿到                           |
+
+```java
+@Test
+public void getDeclaredFileds(){
+    Class<Student> s = Student.class;
+    Field[] fileds = s.getDeclaredFields();
+    for (Field filed : fileds) {
+        System.out.println(filed.getName()+"===>>>"+filed.getType());
+    }
+    try {
+        Field age = s.getField("age");
+    } catch (NoSuchFieldException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+**获取成员变量的作用依然是在某个对象中取值、赋值**
+
+| Field类中用于取值、赋值的方法            | 说明                                                         |
+| ---------------------------------------- | ------------------------------------------------------------ |
+| void **set(Object obj, Object value)：** | 赋值（第一个参数是对象，需要我们自己去创建，第二个是该Filed的设置的值） |
+| Object **get(Object obj)**               | 获取值。                                                     |
+
+```java
+    @Test
+    public void setFiled() throws Exception{
+        Class<Student> s = Student.class;
+        Field age = s.getDeclaredField("age");
+        
+        // 因为成员变量都是私有，所以这里需要暴力拆解的
+        age.setAccessible(true);
+        Student student = new Student();
+        age.set(student,22);
+    }
+```
+
+## 反射获取成员方法对象
+
+**有暴力拆解**
+
+<img src="images/image-20220122151254606.png" alt="image-20220122151254606" style="zoom:80%;" />
+
+反射的第一步是先得到类对象，然后从类对象中获取类的成分对象。
+
+| Class类中用于获取成员方法的方法                              | 说明                               |
+| ------------------------------------------------------------ | ---------------------------------- |
+| Method[] **getMethods()**                                    | 返回所有public成员方法的对象数组   |
+| Method[] **getDeclaredMethods()**                            | 返回所有成员方法对象的数组         |
+| Method **getMethod(String name, Class<?>... parameterTypes)** | 返回public单个成员方法对象         |
+| Method **getDeclaredMethod(String name, Class<?>... parameterTypes)** | 返回单个成员方法对象，存在就能拿到 |
+
+```java
+@Test
+public void testString() throws NoSuchMethodException {
+    Class<Student> studentClass = Student.class;
+    Method method = studentClass.getMethod("toString",null);
+    System.out.println(method.getName()+" 返回值类型："+method.getReturnType()+"  参数个数："+method.getParameterCount());
+}
+```
+
+**获取成员方法的作用依然是在某个对象中进行执行此方法**
+
+| Method类中用于触发执行的方法                                 | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Object                                                                                              invoke(Object obj, Object... args) | 参数一：用obj对象调用该方法；参数二：调用方法的传递的参数（如果没有就不写）；返回值：方法的返回值（如果没有就不写） |
+
+```java
+@Test
+public void testString() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    Class<Student> studentClass = Student.class;
+    Method method = studentClass.getMethod("toString",null);
+    System.out.println(method.getName()+" 返回值类型："+method.getReturnType()+"  参数个数："+method.getParameterCount());
+  	// 调用方法
+    Student student = new Student("zq",12);
+    System.out.println(method.invoke(student, null));
+}
+```
+
+
+
+## 反射作用一
+
+**反射的作用一：绕过编译阶段为集合添加数据**
+
+**解释：**反射是作用在运行时的技术，此时集合的泛型将不能产生约束了，此时是可以为集合存入其他任意类型的元素的。
+
+<img src="images/image-20220122161056374.png" alt="image-20220122161056374" style="zoom:67%;" />
+
+泛型只是在编译阶段可以约束集合只能操作某种数据类型，在编译成Class文件进入运行阶段的时候，其真实类型都是ArrayList了，泛型相当于被擦除了。
+
+```java
+public class reflect2 {
+    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        ArrayList<String> list1 = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>();
+        System.out.println(list1.getClass());
+        System.out.println(list2.getClass());
+        System.out.println(list1.getClass()==list2.getClass());
+
+        System.out.println("==============");
+        list1.add("java");
+        list1.add("python");
+        Class c = list1.getClass();
+        Method add = c.getMethod("add", Object.class);
+        add.invoke(list1,12345);
+    }
+}
+//发现这样使用其实是有点麻烦的，其实可以采用下面这种方法.采用多个对象指向一个地址的方法
+ArrayList list3 = list1;
+list3.add(123);
+list3.add(456);
+sout(list1)
+```
+
+## 反射作用二
+
+**反射作用二：通用框架的底层原理**
+
+需求：给你任意一个对象，在不清楚对象字段的情况可以，可以把对象的字段名称和对应值存储到文件中去。
+
+<img src="images/image-20220122194610887.png" alt="image-20220122194610887" style="zoom:67%;" />
+
+思路：
+
+1. 定义一个方法，可以接收任意类的对象。
+2. 每次收到一个对象后，需要解析这个对象的全部成员变量名称。
+3. 使用反射获取对象的Class类对象，然后获取全部成员变量信息。
+4. 遍历成员变量信息，然后提取本成员变量在对象中的具体值
+5. 存入成员变量名称和值到文件中去即可。
+
+```java
+public class MybatisUtil {
+    /**
+     保存任意类型的对象
+     * @param ob
+     */
+    public static void save(Object ob){
+        try {
+            PrintStream ps = new PrintStream(new FileOutputStream("F:\\Java_Project\\studying\\Reflect\\src\\com\\CCooky\\data.txt"),true);
+            Class<?> c = ob.getClass();
+            ps.println("======="+c.getSimpleName()+"===========");
+            Field[] fileds = c.getDeclaredFields();
+            for (Field filed : fileds) {
+                String name = filed.getName();
+                filed.setAccessible(true);
+                String value = filed.get(ob)+"";
+                ps.println(name+"="+value);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+# 注解
+
+**概述：**
+
+Java 注解（Annotation）又称 Java 标注，是 JDK5.0 引入的一种注释机制。
+
+Java 语言中的**类、构造器、方法、成员变量、参数等都可以被注解进行标注。**
+
+**作用：**
+
+**对Java中类、方法、成员变量做标记，然后进行特殊处理，至于到底做何种处理由业务需求来决定。**
+
+例如：JUnit框架中，标记了注解@Test的方法就可以被当成测试方法执行，而没有标记的就不能当成测试方法执行。
+
+## 自定义注解
+
+<img src="images/image-20220122201616016.png" alt="image-20220122201616016" style="zoom:80%;" />
+
+```java
+public @interface Mybook {
+    public String name();
+    String[] authors();
+    double price();
+}
+```
+
+<img src="images/image-20220122202443993.png" alt="image-20220122202443993" style="zoom:67%;" />
+
+注解可以标记几乎任何地方哦。除此之外，**注解有一个特殊的属性**，如下：
+
+- **value属性**，如果只有一个value属性的情况下，使用value属性的时候可以省略value名称不写!!
+- 但是如果有多个属性,  且多个属性没有默认值，那么value名称是不能省略的。
+
+```java
+// 只有一个value属性
+public @interface Book {
+    String value();
+}
+```
+
+```java
+// 在使用的时候，就不需要加这个属性名——value
+@Book("/delete")
+public class Annotationdemo1 {
+    @Mybook(name = "JAVA",authors = {"heima","zhouquan"},price = 299)
+    private Annotationdemo1(){
+    }
+    public static void main(String[] args) {
+    }
+}
+```
+
+## 元注解
+
+元注解：就是注解注解的注解。 
+
+元注解有两个：
+
+-  **@Target**: 约束自定义注解只能在哪些地方使用，
+-  **@Retention**：申明注解的生命周期
+
+**@Target中可使用的值定义在ElementType枚举类中，常用值如下：**
+
+-  TYPE，类，接口
+-  FIELD, 成员变量
+- METHOD, 成员方法
+- PARAMETER, 方法参数
+- CONSTRUCTOR, 构造器
+- LOCAL_VARIABLE, 局部变量
+
+```java
+//元注解,只能注解方法和成员变量
+@Target({ElementType.METHOD,ElementType.FIELD}) 
+public @interface MyTest {
+    
+}
+```
+
+**@Retention中可使用的值定义在RetentionPolicy枚举类中，常用值如下**
+
+-  SOURCE： 注解只作用在源码阶段，生成的字节码文件中不存在
+-  CLASS：  注解作用在源码阶段，字节码文件阶段，运行阶段不存在，默认值.
+-  **RUNTIME：注解作用在源码阶段，字节码文件阶段，运行阶段（开发常用）**
+
+```java
+//元注解,只能注解方法和成员变量
+@Target({ElementType.METHOD,ElementType.FIELD}) 
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyTest {
+
+}
+```
+
+## 注解解析
+
+**注解的解析：**
+
+注解的操作中经常需要进行解析，注解的解析就是判断是否存在注解，存在注解就解析出内容。
+
+**与注解解析相关的接口：**
+
+**Annotation**: 注解的顶级接口，注解都是Annotation类型的对象
+
+**AnnotatedElement:**  该接口定义了与注解解析相关的解析方法
+
+| AnnotatedElement解析方法                                     | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Annotation[]  **getDeclaredAnnotations()**                   | 获得当前对象上使用的所有注解，返回注解数组。                 |
+| T **getDeclaredAnnotation(Class<T> annotationClass)**        | 根据注解类型获得对应注解对象                                 |
+| boolean **isAnnotationPresent(Class<Annotation> annotationClass)** | 判断当前对象是否使用了指定的注解，如果使用了则返回true，否则false |
+
+**注意注意哦：所有的类成分Class, Method , Field , Constructor，都实现了AnnotatedElement接口，所以他们都拥有解析注解的能力：**
+
+**解析注解的技巧**
+
+- 注解在哪个成分上，我们就先拿哪个成分对象。
+-  比如注解作用成员方法，则要获得该成员方法对应的Method对象，再来拿上面的注解
+-  比如注解作用在类上，则要该类的Class对象，再来拿上面的注解
+-  比如注解作用在成员变量上，则要获得该成员变量对应的Field对象，再来拿上面的注解
+
+## 案例
+
+<img src="images/image-20220122210302244.png" alt="image-20220122210302244" style="zoom:80%;" />
+
+```java
+// 定义注解
+@Target({ElementType.METHOD,ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface BOOkk {
+    String value();
+    double price();
+    String[] authors();
+}
+
+```
+
+```java
+// 新建一个类，写上注解
+@BOOkk(value = "倚天屠龙记",price = 200,authors = {"琼瑶","吴磊"})
+class BookStore{
+    @BOOkk(value = "三少爷的键",price =  600,authors = {"刘德华","周杰伦"})
+    public void Test(){
+    }
+}
+```
+
+```java
+public class Annotation3 {
+    @Test
+    public void parseClass() throws NoSuchMethodException {
+        //1. 获得类对象
+        Class<BookStore> c = BookStore.class;
+        //2. 获得类方法
+        Method method = c.getDeclaredMethod("Test");
+
+        //3. 从类对象中解析出来注解内容
+        //a. 首先判断该类对象上面有没有这个注解
+        if (c.isAnnotationPresent(BOOkk.class)) {
+            //b. 直接获取该注解对象
+            BOOkk book = c.getDeclaredAnnotation(BOOkk.class);
+            System.out.println(book.value());
+            System.out.println(book.price());
+            System.out.println(Arrays.toString(book.authors()));
+        }
+        //4. 从类方法中解析出注解内容
+        if (method.isAnnotationPresent(BOOkk.class)) {
+            BOOkk book = method.getDeclaredAnnotation(BOOkk.class);
+            System.out.println(book.value());
+            System.out.println(book.price());
+            System.out.println(Arrays.toString(book.authors()));
+        }
+    }
+}
+```
+
+## 模拟Junit
+
+<img src="images/image-20220122210552894.png" alt="image-20220122210552894" style="zoom:67%;" />
+
+```java
+@Target({ElementType.METHOD,ElementType.FIELD}) //元注解,只能注解方法和成员变量
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyTest {
+
+}
+```
+
+```java
+public class Annotationdemo4 {
+    @MyTest
+    public void test1(){
+        System.out.println("====test1=====");
+    }
+    public void test2(){
+        System.out.println("====test2=====");
+    }
+    @MyTest
+    public void test3(){
+        System.out.println("====test3=====");
+    }
+
+    /**
+     * 启动菜单
+     * @param args
+     */
+    public static void main(String[] args) throws Exception{
+        Annotationdemo4 t = new Annotationdemo4();
+        //1. 获取类对象
+        Class<Annotationdemo4> c = Annotationdemo4.class;
+
+        //2.
+        Method[] methods = c.getDeclaredMethods();
+
+        //3.
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(MyTest.class)) {
+                method.invoke(t);
+            }
+        }
+    }
+}
+```
+
+# 动态代理Proxy
+
+**概述**
+
+代理就是被代理者没有能力或者不愿意去完成某件事情，需要找个人代替自己去完成这件事，动态代理就是用来对业务功能（方法）进行代理的。例如我要出国，但我不想去弄很多的证明，所以我出钱要别人给我弄，我只用做飞机就行了。其实他出现的原因是在于：想让程序员在业务实现层仅仅保留你的逻辑代码就好了，一些其他的冗余，重复，没有技术的东西让代理去做，这样代码很整洁，方便查看。
+
+**关键步骤**
+
+1. 必须有接口，实现类要实现接口（**代理通常是基于接口实现的**）。
+
+2. 创建一个实现类的对象，该对象为业务对象，紧接着为业务对象做一个代理对象。
+
+<img src="images/image-20220123111540249.png" alt="image-20220123111540249" style="zoom:80%;" />
+
+**举个案例说明好处与基本使用：**
+
+<img src="images/image-20220123111638748.png" alt="image-20220123111638748" style="zoom:80%;" />
+
+这里我们会发现，这个统计耗时的工作是明显重复的，并且让我们的业务实现层变得很复杂，代码看着不优雅！！
+
+**UserService:**
+
+```java
+/**
+   模拟用户业务功能
+ */
+public interface UserService {
+    String login(String loginName , String passWord) ;
+    void selectUsers();
+    boolean deleteUsers();
+    void updateUsers();
+}
+```
+
+**UserServiceImpl:**
+
+```java
+public class UserServiceImpl implements UserService{
+    @Override
+    public String login(String loginName, String passWord)  {
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if("admin".equals(loginName) && "1234".equals(passWord)) {
+            return "success";
+        }
+        return "登录名和密码可能有毛病";
+
+    }
+
+    @Override
+    public void selectUsers() {
+        System.out.println("查询了100个用户数据！");
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean deleteUsers() {
+        try {
+            System.out.println("删除100个用户数据！");
+            Thread.sleep(500);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public void updateUsers() {
+        try {
+            System.out.println("修改100个用户数据！");
+            Thread.sleep(2500);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**代理对象：ProxyUtil（写成了一个工具类）**
+
+这里写的是泛型，表明可以接收任意类型，为任意业务进行耗时统计。
+
+```java
+/**
+    public static Object newProxyInstance(ClassLoader loader,  Class<?>[] interfaces, InvocationHandler h)
+    参数一：类加载器，负责加载代理类到内存中使用。
+    参数二：获取被代理对象实现的全部接口。代理要为全部接口的全部方法进行代理
+    参数三：代理的核心处理逻辑
+ */
+public class ProxyUtil {
+    /**
+      生成业务对象的代理对象。
+     * @param obj
+     * @return
+     */
+    public static <T> T  getProxy(T obj) {
+        // 返回了一个代理对象了
+        return (T)Proxy.newProxyInstance(obj.getClass().getClassLoader(),
+                obj.getClass().getInterfaces(),
+                new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        // 参数一：代理对象本身。一般不管
+                        // 参数二：正在被代理的方法
+                        // 参数三：被代理方法，应该传入的参数
+                       long startTimer = System .currentTimeMillis();
+                        // 马上触发方法的真正执行。(触发真正的业务功能)
+                        Object result = method.invoke(obj, args);
+
+                        long endTimer = System.currentTimeMillis();
+                        System.out.println(method.getName() + "方法耗时：" + (endTimer - startTimer) / 1000.0 + "s");
+
+                        // 把业务功能方法执行的结果返回给调用者
+                        return result;
+                    }
+                });
+    }
+}
+```
+
+**测试类**
+
+```java
+public class Controller {
+    public static void main(String[] args) {
+        UserService1 userService1 = ProxyUtil1.getProxy(new UserServiceImpl1());
+        System.out.println(userService1.login("admin", "123456"));
+        userService1.selectUsers();
+        System.out.println(userService1.deleteUsers());
+        System.out.println(userService1.updateUsers());
+    }
+}
+```
+
+## 动态代理的优点
+
+1. 非常的灵活，支持任意接口类型的实现类对象做代理，也可以直接为接本身做代理。
+2. 可以为被代理对象的所有方法做代理。
+3. 可以在不改变方法源码的情况下，实现对方法功能的增强。
+4. 不仅简化了编程工作、提高了软件系统的可扩展性，同时也提高了开发效率。
+
+# XML
+
+<img src="images/image-20220123112403272.png" alt="image-20220123112403272" style="zoom:80%;" />
+
+## XML概述
+
+XML是可扩展标记语言（eXtensible Markup Language）的缩写，它是**是一种数据表示格式，**可以描述非常复杂的数据结构，常用于传输和存储数据。**可以用于自定义数据格式。**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <sender>张三</sender>
+  <receiver>李四</receiver>
+  <src>
+    	 <addr>北京</addr>
+    <date>2022-11-11 11:11:11</date>
+    </src>
+  <current>武汉</current>
+  <dest>广州</dest>
+</data>
+
+```
+
+**XML的几个特点和使用场景**
+
+- 一是纯文本，默认使用UTF-8编码；二是可嵌套；
+- 如果把XML内容存为文件，那么它就是一个XML文件。
+
+XML的使用场景：**XML内容经常被当成消息进行网络传输，或者作为配置文件用于存储系统的信息。**
+
+## XML语法规则
+
+- **XML文件的后缀名为：xml**
+- **文档声明必须是第一行**,让别人识别这是xml文件
+
+```java
+//一行文档声明
+<?xml version="1.0" encoding="UTF-8" ?>
+  version：XML默认的版本号码、该属性是必须存在的
+  encoding：本XML文件的编码
+```
+
+**XML的标签(元素)规则**
+
+1. 标签由一对尖括号和合法标识符组成: < name>< /name>，必须存在一个根标签，有且只能有一个。
+2. 标签必须成对出现，有开始，有结束: < name>< /name>
+3. 特殊的标签可以不成对，但是必须有结束标记，如:< br/>
+4. 标签中可以定义属性，属性和标签名空格隔开, 属性值必须用引号引起来<student id = “1">
+5. 标签需要正确的嵌套
+
+**XML的其他组成**
+
+- XML文件中可以定义注释信息：<!-- 注释内容 -->
+
+- XML文件中可以存在以下特殊字符
+
+<img src="images/image-20220123113940152.png" alt="image-20220123113940152" style="zoom:80%;" />
+
+- XML文件中可以存在CDATA区:   < ![CDATA[   …内容…  ]]>。代表数据区
+
+  因为第二点太麻烦了，所以有这个东西，里面就不用管其他的东西，可以写任意内容。
+
+  快捷写法：CD
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<student>
+    <name>妞儿国外</name>
+    <sex>女</sex>
+    <hobby>唐僧，追唐僧</hobby>
+    <sql>
+        select * from user where age &lt; 18;
+    </sql>
+    <![CDATA[
+            select * from user where age < 18;
+    ]]>
+</student>
+```
+
+## XML文档约束方式
+
+<img src="images/image-20220123114616556.png" alt="image-20220123114616556" style="zoom: 80%;" />
+
+<img src="images/image-20220123114711598.png" alt="image-20220123114711598" style="zoom:80%;" />
+
+**文档约束的分类：**
+
+1. **DTD**
+
+2. **schema**
+
+   
+
+### **DTD约束**
+
+**需要先手动编写一个DTD文档约束，来约束我们xml的写法**
+
+需求：利用DTD文档约束，约束一个XML文件的编写。
+
+分析：
+
+①：编写DTD约束文档，后缀必须是.dtd
+
+```dtd
+<!ELEMENT 书架 (书+)>
+<!ELEMENT 书 (书名,作者,售价)>
+<!ELEMENT 书名 (#PCDATA)>
+<!ELEMENT 作者 (#PCDATA)>
+<!ELEMENT 售价 (#PCDATA)>
+```
+
+②：在需要编写的XML文件中导入该DTD约束文档
+
+```xml
+<!DOCTYPE 书架 SYSTEM "data.dtd">
+```
+
+③：按照约束的规定编写XML文件的内容。
+
+ **缺点：**
+
+- 不能约束具体的数据类型。
+
+### schema约束
+
+- schema可以约束具体的数据类型，约束能力上更强大。
+
+- schema本身也是一个xml文件，本身也受到其他约束文件的要求，所以编写的更加严谨
+
+<img src="images/image-20220123142112963.png" alt="image-20220123142112963" style="zoom:80%;" />
+
+**需求：利用schema文档约束，约束一个XML文件的编写。**
+
+**分析：**
+
+​		①：编写schema约束文档，后缀必须是.xsd，具体的形式到代码中观看。
+
+​		②：在需要编写的XML文件中导入该schema约束文档
+
+​		③：按照约束内容编写XML文件的标签。
+
+**schema文档：**
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.itcast.cn"
+        elementFormDefault="qualified" >
+    <!-- targetNamespace:申明约束文档的地址（命名空间）-->
+    <element name='书架'>
+        <!-- 写子元素 -->
+        <complexType>
+            <!-- maxOccurs='unbounded': 书架下的子元素可以有任意多个！-->
+            <sequence maxOccurs='unbounded'>
+                <element name='书'>
+                    <!-- 写子元素 -->
+                    <complexType>
+                        <sequence>
+                            <element name='书名' type='string'/>
+                            <element name='作者' type='string'/>
+                            <element name='售价' type='double'/>
+                        </sequence>
+                    </complexType>
+                </element>
+            </sequence>
+        </complexType>
+    </element>
+</schema>
+```
+
+**自己写xml：**
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<书架 xmlns="http://www.itcast.cn"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.itcast.cn data.xsd">
+    <!-- xmlns="http://www.itcast.cn"  基本位置
+         xsi:schemaLocation="http://www.itcast.cn books02.xsd" 具体的位置 -->
+    <书>
+        <书名>神雕侠侣</书名>
+        <作者>金庸</作者>
+        <售价>399.9</售价>
+    </书>
+    <书>
+        <书名>神雕侠侣</书名>
+        <作者>金庸</作者>
+        <售价>19.5</售价>
+    </书>
+
+</书架>
+```
+
+## XML解析技术
+
+XML是为了区存储数据、做配置信息、进行数据传输。
+
+并且最终需要被程序进行读取，解析里面的信息。所以需要解析技术。
+
+<img src="images/image-20220123143131884.png" alt="image-20220123143131884" style="zoom:80%;" />
+
+| Dom常见的解析框架 | 说明                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| JAXP              | SUN公司提供的一套XML的解析的API                              |
+| JDOM              | JDOM是一个开源项目，它基于树型结构，利用纯JAVA的技术对XML文档实现解析、生成、序列化以及多种操作。 |
+| **dom4j**         | **是JDOM的升级品**，用来读写XML文件的。具有性能优异、功能强大和极其易使用的特点，它的性能超过sun公司官方的dom 技术，同时它也是一个开放源代码的软件，Hibernate也用它来读写配置文件。 |
+| jsoup             | 功能强大DOM方式的XML解析开发包，尤其对HTML解析更加方便       |
+
+**主要掌握DOM解析技术**
+
+<img src="images/image-20220123143522298.png" alt="image-20220123143522298" style="zoom:80%;" />
+
+Element对象：students、student等标签；
+
+Attribute对象：id、name、age；
+
+Text对象：id、name、age对应的内容；
+
+**以上三个均实现了Node接口，都为节点类型**
+
+### Dom4j
+
+**使用Dom4J解析出XML文件：**
+
+1. 下载Dom4j框架，官网下载。
+
+   <img src="images/image-20220123144109131.png" alt="image-20220123144109131" style="zoom:67%;" />
+
+2. 在项目中创建一个文件夹：lib
+
+3. 将dom4j-2.1.1.jar文件复制到 lib 文件夹
+
+4. 在jar文件上点右键，选择 Add as Library -> 点击OK
+
+5. 在类中导包使用
+
+#### **一.得到Document对象**
+
+<img src="images/image-20220123144657710.png" alt="image-20220123144657710" style="zoom:80%;" />
+
+<img src="images/image-20220123144710306-16429204313071.png" alt="image-20220123144710306" style="zoom:80%;" />
+
+#### **二.获取xml里面所有的属性，文本....各个节点**
+
+API太多了，不用刻意去记，用到就查查
+
+<img src="images/image-20220123151329563.png" alt="image-20220123151329563" style="zoom:80%;" />
+
+```java
+public class Dom4JHelloWorldDemo1 {
+    @Test
+    public void parseXMLData() throws Exception {
+        // 1、创建一个Dom4j的解析器对象，代表了整个dom4j框架
+        SAXReader saxReader = new SAXReader();
+
+        // 2、把XML文件加载到内存中成为一个Document文档对象
+        // Document document = saxReader.read(new File("xml-app\\src\\Contacts.xml")); // 需要通过模块名去定位
+        // Document document = saxReader.read(new FileInputStream("xml-app\\src\\Contacts.xml"));
+
+        // 注意: getResourceAsStream中的/是直接去src下寻找的文件
+        InputStream is = Dom4JHelloWorldDemo1.class.getResourceAsStream("/Contacts.xml");
+        Document document = saxReader.read(is);
+
+        // 3、获取根元素对象
+        Element root = document.getRootElement();
+        System.out.println(root.getName());
+
+        // 4、拿根元素下的全部子元素对象(一级)
+        // List<Element> sonEles =  root.elements();
+        List<Element> sonEles =  root.elements("contact");
+        for (Element sonEle : sonEles) {
+            System.out.println(sonEle.getName());
+        }
+
+        // 拿某个子元素
+        Element userEle = root.element("user");
+        System.out.println(userEle.getName());
+
+        // 默认提取第一个子元素对象 (Java语言。)
+        Element contact = root.element("contact");
+        // 获取子元素文本
+        System.out.println(contact.elementText("name"));
+        // 去掉前后空格
+        System.out.println(contact.elementTextTrim("name"));
+        // 获取当前元素下的子元素对象
+        Element email = contact.element("email");
+        System.out.println(email.getText());
+        // 去掉前后空格
+        System.out.println(email.getTextTrim());
+
+        // 根据元素获取属性值
+        Attribute idAttr = contact.attribute("id");
+        System.out.println(idAttr.getName() + "-->" + idAttr.getValue());
+        // 直接提取属性值
+        System.out.println(contact.attributeValue("id"));
+        System.out.println(contact.attributeValue("vip"));
+    }
+}
+```
+
+## XML检索技术:Xpath
+
+当我们需要拿出或者寻找xml文件中的某个数据的时候，采用dom4j就显得很无力，因为他很麻烦，首先需要解析整个xml文件，然后再找到各个节点，解析出来，第二步找到各个节点的过程很麻烦。
+
+于是，有了Xpath技术，他适合对xml文件进行快速的信息检索工作。但他不是单独的哦，他是基于dom4j进行开发来的。
+
+**XPath介绍：**
+
+XPath在解析XML文档方面提供了一独树一帜的路径思想，更加优雅，高效
+
+XPath使用**路径表达式**来定位XML文档中的元素节点或属性节点。
+
+- 示例
+- /元素/子元素/孙元素
+- //子元素//孙元素
+
+#### 快速入门：
+
+1. 导入jar包(dom4j和jaxen-1.1.2.jar)，Xpath技术依赖Dom4j技术
+2. 通过dom4j的SAXReader获取Document对象
+3. 利用XPath提供的API, 结合XPath的语法完成选取XML文档元素节点进行解析操作。
+4. Document中与Xpath相关的API如下：
+
+| 方法名                                       | 说明                     |
+| -------------------------------------------- | ------------------------ |
+| **Node  selectSingleNode**( "路径表达式" )   | 获取符合表达式的唯一元素 |
+| **List<Node>   selectNodes**( "路径表达式" ) | 获取符合表达式的元素集合 |
+
+其中，这个路径表达式，具体该怎么写，Xpath给我们提供了四种书写方式：
+
+- **绝对路径**
+- **相对路径**
+- **全文检索**
+- **属性查找**
+
+##### **一：绝对路径**
+
+获取从根节点开始逐层的查找节点列表并打印信息。第一个正斜杠代表了这个文档。
+
+| 路径表达式语法        | 说明                                     |
+| --------------------- | ---------------------------------------- |
+| /根元素/子元素/孙元素 | 从根元素开始，一级一级向下查找，不能跨级 |
+
+```java
+List<Node> nameEles = document.selectNodes("/contactList/contact/name");
+
+//Example
+    @Test
+    public void parse01() throws Exception{
+        //a.
+        SAXReader saxReader = new SAXReader();
+        Document document = saxReader.read(XpathDemo.class.getResourceAsStream("/xmldata/Contacts2.xml"));
+        //b.
+        List<Node> nameNodes = document.selectNodes("/contactList/contact/name");
+        for (Node nameNode : nameNodes) {
+            Element nameEle = (Element)nameNode;
+            System.out.println(nameEle.getTextTrim());
+        }
+    }
+```
+
+##### **二：相对路径**（有点鸡肋）
+
+1. 先得到根节点contactList
+
+2. 再采用相对路径获取下一级contact 节点的name子节点并打印信息
+
+| 路径表达式写法  | 说明                                       |
+| --------------- | ------------------------------------------ |
+| ./子元素/孙元素 | 从当前元素开始，一级一级向下查找，不能跨级 |
+
+```java
+List<Node> nameNodes = rootElement.selectNodes("./contact/name");
+
+//Example
+@Test
+public void parse02() throws Exception{
+    //a.
+    SAXReader saxReader = new SAXReader();
+    Document document = saxReader.read(XpathDemo.class.getResourceAsStream("/xmldata/Contacts2.xml"));
+  	//b.
+    Element rootElement = document.getRootElement();
+    //c.
+    List<Node> nameNodes = rootElement.selectNodes("./contact/name");
+    for (Node nameNode : nameNodes) {
+        Element nameEle = (Element)nameNode;
+        System.out.println(nameEle.getTextTrim());
+    }
+}
+```
+
+##### 三：全文检索（666）
+
+直接全文搜索所有的name元素并打印；不用管路径，嵌套，多深都可以找到。
+
+| 路劲表达式语法      | 说明                                    |
+| ------------------- | --------------------------------------- |
+| **//contact**       | 找contact元素，无论元素在哪里           |
+| **//contact/name**  | 找出所有contact元素下的一级name元素     |
+| **//contact//name** | 找出所有contact元素下的所有级的name元素 |
+
+```java
+List<Node> nameNodes = document.selectNodes("//name");
+
+//Example
+@Test
+public void parse03() throws Exception{
+    //a.
+    SAXReader saxReader = new SAXReader();
+    Document document = saxReader.read(XpathDemo.class.getResourceAsStream("/xmldata/Contacts2.xml"));
+    //b.
+    List<Node> nameNodes = document.selectNodes("//name");
+    for (Node nameNode : nameNodes) {
+        Element nameEle = (Element)nameNode;
+        System.out.println(nameEle.getTextTrim());
+    }
+}
+```
+
+##### 四：属性搜索
+
+在**全文中**搜索属性，或者带属性的元素。
+
+| 路径表达式语法         | 说明                                                         |
+| ---------------------- | ------------------------------------------------------------ |
+| //@属性名              | 全文查找带有该属性对象的所有**属性对象**                     |
+| //元素[@属性名]        | 全文查找带有指定元素名和属性名的所有**元素对象**             |
+| //元素//[@属性名=‘值’] | 全文查找指定元素名和属性名，并且属性值相等的所有**元素对象** |
+
+注意哦：前面三个查找都是什么对象啊？是Element对哦，而属性是另外一个Attribute对象哦，这里很容易搞错。
+
+```java
+List<Node> nodes = document.selectNodes("//@id");//查出的是Attribute哦
+List<Node> nodes = document.selectNodes("//contact[@id]");//这是Element哦
+
+//Example
+@Test
+public void parse04() throws Exception{
+    //a.
+    SAXReader saxReader = new SAXReader();
+    Document document = saxReader.read(XpathDemo.class.getResourceAsStream("/xmldata/Contacts2.xml"));
+    //b.
+    List<Node> nodes = document.selectNodes("//@id");
+    for (Node node : nodes) {
+        Attribute nameEle = (Attribute)node;
+        System.out.println(nameEle.getName()+"===>"+nameEle.getValue());
+    }
+}
+```
+
+# 设计模式
+
+## 工厂模式
+
+**什么是工厂设计模式？**
+
+之前我们创建类对象时, 都是使用new 对象的形式创建,在很多业务场景下也提供了不直接new的方式 。
+
+工厂模式（Factory Pattern）是 Java 中最常用的设计模式之一，  **这种类型的设计模式属于创建型模式，它提供了一种获取对象的方式。**之前我们创建类对象时, 都是使用new 对象的形式创建, 除new 对象方式以外,工厂模式也可以创建对象。
+
+目的：Java来自于现实，现实里面我们平常人是不会区new一个新对象的。例如，电脑，我们是直接从商店里面买来的，并不是自己新建的，对不对，工厂模式也就是这个原理。
+
+采用工厂的方法可以封装对象的创建细节，比如：为该对象进行加工和数据注入，也就是每台电脑的具体配置过程。并且可以实现类与类之间的解耦操作（核心思想）。也就是说，我买来了电脑这个对象后，我觉得电脑出了问题，需要维修，此时我们不可能自己修呀，肯定是送去工厂对不对！
+
+**Example：**
+
+**一：定义电脑的父类**
+
+```java
+public abstract class Computer {
+    private String name;
+    private double price;
+
+    public abstract void start();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+}
+```
+
+**二：华为，Mac电脑对象（子类）**
+
+```java
+public class Huawei extends Computer{
+    @Override
+    public void start() {
+        System.out.println(getName() + "开机了，展示了华为的菊花图标~~~~");
+    }
+}
+
+public class Mac extends Computer{
+    @Override
+    public void start() {
+        System.out.println(getName() + "以非常优雅的方法启动了，展示了一个苹果logo");
+    }
+}
+```
+
+**三：实现工厂模式的工具类**
+
+```java
+public class FactoryPattern {
+    /**
+       定义一个方法，创建对象返回
+     */
+    public static Computer createComputer(String info){
+        switch (info){
+            case "huawei":
+                Computer c = new Huawei();
+                c.setName("huawei pro 16");
+                c.setPrice(5999);
+                return c;
+            case "mac":
+                Computer c2 = new Mac();
+                c2.setName("MacBook pro");
+                c2.setPrice(11999);
+                return c2;
+            default:
+                return null;
+        }
+    }
+}
+```
+
+**四：测试方法**
+
+```java
+public class FactoryDemo {
+    public static void main(String[] args) {
+        Computer c1 = FactoryPattern.createComputer("huawei");
+        c1.start();
+
+        Computer c2 = FactoryPattern.createComputer("mac");
+        c2.start();
+    }
+}
+```
+
+## 装饰模式
+
+**什么是装饰设计模式？**
+
+创建一个新类，包装原始类，从而在新类中提升原来类的功能。其实简单说就是，把我原来那个类里面的功能给加强一点，扩展一下。
+
+**装饰设计模式的作用：**
+
+装饰模式指的是在不改变原类的基础上, 动态地扩展一个类的功能。
+
+**实现步骤：**
+
+1. 定义父类。
+2. 定义原始类，继承父类，定义功能。
+3. 定义装饰类，继承父类，包装原始类，增强功能！！
+
+就拿我们前面的IO流为例子，他就是使用了装饰设计模式，
+
+<img src="images/image-20220123202718167.png" alt="image-20220123202718167" style="zoom:80%;" />
+
+**Example：**拿上面这个为例子
+
+**一：抽象父类**
+
+```java
+public abstract class InputStream {
+    public abstract int read();
+    public abstract int read(byte[] buffer);
+}
+```
+
+**二：实现子类1**
+
+```java
+/**
+   原始类
+ */
+public class FileInputStream extends InputStream{
+    @Override
+    public int read() {
+        System.out.println("低性能的方式读取了一个字节a");
+        return 97;
+    }
+    @Override
+    public int read(byte[] buffer) {
+        buffer[0] = 97;
+        buffer[1] = 98;
+        buffer[2] = 99;
+        System.out.println("低性能的方式读取了一个字节数组：" + Arrays.toString(buffer));
+        return 3;
+    }
+}
+```
+
+**三：装饰类**
+
+```java
+/**
+   装饰类：继承InputStream 拓展原始类的功能
+ */
+public class BufferedInputStream extends InputStream{
+    private InputStream is;
+    public BufferedInputStream(InputStream is){
+        this.is = is;
+    }
+    @Override
+    public int read() {
+        System.out.println("提供8KB的缓冲区，提高读数据性能~~~~");
+        return is.read();
+    }
+
+    @Override
+    public int read(byte[] buffer) {
+        System.out.println("提供8KB的缓冲区，提高读数据性能~~~~");
+        return is.read(buffer);
+    }
+}
+```
+
+**四：测试类**
+
+```java
+/**
+  装饰模式
+
+    定义父类：InputStream
+    定义实现类：FileInputStream 继续父类 定义功能
+    定义装饰实现类：BufferedInputStream 继承父类 定义功能 包装原始类，增强功能。
+ */
+public class DecoratorPattern {
+    public static void main(String[] args) {
+        InputStream is = new BufferedInputStream(new FileInputStream());
+        System.out.println(is.read());
+        System.out.println(is.read(new byte[3]));
+    }
+}
+```
+

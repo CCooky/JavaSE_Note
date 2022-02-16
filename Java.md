@@ -20,7 +20,17 @@ Dom4JHelloWorldDemo1——当前写代码的这个类名；反射原理，舒舒
 */
         InputStream is = Dom4JHelloWorldDemo1.class.getResourceAsStream("/Contacts.xml");
         Document document = saxReader.read(is);
+
 ```
+
+**相对路径的找法：**真的是很烦，一下子在项目工程下面，一下子又在模块下面，尼亚的，这里给出一个通用方法。
+
+```java
+// 这个可以获取我们当前class文件代码所在的主路径
+System.out.println(System.getProperty("user.dir"));
+```
+
+然后我们就可以在这个下面再去拼接我们的相对路径，+号拼接起来。
 
 
 
@@ -179,11 +189,13 @@ System.out.println();
 - ​	**Crtl + ALT +T** ——先选取代码部分，然后按住，可以将代码用**循环语句**包住66666；
 - ​    **ALT + Enter**——快速提示，很多地方用到，异常抛出
 - ​    **ALT + Insert** ——提示插入的东西
-- ​    **Shift + F6** ——选择所有同名的变量，一起更改
+- ​    **Shift + F6** ——选择所有同名的**变量**，一起更改
 - ​    **Ctrl + F12** ——查看实体类内在的成员
 - ​    **Ctrl + H**——查看接口的实现类
 - ​    **Ctrl + O**，展示出Object中可以重写的方法！！！
 - ​    **Ctrl+Alt+V**——自动补全代码
+- ​    **Crtl + R** ——搜索替换。类似于windows的Crtl F，但是它增强了一个替换功能，可以用于**所有字段**
+- ​    **ALT + 鼠标左键**——可以按照列的方向整列选择，并统一编辑成输入内容
 - ​	for 循环的快速操作：arr是我们定义的数组，arr.for i 就可以直接遍历arr数组所有元素。即 " **变量名.for i** "
 - ​    增强for——即 " **变量名.for**"
 
@@ -2054,6 +2066,8 @@ BigDecimal a1 = BigDecimal.valueOf(0.5)
 # 日期与时间
 
 ## Date类（日期对象）
+
+需要时间毫秒值的原因：日期对象无法进行运行！！！求出现在往后24小时后的时间，就只能通过时间毫秒值做。
 
 构造器：
 

@@ -190,7 +190,7 @@ System.out.println();
 - ​    **ALT + Enter**——快速提示，很多地方用到，异常抛出
 - ​    **ALT + Insert** ——提示插入的东西
 - ​    **Shift + F6** ——选择所有同名的**变量**，一起更改
-- ​    **Ctrl + F12** ——查看实体类内在的成员
+- ​    **Ctrl + F12** ——查看实体类内在的成员方法
 - ​    **Ctrl + H**——查看接口的实现类
 - ​    **Ctrl + O**，展示出Object中可以重写的方法！！！
 - ​    **Ctrl+Alt+V**——自动补全代码
@@ -911,10 +911,10 @@ String s = new String("abc");
 
 1. **比较字符串内容（boolean）**
 
-|                     方法名                      |                             说明                             |
-| :---------------------------------------------: | :----------------------------------------------------------: |
-|     public boolean equals ( String another)     | 该字符串对象与指定字符串对象比较，只关心字符串内容是否完完全全一致 |
-| public boolean equalsIgnoreCase(String another) |         也是比较内容，但忽略大小写，常用于验证码！！         |
+|                       方法名                        |                             说明                             |
+| :-------------------------------------------------: | :----------------------------------------------------------: |
+|     public boolean **equals** ( String another)     | 该字符串对象与指定字符串对象比较，只关心字符串内容是否完完全全一致 |
+| public boolean **equalsIgnoreCase**(String another) |         也是比较内容，但忽略大小写，常用于验证码！！         |
 
 为什么不用 == 来比较？因为字符串对象是引用类型，不是直接存储数据，再加上其内存的独特性，完全不能用==比较，根本判断不对！
 
@@ -1962,6 +1962,10 @@ public String toString() {
 
 在**子类里面**我们对该方法重写。用到了**多态和引用类型强转**哦  **Alt + Insert**
 
+==但是，我们一般不用这个！！！==
+
+原因在于假如s1为null的话，就报错：空指针异常。s1.equals(s2)这个是字符串对象调用里面的equals方法，但是如果s1是null呢，也就是s1不是对象，那他就没有对应的equals方法啊，这个空指针异常的问题经常出现，原因是程序员的技术不行。
+
 ```java
 @Override
 public boolean equals(Object o) {
@@ -1994,7 +1998,9 @@ Objects 类是 **final 修饰**的类，不可继承，内部方法都是 **stat
 
 这个方法安全性最高！！！！
 
-因为它验证了s1\s2是否为NUll，做了非空校验。所以说我们看到官方重写的equals（）方法里面用到了这个！
+因为它验证了s1\s2是否为NUll，做了非空校验。报错：空指针异常，s1.equals(s2)这个是字符串对象调用里面的equals方法，但是如果s1是null呢，也就是s1不是对象，那他就没有对应的equals方法啊，这个空指针异常的问题经常出现，原因是程序员的技术不行。
+
+所以说我们看到官方重写的equals（）方法里面用到了这个！
 
 ## StringBuilder类
 
@@ -2243,6 +2249,7 @@ Integer b1 = a;
 //Example
 integer id = Integer.valueOf("1106");
 //等价于==  new Integer(Integer.parseInt(s))
+String flag = String.valueOf(true);
 ```
 
 

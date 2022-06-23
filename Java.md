@@ -1,4 +1,4 @@
-#java常用方法
+#java常用技巧
 
 ```java
 // 获取对象的数据类型，是什么对象
@@ -30,7 +30,7 @@ Dom4JHelloWorldDemo1——当前写代码的这个类名；反射原理，舒舒
 System.out.println(System.getProperty("user.dir"));
 ```
 
-然后我们就可以在这个下面再去拼接我们的相对路径，+号拼接起来。
+这样我们就知道，相对路径应该怎么写。一般情况下，相对路径都是相对工程而言的，我们路径里面写模块名+...等等定位文件
 
 
 
@@ -195,6 +195,7 @@ System.out.println();
 - ​    **Ctrl + O**，展示出Object中可以重写的方法！！！
 - ​    **Ctrl+Alt+V**——自动补全代码
 - ​    **Crtl + R** ——搜索替换。类似于windows的Crtl F，但是它增强了一个替换功能，可以用于**所有字段**
+- ​    **Alt + 7**——查看类中的方法 
 - ​    **ALT + 鼠标左键**——可以按照列的方向整列选择，并统一编辑成输入内容
 - ​	for 循环的快速操作：arr是我们定义的数组，arr.for i 就可以直接遍历arr数组所有元素。即 " **变量名.for i** "
 - ​    增强for——即 " **变量名.for**"
@@ -327,7 +328,7 @@ byte b = (byte)a;
 
 ###  基本运算符
 
-两个整数相除结果还是整数，因为表达式的最终类型由式子里面最高类型决定（自动类型转换原理）.
+两个整数相除结果还是整数，因为表达式的最终类型,由式子里面最高类型决定（自动类型转换原理）.
 
 ```java
 a = 10;
@@ -497,9 +498,17 @@ sout("随机产生了：" + number)
 
 ## 数组
 
-记住：数组变量名称存储的是数组第一个对象的内存地址，所以数组是引用类型。
+记住：数组变量名称存储的是数组第一个元素的内存地址，所以数组是引用类型。
 
 计算机编号都是从0开始，matlab不是计算机编号。
+
+特点：
+
+- 在内存中申请一块连续的空间
+- 数组下标从 0 开始
+- 每个数组元素都有默认值，基本类型的默认值为 0、0.0、false，引用类型的默认值为 null
+- 数组的类型只能是一个，且固定，在申明时确定
+- 数组的长度一经确定，无法改变，即定长。要改变长度，只能重新申明一个。但数组元素内容可以变化。
 
 ![13](Images/13.png)
 
@@ -2176,6 +2185,7 @@ Calendar日历类创建日历对象的方法：
 				// 1、拿到系统此刻日历对象
 				Calendar cal = Calendar.getInstance();
 				System.out.println(cal);
+
         // 2、获取日历的信息:public int get(int field)：取日期中的某个字段信息。
         int year = cal.get(Calendar.YEAR);
         System.out.println(year);
@@ -2187,9 +2197,603 @@ Calendar日历类创建日历对象的方法：
         System.out.println(days);
 ```
 
-# JDK8新增日期类(后面补充)
+# JDK8新增日期类
 
-第十三讲
+从Java 8开始，java.time包提供了新的日期和时间API，主要涉及的类型有：
+
+- **LocalDate：**本地日期对象。
+- **LocalTime：**本地时间对象。
+- **LocalDateTime**：本地日期时间对象，包含了日期及时间。
+- **Instant：**代表的是时间戳对象（具体的年月日时分秒）。
+- **DateTimeFormatter:**  用于做最上面三种时间对象的格式化和解析。
+- **Duration:**  用于计算两个 “时间 ”间隔 。
+- **Period:**  用于计算两个 “日期” 间隔。
+
+==注意区分：== Java中的日期指的是：“年月日”；时间指的是：“时分秒”。
+
+==特点：==新API的类型几乎全部是不变类型（和String的使用类似），可以放心使用不必担心被修改。
+
+## 本地三种时间对象
+
+LocalDate、LocalTime、LocalDateTime
+
+他们三者构建对象和API都是通用的，并且存在下面转化关系：
+
+<img src="images/image-20220511232011083.png" alt="image-20220511232011083" style="zoom:80%;" />
+
+LocalDateTime的转换API：
+
+| 方法名                              | 说明                    |
+| ----------------------------------- | ----------------------- |
+| public LocalDate **toLocalDate( )** | 转换成一个LocalDate对象 |
+| public LocalTime **toLocalTime( )** | 转换成一个LocalTime对象 |
+
+**修改相关的API**
+
+LocalDateTime 综合了 LocalDate 和 LocalTime 里面的方法，所以下面只用 LocalDate 和 LocalTime 来举例，可以向当前时间对象，添加几天，减少几天，修改年月日，比较两个时间对象等。
+
+这些方法返回的是一个新的实例引用，因为LocalDateTime 、LocalDate 、LocalTime 都是不可变的。 
+
+详细使用看下面代码
+
+**LocalDate：**
+
+```java
+public class Demo01LocalDate {
+    public static void main(String[] args) {
+        // 1、获取本地日期对象。（年-月-日）
+        LocalDate nowDate = LocalDate.now();
+        System.out.println("今天的日期：" + nowDate);//今天的日期：
+
+        int year = nowDate.getYear();
+        System.out.println("year：" + year);
+
+        int month = nowDate.getMonthValue();
+        System.out.println("month：" + month);
+
+        int day = nowDate.getDayOfMonth();
+        System.out.println("day：" + day);
+
+        //当年的第几天
+        int dayOfYear = nowDate.getDayOfYear();
+        System.out.println("dayOfYear：" + dayOfYear);
+
+        //星期
+        System.out.println(nowDate.getDayOfWeek());
+        System.out.println(nowDate.getDayOfWeek().getValue());
+
+        //月份
+        System.out.println(nowDate.getMonth());//AUGUST
+        System.out.println(nowDate.getMonth().getValue());//8
+
+        System.out.println("------------------------");
+        LocalDate bt = LocalDate.of(1991, 11, 11);
+        System.out.println(bt);//直接传入对应的年月日
+        System.out.println(LocalDate.of(1991, Month.NOVEMBER, 11));//相对上面只是把月换成了枚举
+    }
+}
+```
+
+<img src="images/image-20220511232250144.png" alt="image-20220511232250144" style="zoom:80%;" />
+
+**LocalTime：**
+
+```java
+public class Demo02LocalTime {
+    public static void main(String[] args) {
+        // 1、获取本地时间对象。（时分秒）
+        LocalTime nowTime = LocalTime.now();
+        System.out.println("今天的时间：" + nowTime);//今天的时间：
+
+        int hour = nowTime.getHour();//时
+        System.out.println("hour：" + hour);//hour：
+
+        int minute = nowTime.getMinute();//分
+        System.out.println("minute：" + minute);//minute：
+
+        int second = nowTime.getSecond();//秒
+        System.out.println("second：" + second);//second：
+
+        int nano = nowTime.getNano();//纳秒
+        System.out.println("nano：" + nano);//nano：
+
+        System.out.println("-----");
+        System.out.println(LocalTime.of(8, 20));//时分
+        System.out.println(LocalTime.of(8, 20, 30));//时分秒
+        System.out.println(LocalTime.of(8, 20, 30, 150));//时分秒纳秒
+        LocalTime mTime = LocalTime.of(8, 20, 30, 150);
+
+        System.out.println("---------------");
+        System.out.println(LocalDateTime.of(1991, 11, 11, 8, 20));
+        System.out.println(LocalDateTime.of(1991, Month.NOVEMBER, 11, 8, 20));
+        System.out.println(LocalDateTime.of(1991, 11, 11, 8, 20, 30));
+        System.out.println(LocalDateTime.of(1991, Month.NOVEMBER, 11, 8, 20, 30));
+        System.out.println(LocalDateTime.of(1991, 11, 11, 8, 20, 30, 150));
+        System.out.println(LocalDateTime.of(1991, Month.NOVEMBER, 11, 8, 20, 30, 150));
+    }
+}
+```
+
+<img src="images/image-20220511232401607.png" alt="image-20220511232401607" style="zoom:80%;" />
+
+**LocalDateTime：**
+
+```java
+public class Demo03LocalDateTime {
+    public static void main(String[] args) {
+        // 日期 时间
+        LocalDateTime nowDateTime = LocalDateTime.now();
+        System.out.println("今天是：" + nowDateTime);//今天是：
+        System.out.println(nowDateTime.getYear());//年
+        System.out.println(nowDateTime.getMonthValue());//月
+        System.out.println(nowDateTime.getDayOfMonth());//日
+        System.out.println(nowDateTime.getHour());//时
+        System.out.println(nowDateTime.getMinute());//分
+        System.out.println(nowDateTime.getSecond());//秒
+        System.out.println(nowDateTime.getNano());//纳秒
+        //日：当年的第几天
+        System.out.println("dayOfYear：" + nowDateTime.getDayOfYear());//dayOfYear：249
+        //星期
+        System.out.println(nowDateTime.getDayOfWeek());//THURSDAY
+        System.out.println(nowDateTime.getDayOfWeek().getValue());//4
+        //月份
+        System.out.println(nowDateTime.getMonth());//SEPTEMBER
+        System.out.println(nowDateTime.getMonth().getValue());//9
+
+
+        LocalDate ld = nowDateTime.toLocalDate();
+        System.out.println(ld);
+
+        LocalTime lt = nowDateTime.toLocalTime();
+        System.out.println(lt.getHour());
+        System.out.println(lt.getMinute());
+        System.out.println(lt.getSecond());
+    }
+}
+```
+
+<img src="images/image-20220511232458899.png" alt="image-20220511232458899" style="zoom:80%;" />
+
+**UpdateTime：**
+
+```java
+public class Demo04UpdateTime {
+    public static void main(String[] args) {
+        LocalTime nowTime = LocalTime.now();
+        System.out.println(nowTime);//当前时间
+        System.out.println(nowTime.minusHours(1));//一小时前
+        System.out.println(nowTime.minusMinutes(1));//一分钟前
+        System.out.println(nowTime.minusSeconds(1));//一秒前
+        System.out.println(nowTime.minusNanos(1));//一纳秒前
+
+        System.out.println("----------------");
+
+        System.out.println(nowTime.plusHours(1));//一小时后
+        System.out.println(nowTime.plusMinutes(1));//一分钟后
+        System.out.println(nowTime.plusSeconds(1));//一秒后
+        System.out.println(nowTime.plusNanos(1));//一纳秒后
+
+        System.out.println("------------------");
+        // 不可变对象，每次修改产生新对象！
+        System.out.println(nowTime);
+
+        System.out.println("---------------");
+        LocalDate myDate = LocalDate.of(2018, 9, 5);
+        LocalDate nowDate = LocalDate.now();
+
+        System.out.println("今天是2018-09-06吗？ " + nowDate.equals(myDate));//今天是2018-09-06吗？ false
+        System.out.println(myDate + "是否在" + nowDate + "之前？ " + myDate.isBefore(nowDate));//2018-09-05是否在2018-09-06之前？ true
+        System.out.println(myDate + "是否在" + nowDate + "之后？ " + myDate.isAfter(nowDate));//2018-09-05是否在2018-09-06之后？ false
+
+        System.out.println("---------------------------");
+        // 判断今天是否是你的生日
+        LocalDate birDate = LocalDate.of(1996, 8, 5);
+        LocalDate nowDate1 = LocalDate.now();
+        // MonthDay: 月日对象（几月几日）
+        MonthDay birMd = MonthDay.of(birDate.getMonthValue(), birDate.getDayOfMonth());
+        MonthDay nowMd = MonthDay.from(nowDate1);
+
+        System.out.println("今天是你的生日吗？ " + birMd.equals(nowMd));//今天是你的生日吗？ false
+    }
+}
+```
+
+<img src="images/image-20220511232606867.png" alt="image-20220511232606867" style="zoom:80%;" />
+
+## Instant
+
+时间戳对象。包含时间与日期，指的是具体的某一时刻（年月日时分秒）。与java.util.Date很类似，事实上Instant就是类似JDK8 以前的Date。并且Instant和Date这两个类可以进行转换。
+
+```java
+public class Demo05Instant {
+    public static void main(String[] args) {
+
+        // 1、得到一个Instant时间戳对象
+            // 这个获取的是世界标准时间
+        Instant instant = Instant.now();
+        System.out.println(instant);
+
+        // 2、系统此刻的时间戳怎么办？
+            // 目前所在地区的时间戳
+        Instant instant1 = Instant.now();
+        System.out.println(instant1.atZone(ZoneId.systemDefault()));
+
+        // 3、如何去返回Date对象
+        Date date = Date.from(instant);
+        System.out.println(date);
+
+        Instant i2 = date.toInstant();
+        System.out.println(i2);
+    }
+}
+```
+
+<img src="images/image-20220512102227359.png" alt="image-20220512102227359" style="zoom:80%;" />
+
+## DateTimeFormatter
+
+在JDK8中，引入了一个全新的日期与时间格式器DateTimeFormatter。超级好用。三种本地时间对象都可以解析。
+
+```java
+public class Demo06DateTimeFormat {
+    public static void main(String[] args) {
+        // 本地此刻  日期时间对象
+        LocalDateTime ldt = LocalDateTime.now();
+        System.out.println(ldt);
+
+        // 解析/格式化器
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss EEE a");
+        // 正向格式化
+        System.out.println(dtf.format(ldt));
+        // 逆向格式化
+        System.out.println(ldt.format(dtf));
+
+        // 解析字符串时间
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // 解析当前字符串时间成为本地日期时间对象
+        LocalDateTime ldt1 = LocalDateTime.parse("2019-11-11 11:11:11" ,  dtf1);
+        System.out.println(ldt1);
+        System.out.println(ldt1.getDayOfYear());
+
+    }
+}
+```
+
+<img src="images/image-20220512102334751.png" alt="image-20220512102334751" style="zoom:80%;" />
+
+## Period
+
+计算两个本地日期对象的日期间隔，是一个日期间隔对象。只能用于 LocalDate 之间的比较。
+
+```java
+public class Demo07Period {
+    public static void main(String[] args) {
+        // 当前本地 年月日
+        LocalDate today = LocalDate.now();
+        System.out.println(today);//
+
+        // 生日的 年月日
+        LocalDate birthDate = LocalDate.of(1998, 10, 13);
+        System.out.println(birthDate);
+
+        Period period = Period.between(birthDate, today);//第二个参数减第一个参数
+
+        System.out.println(period.getYears());
+        System.out.println(period.getMonths());
+        System.out.println(period.getDays());
+    }
+}
+```
+
+<img src="images/image-20220512102606402.png" alt="image-20220512102606402" style="zoom:80%;" />
+
+## Duration
+
+计算两个本地时间对象的时间间隔，是一个时间间隔对象。可以用于 LocalDateTime 和 Instant 之间的比较。
+
+```java
+public class Demo08Duration {
+    public static void main(String[] args) {
+        // 本地日期时间对象。
+        LocalDateTime today = LocalDateTime.now();
+        System.out.println(today);
+
+        // 出生的日期时间对象
+        LocalDateTime birthDate = LocalDateTime.of(2021,8
+                ,06,01,00,00);
+
+        System.out.println(birthDate);
+
+        Duration duration = Duration.between(  today , birthDate);//第二个参数减第一个参数
+
+        System.out.println(duration.toDays());//两个时间差的天数
+        System.out.println(duration.toHours());//两个时间差的小时数
+        System.out.println(duration.toMinutes());//两个时间差的分钟数
+        System.out.println(duration.toMillis());//两个时间差的毫秒数
+        System.out.println(duration.toNanos());//两个时间差的纳秒数
+    }
+}
+```
+
+<img src="images/image-20220512102753637.png" alt="image-20220512102753637" style="zoom:80%;" />
+
+## ChronoUnit
+
+ChronoUnit类可用于在单个时间单位内测量一段时间，这个工具类是最全的了，可以用于比较所有的时间单位
+
+```java
+public class Demo09ChronoUnit {
+    public static void main(String[] args) {
+        // 本地日期时间对象：此刻的
+        LocalDateTime today = LocalDateTime.now();
+        System.out.println(today);
+
+        // 生日时间
+        LocalDateTime birthDate = LocalDateTime.of(1990,10,1,
+                10,50,59);
+        System.out.println(birthDate);
+
+        System.out.println("相差的年数：" + ChronoUnit.YEARS.between(birthDate, today));
+        System.out.println("相差的月数：" + ChronoUnit.MONTHS.between(birthDate, today));
+        System.out.println("相差的周数：" + ChronoUnit.WEEKS.between(birthDate, today));
+        System.out.println("相差的天数：" + ChronoUnit.DAYS.between(birthDate, today));
+        System.out.println("相差的时数：" + ChronoUnit.HOURS.between(birthDate, today));
+        System.out.println("相差的分数：" + ChronoUnit.MINUTES.between(birthDate, today));
+        System.out.println("相差的秒数：" + ChronoUnit.SECONDS.between(birthDate, today));
+        System.out.println("相差的毫秒数：" + ChronoUnit.MILLIS.between(birthDate, today));
+        System.out.println("相差的微秒数：" + ChronoUnit.MICROS.between(birthDate, today));
+        System.out.println("相差的纳秒数：" + ChronoUnit.NANOS.between(birthDate, today));
+        System.out.println("相差的半天数：" + ChronoUnit.HALF_DAYS.between(birthDate, today));
+        System.out.println("相差的十年数：" + ChronoUnit.DECADES.between(birthDate, today));
+        System.out.println("相差的世纪（百年）数：" + ChronoUnit.CENTURIES.between(birthDate, today));
+        System.out.println("相差的千年数：" + ChronoUnit.MILLENNIA.between(birthDate, today));
+        System.out.println("相差的纪元数：" + ChronoUnit.ERAS.between(birthDate, today));
+    }
+}
+```
+
+<img src="images/image-20220512102852179.png" alt="image-20220512102852179" style="zoom:80%;" />
+
+## 其他一些操作
+
+```java
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 操作时间工具类
+ *
+ * @author LiSanWei
+ */
+public class DataTimeUtils {
+
+    public static final DateTimeFormatter FORMATTER_FULL = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("+8"));
+    public static final DateTimeFormatter DATE_STR = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.of("+8"));
+
+    public static void main(String[] args) {
+        // 1. java8获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("+8"));
+        // 2.将获取当前时间转化成特定格式
+        System.out.println("dateTimeFormatter = " + now.format(dateTimeFormatter));
+
+        // 3.字符串转成特定时间
+        String strDateTime = "2016-04-04 11:50:53";
+        LocalDateTime parse = LocalDateTime.parse(strDateTime, dateTimeFormatter);
+
+
+        // 4.一天的开始/一天的结束
+        LocalDateTime start = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+        String startDay = start.format(dateTimeFormatter);
+        String endDay = end.format(dateTimeFormatter);
+        System.out.println("startDay = " + startDay + "endDay = " + endDay);
+
+        // 5.获取当前月的第一天
+        LocalDate currentMonthFirstDay = LocalDate.now().minusMonths(0).with(TemporalAdjusters.firstDayOfMonth());
+        System.out.println("with = " + currentMonthFirstDay);
+
+        // 6.获取周几
+        DayOfWeek dayOfWeek = currentMonthFirstDay.getDayOfWeek();
+        System.out.println("dayOfWeek = " + dayOfWeek);
+        int value = dayOfWeek.getValue();
+        System.out.println("value = " + value);
+
+        // 7.获取一个月多少 //当月的天数
+        int i = LocalDate.now().lengthOfMonth();
+
+        // 8.获取当前月的最后一天
+        LocalDate currentMonthEndDay = LocalDate.now().minusMonths(0).with(TemporalAdjusters.lastDayOfMonth());
+        System.out.println("withEnd = " + currentMonthEndDay);
+
+        // 9.一个月之前，一个月之后
+        LocalDate currentNow = LocalDate.now();
+        LocalDate minus = currentNow.minus(1, ChronoUnit.MONTHS);
+        LocalDate plus = currentNow.plus(1, ChronoUnit.MONTHS);
+        System.out.println("with = " + minus + plus);
+
+        // 10.获取几天/几天后的日期
+        LocalDate minus1 = currentNow.minus(1, ChronoUnit.DAYS);
+        LocalDate plus1 = currentNow.plus(1, ChronoUnit.DAYS);
+        System.out.println("minus1 = " + minus1);
+        System.out.println("plus1 = " + plus1);
+
+        // 11.java8指定年月日
+        LocalDate of = LocalDate.of(2021, 11, 18);
+        System.out.println("of = " + of);
+    }
+
+
+    /**
+     * 将字符串 转成 LocalDateTime 示例："2016-04-04 11:50:53"
+     *
+     * @param dateTime 时间
+     * @return LocalDateTime
+     */
+    public static LocalDateTime strTimeToLocalDateTime(String dateTime) {
+        return LocalDateTime.parse(dateTime, FORMATTER_FULL);
+    }
+
+    /**
+     * date 转成 LocalDateTime
+     *
+     * @param date 日期
+     */
+    public static LocalDateTime dateToLocalDateTime(Date date) {
+        Instant instant = date.toInstant();
+        ZoneId zone = ZoneId.systemDefault();
+        return LocalDateTime.ofInstant(instant, zone);
+    }
+
+    /**
+     * date 转成 LocalDate
+     *
+     * @param date 日期
+     */
+    public static LocalDate dateToLocalDate(Date date) {
+        Instant instant = date.toInstant();
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
+        return localDateTime.toLocalDate();
+    }
+
+    /**
+     * date 转成 LocalTime
+     *
+     * @param date 日期
+     */
+    public static LocalTime dateToLocalTime(Date date) {
+        Instant instant = date.toInstant();
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
+        return localDateTime.toLocalTime();
+    }
+
+    /**
+     * LocalDateTime 转成 Date
+     *
+     * @param localDateTime 时间
+     * @return 结果集
+     */
+    public static Date localDateTimeToDate(LocalDateTime localDateTime) {
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant = localDateTime.atZone(zone).toInstant();
+        return Date.from(instant);
+    }
+
+    /**
+     * localDate 转成 Date
+     *
+     * @param localDate 结果集
+     */
+    public static Date localDateToDate(LocalDate localDate) {
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant = localDate.atStartOfDay().atZone(zone).toInstant();
+        return Date.from(instant);
+    }
+
+    /**
+     * LocalTime 转成 Date
+     *
+     * @param localTime 本地时间
+     * @param localDate 时间
+     */
+    public static Date localTimeToDate(LocalTime localTime, LocalDate localDate) {
+        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant = localDateTime.atZone(zone).toInstant();
+        return Date.from(instant);
+    }
+
+
+    /**
+     * 获取前一个月的第一天的时间
+     *
+     * @return 几号
+     */
+    public Integer getLastMonthEndDay() {
+        LocalDate with = LocalDate.now().plusMonths(-1).with(TemporalAdjusters.firstDayOfMonth());
+        return with.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
+    }
+
+    /**
+     * 获取后一个月的第一天的时间
+     *
+     * @return 几号
+     */
+    public static Integer getNextMonthEndDay() {
+        LocalDate with = LocalDate.now().plusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
+        return with.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
+    }
+
+    /**
+     * 获取日历表
+     *
+     * @param index -1表示上月 0表示当月 1表示下月
+     * @return 结果集
+     */
+    public static List<DataCalendarDTO> getCalendarTable(Integer index) {
+        // 根据输入确定月份
+        LocalDate months = LocalDate.now().plusMonths(index);
+        // 获取当前月的第一天
+        LocalDate currentMonthFirstDay = months.with(TemporalAdjusters.firstDayOfMonth());
+        // 获取当前月的最后一天
+        LocalDate currentMonthEndDay = months.with(TemporalAdjusters.lastDayOfMonth());
+        // 获取一个月多少 //当月的天数
+        int days = LocalDate.now().lengthOfMonth();
+        // 获取周几
+        int dayOfWeek = currentMonthFirstDay.getDayOfWeek().getValue();
+        // 获取日历第一天
+        LocalDate calendarFirstDay = months.minus(dayOfWeek - 1, ChronoUnit.DAYS);
+        // 获取日历最后一天
+        LocalDate calendarEndDay = currentMonthEndDay.plus(42 - days - (dayOfWeek - 1), ChronoUnit.DAYS);
+        List<DataCalendarDTO> localDateList = new ArrayList<>();
+        long length = calendarEndDay.toEpochDay() - calendarFirstDay.toEpochDay();
+        DataCalendarDTO dataCalendarDTO;
+        for (long i = length; i >= 0; i--) {
+            dataCalendarDTO = new DataCalendarDTO();
+            // 当前日期
+            LocalDate localDate = calendarEndDay.minusDays(i);
+            dataCalendarDTO.setDate(localDate.format(DATE_STR));
+            // 周几
+            dataCalendarDTO.setWeek(localDate.getDayOfWeek().getValue());
+            localDateList.add(dataCalendarDTO);
+        }
+        return localDateList;
+    }
+
+    /**
+     * @param begin 开始日期
+     * @param end   结束日期
+     * @return 开始与结束之间的所以日期，包括起止
+     */
+    public static List<LocalDate> getMiddleAllDate(LocalDate begin, LocalDate end) {
+        List<LocalDate> localDateList = new ArrayList<>();
+        long length = end.toEpochDay() - begin.toEpochDay();
+        for (long i = length; i >= 0; i--) {
+            localDateList.add(end.minusDays(i));
+        }
+        return localDateList;
+    }
+
+    /**
+     * 获取前几天或者后几天的时间
+     *
+     * @param offSet     负数代表前几天
+     * @param timeFormat 时间格式化类型
+     * @return 格式化后的结果
+     */
+    public static String getYesterdayByFormat(Integer offSet, String timeFormat) {
+        return LocalDateTime.now().plusDays(offSet).format(DateTimeFormatter.ofPattern(timeFormat));
+    }
+}
+```
 
 # 包装类
 
@@ -2447,6 +3051,8 @@ Arrays.toString()用于普通数组的时候，例如in[]，String[]，直接返
 
 ![image-20220115142507454](images/image-20220115142507454.png)
 
+==当结果>0时，把把左右两边更换位置，其他情况不变==
+
 - 有一点看不懂原理，其实没有关系，只要记住一个道理：
 
   但是注意一定返回的是整数才可以哦，如果遇到double类型，就使用
@@ -2650,7 +3256,7 @@ Collection list = new ArrayList();
 
 - 对于**List集合**，因为可以使用for循环，所以可以采用for循环，倒着删除的办法解决
 
-# Collection集合
+# Collection集合体系
 
 ## Collection的常用API
 
@@ -2694,10 +3300,10 @@ Collection<String> list = new ArrayList<>();
 Iterator<String> it = list.iterator();
 ```
 
-| Iterator常用方法名称 | 说明                                                         |
-| -------------------- | ------------------------------------------------------------ |
-| boolean hasNext ( )  | 询问当前位置是否有元素存在，存在返回true ,不存在返回false    |
-| E next()             | 获取当前位置的元素，并同时将迭代器对象移向下一个位置，注意防止取出越界。 |
+| Iterator常用方法名称     | 说明                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| boolean  **hasNext ( )** | 询问当前位置是否有元素存在，存在返回true ,不存在返回false    |
+| E  **next()**            | 获取当前位置的元素，并同时将迭代器对象移向下一个位置，注意防止取出越界。 |
 
 ```java
 Iterator<String> it = lists.iterator();
@@ -3967,25 +4573,25 @@ public class Test {
 
 ### 配置详解
 
-**日志输出位置、格式设置：**
+==**1. 日志输出位置、格式设置：< appender>**==
 
-- 通过logback.xml 中的**< append>标签**可以设置输出位置和日志信息的详细格式。
+- 通过logback.xml 中的**< appender>标签**可以设置输出位置和日志信息的详细格式。
 
 - 通常可以设置2个日志输出位置：一个是控制台、一个是系统文件中
 
-**输出到控制台的配置标志**
+​		**输出到控制台的配置标志**
 
 ```xml
 <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 ```
 
-**输出到系统文件的配置标志**
+​		**输出到系统文件的配置标志**
 
 ```xml
 <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 ```
 
-**日志级别设置:**
+==**2. 日志级别设置: < root>**==
 
 可以通过设置日志的输出级别来控制哪些日志信息输出或者不输出。
 
@@ -3998,6 +4604,28 @@ public class Test {
 <img src="images/image-20220117143155760.png" alt="image-20220117143155760" style="zoom:80%;" />
 
 ### 范例：
+
+依赖：
+
+```xml
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-core</artifactId>
+    <version>1.2.9</version>
+</dependency>
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+    <version>1.2.9</version>
+</dependency>
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+    <version>1.7.32</version>
+</dependency>
+```
+
+配置文件：
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -4036,7 +4664,6 @@ public class Test {
     </appender>
 
     <!--
-
     level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF
    ， 默认debug
     <root>可以包含零个或多个<appender-ref>元素，标识这个输出位置将会被本日志级别控制。
@@ -4051,6 +4678,8 @@ public class Test {
 # File、IO流(TODO)
 
 前面做系统的时候，我们用集合存储数据，都是在内存里面，数据都是临时的，所以，我们希望把数据存储到磁盘里面，这样可以一直保存。
+
+==计算机的最小存储单位为字节byte，由8个二进制位组成，也叫8个bit==
 
 **方法：**
 
@@ -4068,39 +4697,67 @@ public class Test {
 
 # File类
 
-- File类在包java.io.File下、代表操作系统的文件对象（**文件、文件夹**）。
-
+- **File类在 包java.io.File下、代表操作系统的文件对象（文件、文件夹）。**
 - File类提供了：定位文件，获取文件本身的信息、删除文件、创建文件（文件夹）等功能
+
+<img src="images/image-20220221171623539.png" alt="image-20220221171623539" style="zoom:67%;" />
 
 ## **创建File对象**
 
-| 构造器名称                               | 说明                                       |
-| ---------------------------------------- | ------------------------------------------ |
-| public File(String pathname)             | 根据**文件路径**创建文件对象               |
-| public File(String parent, String child) | 从**父路径和子路径**创建文件对象           |
-| public File(File parent, String child)   | 根据**父路径文件对象和子路径**创建文件对象 |
+| 构造器名称                                   | 说明                                       |
+| -------------------------------------------- | ------------------------------------------ |
+| public **File**(String pathname)             | 根据**文件路径**创建文件对象               |
+| public **File**(String parent, String child) | 从**父路径和子路径**创建文件对象           |
+| public **File**(File parent, String child)   | 根据**父路径文件对象和子路径**创建文件对象 |
 
 注意：File对象可以是文件或者文件夹
 
 ​			File封装的对象仅仅是一个路径名，这个路径可以是存在的，也可以是不存在的。
 
-**Java的相对路径，**是相对于工程而言的，而不是模块，当你使用相对路径时，会直接从该模块的上面工程开始往下找。工程相对于酒店，模块相对于房间。
+**Java的相对路径，默认直接到当前工程下的目录寻找文件。** 是相对于工程而言的，而不是模块，当你使用相对路径时，会直接从该模块的上级工程开始往下找。工程相对于酒店，模块相对于房间。
 
-## File—API
+<img src="images/image-20220221172148978.png" alt="image-20220221172148978" style="zoom: 80%;" />
 
-File对象的API
+```java
+// 相对路径
+File f = new File("C:\\Users\\Joker_Monster\\Desktop\\个人\\租房信息.jpg");
+long size = f.length();//文件字节大小
 
-| 方法名称                            | 说明                                       |
-| ----------------------------------- | ------------------------------------------ |
-| public boolean **isDirectory()**    | 测试此抽象路径名表示的File是否为文件夹     |
-| public boolean **isFile()**         | 测试此抽象路径名表示的File是否为文件       |
-| public boolean **exists()**         | 测试此抽象路径名表示的File是否存在         |
-| public String **getAbsolutePath()** | 返回此抽象路径名的绝对路径名字符串         |
-| public String **getPath()**         | 将此抽象路径名转换为路径名字符串           |
-| public String **getName()**         | 返回由此抽象路径名表示的文件或文件夹的名称 |
-| public long **lastModified()**      | 返回文件最后修改的时间毫秒值               |
+// 相对路径
+File f3 = new File("File-IO/resource/校车表.png");
+System.out.println(f3.length());
+```
 
-**File类创建文件的功能**
+```java
+// 这个可以获取我们当前class文件代码所在的主路径
+System.out.println(System.getProperty("user.dir"));
+```
+
+
+
+## File类API
+
+- **File类的判断文件类型、获取文件信息功能**
+
+| 方法名称                            | 说明                                           |
+| ----------------------------------- | ---------------------------------------------- |
+| public boolean **isDirectory()**    | 测试此文件对象表示的File是否为文件夹           |
+| public boolean **isFile()**         | 测试此文件对象表示的File是否为文件             |
+| public boolean **exists()**         | 测试此文件对象表示的File是否存在               |
+| public String **getAbsolutePath()** | 返回此文件对象的   绝对路径名字符串            |
+| public String **getPath()**         | 返回此文件对象定义时使用的路径                 |
+| public String **getName()**         | 返回由此文件对象表示的文件或文件夹的名称       |
+| public long **lastModified()**      | 返回文件最后修改的时间毫秒值                   |
+| public long **length( )**           | 返回此文件对象的真实字节大小（文件夹没有意义） |
+
+Example:
+
+```java
+long time = f.lastModified();
+System.out.println("该文件最后的修改时间为："+new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(time));
+```
+
+- **File类创建文件的功能**
 
 | 方法名称                            | 说明                 |
 | ----------------------------------- | -------------------- |
@@ -4108,22 +4765,20 @@ File对象的API
 | public boolean **mkdir( )**         | 只能创建一级文件夹   |
 | public boolean **mkdirs( )**        | 可以创建多级文件夹   |
 
-**File类删除文件的功能**
+- **File类删除文件的功能**
 
 | 方法名称                     | 说明                                   |
 | ---------------------------- | -------------------------------------- |
 | public boolean **delete( )** | 删除由此抽象路径名表示的文件或空文件夹 |
 
-- delete方法默认**只能删除文件和空文件夹。**
+delete方法默认只能删除文件和空文件夹并且==不走回收站==
 
-- delete方法**直接删除不走回收站**
+- **遍历File**
 
-## 遍历File
-
-| 方法名称                              | 说明                                                         |
-| ------------------------------------- | ------------------------------------------------------------ |
-| public String[] **list()**            | 获取当前目录下所有的"一级文件名称"到一个字符串数组中去返回。 |
-| public File[] **listFiles()**  (常用) | 获取当前目录下所有的"一级文件对象"到一个文件对象数组中去返回（重点） |
+| 方法名称                       | 说明                                                     |
+| ------------------------------ | -------------------------------------------------------- |
+| public String[ ] **list()**    | 返回一个字符串数组，获取当前目录下所有的"一级文件名称"   |
+| public File[ ] **listFiles()** | 返回一个文件对象数组，获取当前目录下所有的"一级文件对象" |
 
 listFiles方法注意事项：
 
@@ -4133,11 +4788,1311 @@ listFiles方法注意事项：
 
 - 当调用者是一个空文件夹时，返回一个长度为0的数组
 
-- 当调用者是一个有内容的文件夹时，将里面所有文件和文件夹的路径放在File数组中返回
+- 当调用者是一个有内容的文件夹时，将里面所有文件和文件夹的路径放在文件对象数组中返回
 
 - 当调用者是一个有隐藏文件的文件夹时，将里面所有文件和文件夹的路径放在File数组中返回，包含隐藏内容
 
 - 当调用者是一个需要权限才能进入的文件夹时，返回null
+
+# 方法递归
+
+- 方法直接调用自己或者间接调用自己的形式称为方法递归（ recursion）
+- 递归做为一种算法在程序设计语言中广泛应用。
+
+## 文件搜索问题
+
+需求：文件搜索、从C:盘中，搜索出某个文件名称并输出绝对路径。
+
+ ```
+ 西南交通大学学术期刊分级目录.pdf
+ ```
+
+```java
+public class FIleSearch {
+    public static void main(String[] args) {
+      searchFile(new File("F:/"), "covid.test.csv");
+    }
+    /**
+     * 搜索某个文件夹下的全部文件，找到我们想要的文件。
+     * @param dir
+     * @param fileName
+     */
+    public static void searchFile(File dir,String fileName){
+        // 判断dir不是空对象，且是一个文件夹
+        if (dir!=null && dir.isDirectory()){
+            // 获取当前文件夹内所有一级文件对象
+            File[] files = dir.listFiles();
+            // 判断dir不是一个需要权限进行的文件夹，且不是空文件夹
+            if (files!=null && files.length>0){
+                //这个时候，开始遍历dir下的一个文件对象
+                for (File file : files) {
+                    // 当子对象为文件时
+                    if (file.isFile()){
+                        boolean a = file.getName().contains(fileName);
+                        if (a){
+                            System.out.println("您需要查找文件在："+file.getAbsolutePath());
+                            return;
+                        }
+                    }
+                    // 当子对象为文件夹时
+                    else {
+                            searchFile(file,fileName);
+                        }
+                }
+            }
+        }else{
+            System.out.println("你当前搜索的不是文件夹！！！");
+            return;
+        }
+
+    }
+}
+```
+
+## 啤酒问题
+
+需求：啤酒2元1瓶，4个盖子可以换一瓶，2个空瓶可以换一瓶，请问10元钱可以喝多少瓶酒，剩余多少空瓶和盖子。
+
+答案：15瓶 3盖子 1瓶子
+
+核心思想：将手里拿到的盖子和空瓶换算成钱。
+
+```java
+public class RecursionDemo06 {
+
+    // 定义一个静态的成员变量用于存储可以买的酒数量
+    public static int totalNumber; // 总数量
+    public static int lastBottleNumber; // 记录每次剩余的瓶子个数
+    public static int lastCoverNumber; // 记录每次剩余的盖子个数
+
+
+    public static void main(String[] args) {
+        // 1、拿钱买酒
+        buy(10);
+        System.out.println("总数：" + totalNumber);
+        System.out.println("剩余盖子数：" + lastCoverNumber);
+        System.out.println("剩余瓶子数：" + lastBottleNumber);
+    }
+
+    public static void buy(int money){
+        // 2、看可以立马买多少瓶
+        int buyNumber = money / 2; // 5
+        totalNumber += buyNumber;
+
+        // 3、把盖子 和瓶子换算成钱
+        // 统计本轮总的盖子数  和 瓶子数
+        int coverNumber = lastCoverNumber + buyNumber;
+        int bottleNumber = lastBottleNumber + buyNumber;
+
+        // 统计可以换算的钱
+        int allMoney = 0;
+        if(coverNumber >= 4){
+            allMoney += (coverNumber / 4) * 2;
+        }
+        lastCoverNumber = coverNumber % 4;
+
+        if(bottleNumber >= 2){
+            allMoney += (bottleNumber / 2) * 2;
+        }
+        lastBottleNumber = bottleNumber % 2;
+
+        if(allMoney >= 2){
+            buy(allMoney);
+        }
+
+        Integer[] arr2 = new Integer[]{11, 22, 33};
+        Arrays.sort(arr2);
+    }
+}
+```
+
+# 字符集
+
+## **字符集基础知识：**
+
+- 字符（Character）是各种文字和符号的总称，包括各国家文字、标点符号、图形符号、数字等。在java里面专门有一个数据类型表示字符——char
+
+- 计算机底层不可以直接存储字符（char）的。计算机中底层只能存储二进制(0、1)
+- 二进制与十进制是可以相互转换的
+
+<img src="images/image-20220222110558993.png" alt="image-20220222110558993" style="zoom:67%;" />
+
+结论：计算机底层可以表示十进制编号。
+
+计算机可以给人类字符进行编号存储，这套编号规则就是字符集。什么意思呢，解释一下：也就是我们是将各种字符进行十进制编号，然后发给计算机，计算机把他从十进制转换成二进制然后存储下来。这套十进制的字符编号规则叫做字符集。为什么以十进制为标准呢，这也是在于我们人类的认知习惯，因为这个字符集都是人为定制的。
+
+所以说：这几种写法都是表示某一个字符，
+
+```java
+char c = 'a';//c变量代表a字符
+```
+
+## 常见字符集介绍
+
+**byte与char：**
+
+- byte—字节，是基本数据类型中的一个，表示十进制整数，范围是【-128—127】。对应计算机底层是8个二进制位，规定这是计算机的最小存储单位，可以说是8个二进制位，也可以说是字节（byte）
+
+  所有的其他的数据类型，都是以byte为基础的。
+
+- char—字符，例如a，b, #，我，10，....。英文数字符号各国文字
+
+  计算机底层无法存储这些东西，只能存储二进制的数字，所以我们人为设置每一个字符对应一个十进制整数，然后计算机在存储时呢会先拿到字符，他就会根据设置的字符集找到十进制整数，然后把他转换成二进制存储。
+
+  然后！！！这个十进制数不可能说我们有10万个字符，我们就把这10万个字符对应0-100000数字吧，然后计算机再直接底层转换，可以是可以，但是这显得多捞哦，我们计算机的存储单元是啥呢？？？是个位数吗，大哥们，这个0-100000是我们现实世界的规则啊，十进制的。我们现在是在讨论计算机的世界啊，他最小只认字节啊，字节字节字节！！！！我们应该说10万个字符要用多少个字节存储，具体几个字节可以表示多少个字符，通过二进制计算，一个字节，8个二进制位，2^8=256个（这样看出，字节与十进制有着千丝万缕的联系），人为规定表示十进制范围【-128-127】，即一个字节可以表示256个字符，若该字符是由一个字节表示，则他对应的编码在【-128-127】中一个。若一个字符由两个字节表示，则是两个【-128-127】中的数字组成的数组。
+
+  例如：
+
+  ```java
+  'a'——97		//一个字节
+  '我'——[-26, -120, -111]		//三个字节
+  ```
+
+```java
+// 这三个都是表示字符a，byte这里表示a的字符集编码
+char a = 'a';
+byte b = 'a';	//有类型转换
+byte c = '98';
+```
+
+
+
+<img src="images/image-20220223121230976.png" alt="image-20220223121230976" style="zoom:80%;" />
+
+**ASCII字符集：**一个字符：一个字节
+
+- ASCII(American Standard Code for Information Interchange，美国信息交换标准代码)：包括了==英文、数字、符号==（没有中文哦）。
+- ASCII使用1个字节存储一个字符，一个字节是8位（-128—127），总共可以表示128个字符信息**（英文数字都只取正数，其他字符集也是一样的）**用一个字节的原因在于英文数字符号，用一个字节完全够了！！！
+
+<img src="images/image-20220222110704695.png" alt="image-20220222110704695" style="zoom:67%;" />
+
+**GBK：**
+
+- window系统默认的码表。兼容ASCII码表，也包含了几万个汉字，并支持繁体汉字以及部分日韩文字。
+- 英文、数字、符号还是按照ASCII的编码规则，一个字符一个字节，这只是对ASCII的一个补充。
+- 注意：GBK是中国的码表，==一个中文以两个字节表示的形式存储，并且均为负数编码，一个汉字对应两个十进制负数==。但不包含世界上所有国家的文字。（16位）（一起可以表示65536/2=32768个中文，其实已经差不多够了）
+- 我们打印出来看到的都是十进制撒，他只在计算机的底层为二进制表示，而底层我们是看不到的。
+
+**Unicode码表：**      GOOD
+
+-  unicode（又称统一码、万国码、单一码）是计算机科学领域里的一项业界字符编码标准。
+- 容纳世界上大多数国家的所有常见文字和符号。
+- 由于Unicode会先通过UTF-8，UTF-16，以及 UTF-32的编码成二进制后再存储到计算机，其中最为常见的就是UTF-8。
+
+**注意：**
+
+- ==Unicode是万国码，以UTF-8编码后一个中文一般以三个字节的形式存储。==（完全够了，表示中国所有的汉字）
+- UTF-8也要兼容ASCII编码表，统一规范撒，都是对ASCII的扩充。
+- ==技术人员都应该使用UTF-8的字符集编码。==
+- 编码前和编码后的字符集需要一致，否则会出现中文乱码。
+
+<img src="images/image-20220222111454557.png" alt="image-20220222111454557" style="zoom:80%;" />
+
+## 字符集的编码、解码操作
+
+**String编码**
+
+| 方法名称                             | 说明                                                         |
+| ------------------------------------ | ------------------------------------------------------------ |
+| byte[ ] getBytes( )                  | 使用平台的默认字符集将该 String编码为一系列字节，将结果存储到新的字节数组中 |
+| byte[ ] getBytes(String charsetName) | 使用指定的字符集将该 String编码为一系列字节，将结果存储到新的字节数组中 |
+
+**String解码**
+
+| 构造器                                    | 说明                                                        |
+| ----------------------------------------- | ----------------------------------------------------------- |
+| String(byte[ ] bytes)                     | 通过使用平台的默认字符集解码指定的字节数组来构造新的 String |
+| String(byte[ ] bytes, String charsetName) | 通过指定的字符集解码指定的字节数组来构造新的 String         |
+
+```java
+String s = new String("我");
+// 编码
+byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
+System.out.println(Arrays.toString(bytes));
+//解码
+System.out.println(new String(bytes));
+```
+
+<img src="images/image-20220223124337276.png" alt="image-20220223124337276" style="zoom:80%;" />
+
+
+
+# IO流
+
+相对于内存而言的输入、输出流，就是用来读写数据的。
+
+- I表示intput，是数据从硬盘文件读入到内存的过程，称之输入，负责读。
+- O表示output，是内存程序的数据从内存到写出到硬盘文件的过程，称之输出，负责写。
+
+<img src="images/image-20220222114059297.png" alt="image-20220222114059297" style="zoom:67%;" />
+
+## IO流的分类体系
+
+<img src="images/image-20220222114136145.png" alt="image-20220222114136145" style="zoom:80%;" />
+
+<img src="images/image-20220222114557862.png" alt="image-20220222114557862" style="zoom:80%;" />
+
+## 字节流
+
+### 文件字节输入流FileInputStream
+
+==是InputStream的实现类==
+
+以内存为基准，把磁盘文件中的数据以字节的形式读取到内存中去。计算机的最小存储单位为字节byte，由8个二进制位组成，也叫8个bit
+
+| 构造器                                  | 说明                                                         |
+| --------------------------------------- | ------------------------------------------------------------ |
+| public FileInputStream(File file)       | 参数：文件对象。创建字节输入流管道，使与源文件对象接通       |
+| public FileInputStream(String pathName) | 参数：文件的绝对路径或相对路径。创建字节输入流管道，使与源文件路径接通 |
+
+| 方法名称                        | 说明                                               |
+| ------------------------------- | -------------------------------------------------- |
+| public int read()               | 读取一个字节并返回，如果字节已经没有可读的返回-1   |
+| public int read(byte[ ] buffer) | 读取一个字节数组返回，如果字节已经没有可读的返回-1 |
+
+#### 每次读取一个字节
+
+**第一个方法public int read()**
+
+<img src="images/image-20220222203105777.png" alt="image-20220222203105777" style="zoom:67%;" />
+
+==read方法也叫做水滴模型，一次只读一个字节数据返回. 他就只能正确读取英文数字和符号哦，对于中文无法正确读取！！！==
+
+- 性能较慢
+
+- 读取中文字符输出无法避免乱码问题。
+
+```java
+// abc.txt文本内容为 ab12我
+public class FIleInputStream {
+    public static void main(String[] args) throws IOException {
+        InputStream inputStream = new FileInputStream("File-IO\\resource\\abc.txt");
+        //  读取一个字节返回（每次读取一滴水）
+        int b1 = inputStream.read();
+        System.out.println(b1 +""+(char) b1);
+
+        int b2 = inputStream.read();
+        System.out.println(b2 +""+(char) b2);
+
+        int b3 = inputStream.read();
+        System.out.println(b3 +""+(char) b3);
+
+        int b4 = inputStream.read();
+        System.out.println(b4 +""+(char) b4);
+				
+        int b5 = inputStream.read();
+        System.out.println(b5 +""+(char) b5);
+        }
+    }
+}
+```
+
+<img src="images/image-20220222202741362.png" alt="image-20220222202741362" style="zoom:67%;" />
+
+#### 每次读取一个字节数组
+
+**第二个方法public int read(byte[ ] buffer)**
+
+<img src="images/image-20220222203049702.png" alt="image-20220222203049702" style="zoom:67%;" />
+
+==这个方法叫做水桶模型，不再是一滴滴去接==
+
+参数是一个字节数组，输入流会按照字节数组的大小去读取相应个数的字节，然后保存到这个数组里面，返回值为读取了的字节个数。
+
+下面是一次读取三个字节。按照默认的字符集进行编码解码。buffer的原理在于，不断向这个数组里面替换读取的新的字节，把前一次的按照顺序替换。例如下面这个，第一次buffer读取的是abc—[97, 98, 99]，第二次读取的就是，一个汉字爱—[-25, -120, -79]，第三次读取的时候，只剩下两个字节cd，但buffer就会读取后为[99, 100, -79]，只替换了前两个字节信息，第三个还在这里，就导致下面输出了一个乱码。
+
+```java
+文件内容： abc爱cd
+public class FileInputStream2 {
+    public static void main(String[] args) throws Exception {
+        InputStream inputStream = new FileInputStream("File-IO\\resource\\abc.txt");
+      
+        byte[] buffer = new byte[3];//1kb--1024byte
+        int len = inputStream.read(buffer);
+        System.out.println("读取的字节个数："+len);
+        System.out.print(Arrays.toString(buffer));
+        System.out.println(new String(buffer));
+
+        int len1 = inputStream.read(buffer);
+        System.out.println("读取的字节个数："+len1);
+        System.out.print(Arrays.toString(buffer));
+        System.out.println(new String(buffer));
+
+        int len2 = inputStream.read(buffer);
+        System.out.println("读取的字节个数："+len2);
+        System.out.print(Arrays.toString(buffer));
+        System.out.println(new String(buffer));
+    }
+}
+```
+
+![image-20220222205545414](images/image-20220222205545414.png)
+
+#### 一次读完全部字节
+
+1、如何使用字节输入流读取中文内容输出不乱码呢？
+				定义一个与文件一样大的字节数组，一次性读取完文件的全部字节。
+
+2、直接把文件数据全部读取到一个字节数组可以避免乱码，是否存在问题？
+				如果文件过大，字节数组可能引起内存溢出。
+
+官方为字节输入流InputStream提供了如下API可以直接把文件的全部数据读取到一个字节数组中。
+
+| 方法名称                                             | 说明                                                         |
+| ---------------------------------------------------- | ------------------------------------------------------------ |
+| public byte[ ] **readAllBytes()** throws IOException | 直接将当前字节输入流对应的文件对象的字节数据装到一个字节数组返回 |
+
+#### 问题
+
+无论怎么搞，用字节流读取文本数据，肯定会出现乱码问题，特别是对于中文字符，如果要完美解决乱码，就又会引起内存溢出的隐患。所以我们不用字节流进行文本数据的传输。
+
+### 字节输出流FileOuputStream
+
+==是OutputStream的实现类。==
+
+以内存为基准，把内存中的数据以字节的形式写出到磁盘文件中去的流。
+
+管道在进行数据的写出时，存在一个缓存区，所有的即将写入磁盘的数据会先进入这个缓存区。
+
+<img src="images/image-20220222212000840.png" alt="image-20220222212000840" style="zoom:80%;" />
+
+| 构造器                                                       | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| public FileOutputStream(File file)                           | 创建字节输出流管道与源文件对象接通                           |
+| public FileOutputStream(File file，boolean append)           | 创建字节输出流管道与源文件对象接通，可追加数据               |
+| public FileOutputStream(**String filepath**)                 | 创建字节输出流管道与源文件路径接通，默认清空原文件数据       |
+| public FileOutputStream(**String filepath，boolean append**) | 创建字节输出流管道，与源文件路径接通，true表示追加数据（即不清空源文件内容） |
+
+==写数据出去的API==
+
+| 写数据出去的方法名称                                        | 说明                                                     |
+| ----------------------------------------------------------- | -------------------------------------------------------- |
+| public void write( **int a** )                              | 写一个字节出去                                           |
+| public void write( byte[ ] buffer )                         | 写一个字节数组出去                                       |
+| public void write( **byte[ ] buffer , int pos , int len** ) | 写一个字节数组的一部分出去。**这个是读多少倒多少的关键** |
+
+==流的关闭与刷新==
+
+| 方法    | 说明                                                         |
+| ------- | ------------------------------------------------------------ |
+| flush() | 刷新流，还可以继续写数据。在写完数据后一要刷新哦             |
+| close() | 关闭流，释放内存资源，但是在关闭之前会先刷新流。一旦关闭，就不能再写数据 |
+
+> 刷新的作用：将缓存区的所有数据全部写入到磁盘里面，一定要在写完之后调用这个方法，他会在应用进程结束前，先跑完之后刷新。
+
+字节输出流实现写出去的数据能换行
+
+```java
+os.write(“\r\n”.getBytes())
+```
+
+```java
+public class OutputStream1 {
+    public static void main(String[] args) throws Exception {
+        //1.创建时，会先清空之前的数据, append=true参数表示不清空原来数据，直接在后面追加
+//        OutputStream os = new FileOutputStream("File-IO\\resource\\abc.txt");
+        OutputStream os = new FileOutputStream("File-IO\\resource\\abc.txt",true);
+        //2.写一个字节出去
+        os.write('a');
+        os.write(98);
+        os.write("\r\n".getBytes(StandardCharsets.UTF_8));
+        //3.写一个字节数组出去
+        byte[] buffer = {'a','b',99};
+        byte[] buffer2 = "我是中国人".getBytes(StandardCharsets.UTF_8);
+        os.write(buffer);
+        os.write(buffer2);
+        os.write("\r\n".getBytes(StandardCharsets.UTF_8));
+        //4.写一个字节数组的一部分出去
+        byte[] buffer3 = {'a','b',99};
+        os.write(buffer3,0,2);
+        os.write("\r\n".getBytes(StandardCharsets.UTF_8));
+        os.close();
+    }
+}
+```
+
+### 文件拷贝
+
+字节流适合做一切文件数据的拷贝，因为任何文件的底层都是字节，拷贝是一字不漏的转移字节，只要前后文件格式、编码一致没有任何问题。
+
+<img src="images/image-20220223144233322.png" alt="image-20220223144233322" style="zoom:80%;" />
+
+需求：把某个视频复制到其他目录下的“b.avi”
+
+```java
+public class CopyFile {
+    public static void main(String[] args) throws Exception {
+        //1.输入流
+        InputStream is = new FileInputStream("C:\\Users\\Joker_Monster\\Desktop\\AlertRecord接口参数.md");
+        //2.输出流
+        OutputStream os = new FileOutputStream("File-IO\\resource\\copy.md");
+
+        //3.开始copy
+        byte[] buffer = new byte[1024];//1kb
+        int len;//记录每次读取的字节数
+        while((len = is.read(buffer))!=-1){
+            os.write(buffer,0,len);
+        }
+        System.out.println("复制完成");
+        //4. 关闭释放内存资源
+        is.close();
+        os.close();
+    }
+}
+```
+
+## 资源释放的方式
+
+### **try-catch-finally**
+
+finally：在异常处理时提供finally块来执行所有清除操作，比如说IO流中的释放资源
+
+特点：==被finally控制的语句最终一定会执行，除非JVM退出==
+
+异常处理标准格式：try….catch…finally
+
+<img src="images/image-20220223152932960.png" alt="image-20220223152932960" style="zoom:80%;" />
+
+几个细节强调一下：
+
+1. finally代码块内部是无法访问is、os的，所以定义在前面
+2. finally块里面需要判断is、os不为空，再进行关闭。因为怕我的try块里面还没有来得及给is、os赋值，就出现了异常，那完美对is、os的关闭就会出bug
+
+### try-with-resource
+
+1. finally虽然可以用于释放资源，但是释放资源的代码过于繁琐？
+2. 有没有办法简化？
+
+<img src="images/image-20220223153810505.png" alt="image-20220223153810505" style="zoom:80%;" />
+
+一般我们还是用JDK7的方案，好理解逻辑性强
+
+```java
+public class TryCatchResouceDemo2 {
+    public static void main(String[] args) {
+        try (
+// 这里面只能放置资源对象，用完会自动关闭：自动调用资源对象的close方法关闭资源（即使出现异常也会做关闭操作）
+                // 1、创建一个字节输入流管道与原视频接通
+               InputStream is = new FileInputStream("file-io-app/src/out04.txt");
+                // 2、创建一个字节输出流管道与目标文件接通
+               OutputStream os = new FileOutputStream("file-io-app/src/out05.txt");
+
+               // int age = 23; // 这里只能放资源
+                MyConnection connection = new MyConnection(); 
+          								// 最终会自动调用资源的close方法
+                ) {
+
+            // 3、定义一个字节数组转移数据
+            byte[] buffer = new byte[1024];
+            int len; // 记录每次读取的字节数。
+            while ((len = is.read(buffer)) != -1){
+                os.write(buffer, 0 , len);
+            }
+            System.out.println("复制完成了！");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+}
+
+class MyConnection implements AutoCloseable{
+    @Override
+    public void close() throws IOException {
+        System.out.println("连接资源被成功释放了！");
+    }
+}
+```
+
+<img src="images/image-20220223174252917.png" alt="image-20220223174252917" style="zoom:80%;" />
+
+## 字符流
+
+1. 字节流读取中文输出会存在什么问题？
+
+   ​	会乱码。或者内存溢出。
+
+2. 读取中文输出，哪个流更合适，为什么？
+
+   ​	字符流更合适，最小单位是按照单个字符读取的。
+
+### 文件字符输入流
+
+<img src="images/image-20220223180158412.png" alt="image-20220223180158412" style="zoom:80%;" />
+
+以内存为基准，把磁盘文件中的数据以字符的形式读取到内存中去。
+
+| 构造器                             | 说明                               |
+| ---------------------------------- | ---------------------------------- |
+| public FileReader(File file)       | 创建字符输入流管道与源文件对象接通 |
+| public FileReader(String pathname) | 创建字符输入流管道与源文件路径接通 |
+
+| 方法名称                       | 说明                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| public int read()              | 每次读取一个字符返回，如果字符已经没有可读的返回-1           |
+| public int read(char[] buffer) | 每次读取一个字符数组，返回读取的字符个数，如果字符已经没有可读的返回-1 |
+
+#### 每次读取一个字符
+
+| 方法名称          | 说明                                               |
+| ----------------- | -------------------------------------------------- |
+| public int read() | 每次读取一个字符返回，如果字符已经没有可读的返回-1 |
+
+```java
+public class FileReaderdemo1 {
+    public static void main(String[] args) throws Exception {
+        //1.
+        Reader fr = new FileReader("F:\\Java_Project\\JavaSE\\File-IO\\resource\\abc.txt");
+        //2.
+        int code;
+        while ((code=fr.read())!=-1){
+            System.out.print((char) code);
+        }
+    }
+}
+```
+
+> 这里注意：不要输出的时候换行！！！因为文本内容存在换行了，我们直接输出就行了
+
+#### 每次读取一个字符组
+
+<img src="images/image-20220223182718939.png" alt="image-20220223182718939" style="zoom:67%;" />
+
+| 方法名称                       | 说明                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| public int read(char[] buffer) | 每次读取一个字符数组，返回读取的字符数，如果字符已经没有可读的返回-1 |
+
+这个水桶的更新和前面的字节输入流的原理是一样的，我们在进行输出时一定要遵循读多少倒多少的原则，否则就乱套了。
+
+```java
+public class FileReaderdemo1 {
+    public static void main(String[] args) throws Exception {
+        //1.
+        Reader fr = new FileReader("F:\\Java_Project\\JavaSE\\File-IO\\resource\\abc.txt");
+      	//2.准备水桶
+        char[] buffer = new char[10];
+        int len;
+        while ((len = fr.read(buffer))!=-1){
+          // 读多少倒多少
+          	String s = new String(buffer, 0, len);
+            System.out.print(s);
+        }
+    }
+}
+```
+
+### 文件字符输出流
+
+<img src="images/image-20220224185820940.png" alt="image-20220224185820940" style="zoom:67%;" />
+
+以内存为基准，把内存中的数据以字符的形式写出到磁盘文件中去的流。
+
+| 构造器                                                 | 说明                                           |
+| ------------------------------------------------------ | ---------------------------------------------- |
+| public FileWriter(File file)                           | 创建字符输出流管道与源文件对象接通             |
+| public FileWriter(File file，boolean append)           | 创建字符输出流管道与源文件对象接通，可追加数据 |
+| public FileWriter(**String filepath**)                 | 创建字符输出流管道与源文件路径接通             |
+| public FileWriter(**String filepath，boolean append**) | 创建字符输出流管道与源文件路径接通，可追加数据 |
+
+文件字符输出流（FileWriter）写数据出去的API
+
+| 方法名称                                  | 说明                 |
+| ----------------------------------------- | -------------------- |
+| void write(int c)                         | 写一个字符           |
+| void write(char[] cbuf)                   | 写入一个字符数组     |
+| void write(char[] cbuf, int off, int len) | 写入字符数组的一部分 |
+| void write(String str)                    | 写一个字符串         |
+| void write(String str, int off, int len)  | 写一个字符串的一部分 |
+| void write(int c)                         | 写一个字符           |
+
+流的关闭与刷新 
+
+| 方法    | 说明                                                         |
+| ------- | ------------------------------------------------------------ |
+| flush() | 刷新流，还可以继续写数据                                     |
+| close() | 关闭流，释放资源，但是在关闭之前会先刷新流。一旦关闭，就不能再写数据 |
+
+字符输出流实现写出去的数据能换行
+
+```java
+fw.write(“\r\n”);
+```
+
+```java
+public class FileWriterdemo1 {
+    public static void main(String[] args) throws IOException {
+        Writer fw = new FileWriter("F:\\Java_Project\\JavaSE\\File-IO\\resource\\abc.txt");
+        fw.write(98);
+        fw.write("\r\n");
+        fw.write("abcdefgh");
+        fw.write("\r\n");
+        fw.write(new char[]{'我','是'});
+        fw.write("\r\n");
+        fw.close();
+    }
+}
+```
+
+# IO流进阶
+
+<img src="images/image-20220224191212066.png" alt="image-20220224191212066" style="zoom:80%;" />
+
+## 缓冲流
+
+缓冲流也称为高效流、或者高级流。之前学习的字节流可以称为原始流。
+
+==作用：缓冲流自带缓冲区、可以提高原始字节流、字符流读写数据的性能==
+
+他们之间的效率对比如下：我们程序中读取的数据都是从内存里面，而不是磁盘，要明白内存的读取速度远远大于磁盘。
+
+<img src="images/image-20220224191538980.png" alt="image-20220224191538980" style="zoom:80%;" />
+
+
+
+<img src="images/image-20220224191553427.png" alt="image-20220224191553427" style="zoom:80%;" />
+
+==缓冲流的体系如下，就是在前面的原始流的基础上进行增强！！！都是对同一个接口进行实现。==
+
+<img src="images/image-20220224191716474.png" alt="image-20220224191716474" style="zoom:80%;" />
+
+### 字节缓冲流
+
+字节缓冲流性能优化原理：
+
+- 字节缓冲输入流、输出流均自带了默认8KB缓冲池，以后我们直接从缓冲池读取数据，以及直接写数据到缓冲池，所以性能较好。这个8kb的缓冲池类似于我们之前写的一个这个水桶，字节数组！！！
+
+==字节缓冲输入流：BufferedInputStream，字节缓冲输出流：BufferedOutputStream，==
+
+都只是提高字节输出流读取数据的性能，读写功能上并无变化，因为和前面的原始流都是实现的同一个接口。
+
+==注意需要先定义出来原始流，然后再将他包装一下成为高级流==
+
+| 构造器                                              | 说明                                                         |
+| --------------------------------------------------- | ------------------------------------------------------------ |
+| public **BufferedInputStream** ( InputStream is )   | 可以把低级的字节输入流包装成一个高级的缓冲字节输入流管道，从而提高字节输入流读数据的性能 |
+| public **BufferedOutputStream** ( OutputStream os ) | 可以把低级的字节输出流包装成一个高级的缓冲字节输出流，从而提高写数据的性能 |
+
+这里采用了JDK7关闭管道资源的写法，不用手动关闭。
+
+```java
+//1.包装缓冲输入流
+InputStream is = new FileInputStream("C:\\Users\\Joker_Monster\\Desktop\\AlertRecord接口参数.md");
+InputStream bufferIs = new BufferedInputStream(is);
+//2.包装缓冲输出流
+OutputStream os = new FileOutputStream("File-IO\\resource\\copy.md");
+OutputStream bufferos = new BufferedOutputStream(os);
+```
+
+重写文件复制的例子：
+
+```java
+public class BufferDemo {
+    public static void main(String[] args) throws Exception {
+        try (
+                //1.包装缓冲输入流
+                InputStream is = new FileInputStream("C:\\Users\\Joker_Monster\\Desktop\\AlertRecord接口参数.md");
+                InputStream bufferIs = new BufferedInputStream(is);
+                //2.包装缓冲输出流
+                OutputStream os = new FileOutputStream("File-IO\\resource\\copy.md");
+                OutputStream bufferos = new BufferedOutputStream(os);
+        ) {
+            //3.开始copy
+            byte[] buffer = new byte[1024];//1kb
+            int len;//记录每次读取的字节数
+            while ((len = bufferIs.read(buffer)) != -1) {
+                bufferos.write(buffer, 0, len);
+            }
+            System.out.println("复制完成");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### 字节缓冲流的性能分析
+
+==建议使用字节缓冲输入流、字节缓冲输出流，结合字节数组的方式，目前来看是性能最优的组合。==
+
+我们通过一个例子观察性能情况：分别使用低级字节流和高级字节缓冲流拷贝大视频，记录耗时。
+
+采用四种方式完成复制：
+
+- 使用低级的字节流按照一个一个字节的形式复制文件。
+- 使用低级的字节流按照一个一个字节数组的形式复制文件。
+- 使用高级的缓冲字节流按照一个一个字节的形式复制文件。
+- 使用高级的缓冲字节流按照一个一个字节数组的形式复制文件。
+
+```java
+public class BufferTimeDemo {
+    private static final String SRC_FILE = "F:\\视频剪辑\\3.mp4";
+    private static final String TARGET_FILE = "File-IO\\resource\\";
+
+    public static void main(String[] args) {
+//        copy();//224s
+//        bufferCopy();//0.319s
+//        copy2();//0.296s
+//        bufferCopy2();//0.062s
+    }
+
+    /**
+     * 原始流一个个字节复制
+     */
+    public static void copy(){
+        long startTime = System.currentTimeMillis();
+        try(
+                InputStream is = new FileInputStream(SRC_FILE);
+                OutputStream os = new FileOutputStream(TARGET_FILE+"copy.mp4");
+                ){
+            int read;
+            while ((read = is.read())!=-1){
+                os.write(read);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("copy花费了："+(startTime-endTime)/1000+"s");
+    }
+
+    /**
+     * 缓冲流一个个字节复制
+     */
+    public static void bufferCopy(){
+        long startTime = System.currentTimeMillis();
+        try (
+                InputStream is = new FileInputStream(SRC_FILE);
+                InputStream bufferIs = new BufferedInputStream(is);
+                OutputStream os = new FileOutputStream(TARGET_FILE+"bufferCopy.mp4");
+                OutputStream bufferOS = new BufferedOutputStream(os);
+        ){
+            int read;
+            while ((read = bufferIs.read())!=-1){
+                bufferOS.write(read);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("bufferCopy花费了："+(startTime-endTime)/1000.0+"s");
+
+
+    }
+
+    /**
+     * 原始流按字节数组复制
+     */
+    public static void copy2(){
+        long startTime = System.currentTimeMillis();
+        try (
+                InputStream is = new FileInputStream(SRC_FILE);
+                OutputStream os = new FileOutputStream(TARGET_FILE+"copy2.mp4");
+        ){
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = is.read(buffer))!=-1){
+                os.write(buffer,0,len);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("copy2花费了："+(startTime-endTime)/1000.0+"s");
+    }
+
+    /**
+     * 高级流按字节数组复制
+     */
+    public static void bufferCopy2(){
+        long startTime = System.currentTimeMillis();
+        try (
+                InputStream is = new FileInputStream(SRC_FILE);
+                InputStream bufferIs = new BufferedInputStream(is);
+                OutputStream os = new FileOutputStream(TARGET_FILE+"bufferCopy2.mp4");
+                OutputStream bufferOS = new BufferedOutputStream(os);
+        ){
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = bufferIs.read(buffer))!=-1){
+                bufferOS.write(buffer,0,len);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("bufferCopy2花费了："+(startTime-endTime)/1000.0+"s");
+    }
+}
+```
+
+### 字符缓冲流
+
+与前面的字节缓冲流是一样的用法，先要构建出原始流，然后进行包装。
+
+#### BufferedReader
+
+**字符缓冲输入流：BufferedReader。**
+
+作用：提高字符输入流读取数据的性能，除此之外多了按照行读取数据的功能。
+
+> ==注意哦，因为BufferedReader实现类多了一个新的功能，所以说不能用多态的写法！！==
+
+| 构造器                          | 说明                                                         |
+| ------------------------------- | ------------------------------------------------------------ |
+| public BufferedReader(Reader r) | 可以把低级的字符输入流包装成一个高级的缓冲字符输入流管道，从而提高字符输入流读数据的性能 |
+
+==字符缓冲输入流新增功能==
+
+| 方法                          | 说明                                                 |
+| ----------------------------- | ---------------------------------------------------- |
+| public String **readLine( )** | 读取一行数据返回，如果读取没有完毕，无行可读返回null |
+
+注意这里是返回的一个字符串，并不会读取到换行符，所以我们需要自己换行。
+
+```java
+public class BufferReaderDemo {
+
+    public static void main(String[] args) {
+        try (
+                Reader fr = new FileReader("F:\\Java_Project\\JavaSE\\File-IO\\resource\\abc.txt");
+                BufferedReader bufferReader = new BufferedReader(fr);
+        ){
+            String line;
+            while (( line= bufferReader.readLine())!=null){
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+####BufferedWriter
+
+**字符缓冲输出流：BufferedWriter。**
+
+ 作用：提高字符输出流写取数据的性能，除此之外多了换行功能。
+
+==注意哦，因为BufferedWriter实现类多了一个新的功能，所以说不能用多态的写法！！==
+
+| 构造器                          | 说明                                                         |
+| ------------------------------- | ------------------------------------------------------------ |
+| public BufferedWriter(Writer w) | 可以把低级的字符输出流包装成一个高级的缓冲字符输出流管道，从而提高字符输出流写数据的性能 |
+
+==字符缓冲输出流新增换行功能==
+
+| 方法                  | 说明     |
+| --------------------- | -------- |
+| public void newLine() | 换行操作 |
+
+```java
+public class BufferedWriterDemo {
+    public static void main(String[] args) {
+        try (
+                Writer fw = new FileWriter("File-IO\\resource\\abc.txt");
+                BufferedWriter bufferedWriter = new BufferedWriter(fw);
+        ) {
+            bufferedWriter.write(98);
+            bufferedWriter.newLine();
+            bufferedWriter.write("iuwekhasdjah");
+            bufferedWriter.newLine();
+            bufferedWriter.write(new char[]{'我', '是'});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+#### 案例（比较器的灵活使用）
+
+把《出师表》的文章顺序进行恢复到一个新文件中。
+
+原来顺序：
+
+<img src="images/image-20220225114630749.png" alt="image-20220225114630749" style="zoom:80%;" />
+
+```java
+public class BufferedCharTest {
+    public static void main(String[] args) {
+        try (
+                BufferedReader br = new BufferedReader(new FileReader("F:\\Java_Project\\JavaSE\\File-IO\\resource\\csb.txt"));
+                BufferedWriter bw = new BufferedWriter(new FileWriter("F:\\Java_Project\\JavaSE\\File-IO\\resource\\new.txt"));
+                ) {
+            //1.定义存放每一行文字的集合
+            List<String> data = new ArrayList<>();
+            //2.按照行读取，存放到集合中
+            String line;
+            while ((line = br.readLine())!=null){
+                data.add(line);
+            }
+            //3.自定义排序规则
+            List<String> sizes = new ArrayList<>();
+            Collections.addAll(sizes, "一","二","三","四","五","陆","柒","八","九","十","十一");
+            // 其中每个索引在集合中的位置代表了他的大小！！
+
+            Collections.sort(data, new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    return sizes.indexOf(o1.substring(0,o1.indexOf(".")))
+                            -sizes.indexOf(o2.substring(0,o2.indexOf(".")));
+                }
+            });
+            System.out.println(data);
+            for (String datum : data) {
+                bw.write(datum);
+                bw.newLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+```
+
+## 转换流
+
+前面讲过：==字符流直接读取文本内容==，文件编码和读取的编码必须一致才不会乱码！！！
+
+我们的代码基本上都是UTF-8的，但文本内容就不一定，也可能是其他编码，这样直接采用Reader流进行读取就有问题。
+
+==转换流就是用来解决这个问题的，在代码字符集与文本字符集不一致时，正确读取文本内容到内存==
+
+![image-20220225160723965](images/image-20220225160723965.png)
+
+### 字符输入转换流
+
+字符输入转换流：**InputStreamReader**，可以把原始的字节流按照指定编码转换成字符输入流。
+
+| 构造器                                                       | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| public InputStreamReader(InputStream is)                     | 可以把原始的字节流按照代码默认编码转换成字符输入流。几乎不用，与默认的FileReader一样。 |
+| public InputStreamReader(**InputStream is ，String charset)** | 可以把原始的字节流按照指定编码转换成字符输入流，这样字符流中的字符就不乱码了 |
+
+> 注意哦：这个字符输入转换流的参数是字节输入流
+
+首先这个原始字节流大家都是一样的，不管什么编码什么玩意的，同一个文件读取进来就是相同的。然后情形是这样的，我有一个GBK编码的文本文件txt，我需要把他读进来，而IDEA默认字符集是UTF-8的。我们先拿到文件的原始字节流InputStream，然后用InputStreamReader指定编码格式为GBK，他就会以指定的GBK编码转换成字符输入流 。
+
+这样我们读取到内存中的数据就没有乱码，对不对！！！**记住一句话，只要读取进来不乱码，后面怎么折腾都不会乱码！！**，虽然我们按照GBK读取的，但我们后面使用IDEA进行输出啊什么的，都是用UTF-8，没有任何问题。
+
+```java
+public class BufferReaderDemo {
+    public static void main(String[] args) {
+        try (
+                InputStream is = new FileInputStream("C:\\Users\\Joker_Monster\\Desktop\\学习资料\\JavaSE资料\\day20、IO流二\\代码\\io-app2\\src\\csb.txt");
+                Reader reader = new InputStreamReader(is,"GBK");
+                BufferedReader bufferReader = new BufferedReader(reader);
+        ){
+            String line;
+            while (( line= bufferReader.readLine())!=null){
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### 字符输出转换流
+
+解决问题：将写出去的字符按照指定编码格式。
+
+前面说过一种方式：把字符以指定编码获取字节后再使用字节输出流写出去：“我爱你中国”.getBytes(编码)，太麻烦不好用！
+
+**OutputStreamWriter**，可以把字节输出流按照指定编码转换成字符输出流
+
+| 构造器                                                       | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| public OutputStreamWriter(OutputStream os)                   | 可以把原始的字节输出流按照代码默认编码转换成字符输出流。几乎不用。 |
+| public OutputStreamWriter**(OutputStream os，String charset)** | 可以把原始的字节输出流按照指定编码转换成字符输出流(重点)     |
+
+> 注意哦：这个字符输出转换流的参数是字节输出流
+
+```java
+public class OutputStreamWriterd {
+    public static void main(String[] args) {
+        try (
+                OutputStream os = new FileOutputStream("File-IO\\resource\\abc.txt");
+                Writer osw = new OutputStreamWriter(os, "GBK");
+                BufferedWriter bw = new BufferedWriter(osw);
+        ) {
+            bw.write("我是中国人！！！");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+## 序列化对象
+
+序列化对象：实现了序列化接口的对象
+
+```java
+public class Student implements Serializable {
+  	// 申明序列化的版本号码
+    // 序列化的版本号与反序列化的版本号必须一致才不会出错！
+    private static final long serialVersionUID = 1;
+  
+    private String name;
+    private String loginName;
+ //	transient修饰的成员变量不参与序列化,用于敏感信息，因为写入文件的东西有被盗风险
+    private transient String passWord;
+    private int age;
+  	.............
+}
+```
+
+接下来的两个流用到的两个实现类如下，都是字节流下的
+
+<img src="images/image-20220225170450491.png" alt="image-20220225170450491" style="zoom:80%;" />
+
+### 对象序列化
+
+作用：以内存为基准，把内存中的对象存储到磁盘文件中去，称为对象序列化。
+
+使用到的流是对象字节输出流：ObjectOutputStream
+
+![image-20220225170416734](images/image-20220225170416734.png)
+
+| 构造器                                          | 说明                                       |
+| ----------------------------------------------- | ------------------------------------------ |
+| public ObjectOutputStream(**OutputStream out**) | 把低级字节输出流包装成高级的对象字节输出流 |
+
+| 方法名称                                      | 说明                                 |
+| --------------------------------------------- | ------------------------------------ |
+| public final void writeObject(**Object obj)** | 把对象写出去到对象序列化流的文件中去 |
+
+==而这个可以被写出的对象必须实现序列化接口==——这种对象被称为序列化对象
+
+```java
+public class Serializable {
+    public static void main(String[] args) {
+        try (
+                //2.
+                ObjectOutputStream objectOutputStream =
+                        new ObjectOutputStream(new FileOutputStream("File-IO\\resource\\abc.txt"));
+        ) {
+            //1.
+            Student student = new Student("陈磊", "chenlei", "123", 22);
+
+            //3.
+            objectOutputStream.writeObject(student);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+然后我们打开文件，发现好像是乱码？？？
+
+![image-20220225172131545](images/image-20220225172131545.png)
+
+其实不是乱码，你看我们自己写的文字都显示出来了，而是这个写出的内容不是给我们看的，是给计算机的，方便以后可以从里面拿取序列化对象数据。
+
+### 对象反序列化
+
+**ObjectInputStream**，以内存为基准，把存储到磁盘文件中去的对象数据恢复成内存中的对象，称为对象反序列化。
+
+<img src="images/image-20220225172334336.png" alt="image-20220225172334336" style="zoom:80%;" />
+
+| 构造器                                    | 说明                                       |
+| ----------------------------------------- | ------------------------------------------ |
+| public ObjectInputStream(InputStream out) | 把低级字节输如流包装成高级的对象字节输入流 |
+
+| 方法名称                        | 说明                                                   |
+| ------------------------------- | ------------------------------------------------------ |
+| public Object **readObject( )** | 把存储到磁盘文件中去的对象数据恢复成内存中的对象返回。 |
+
+```java
+public class Serializable {
+    public static void main(String[] args) {
+        try (
+            ObjectInputStream objectInputStream =
+                        new ObjectInputStream(new FileInputStream("File-IO\\resource\\abc.txt"))
+        ) {
+            Student s = (Student) objectInputStream.readObject();
+            System.out.println(s);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+## 打印流
+
+作用：打印流可以实现方便、高效的打印数据到文件中去。打印流一般是指：PrintStream，PrintWriter两个类。
+
+可以实现打印什么数据就是什么数据，例如打印整数97写出去就是97，打印boolean的true，写出去就是true。
+
+<img src="images/image-20220225195830762.png" alt="image-20220225195830762" style="zoom:80%;" />
+
+**PrintStream和PrintWriter的区别：**
+
+- 打印数据功能上是一模一样的，都是使用方便，性能高效（核心优势）
+- PrintStream继承自字节输出流OutputStream，支持写字节数据write()的方法。基本不用，
+- PrintWriter继承自字符输出流Writer，支持写字符数据write()出去。基本不用
+
+### PrintStream
+
+超级多的构造器，满足你的一切打印需求。还有很多在参考文档里面。==但没有设置追加的构造器，如果要实现追加，需要对低级流进行包装即可==
+
+```java
+PrintStream ps = new PrintStream(new FileOutputStream("File-IO\\resource\\abc.txt",true));
+```
+
+| 构造器                                                   | 说明                                     |
+| -------------------------------------------------------- | ---------------------------------------- |
+| public PrintStream(OutputStream os)                      | 打印流直接通向字节输出流管道             |
+| public PrintStream(File f)                               | 打印流直接通向文件对象                   |
+| public PrintStream**(String fileName, Charset charset)** | 打印流直接通向文件路径，可以指定编码格式 |
+
+| 方法                      | 说明                   |
+| ------------------------- | ---------------------- |
+| public void print(Xxx xx) | 打印任意类型的数据出去 |
+
+```java
+public class PrintStreamdemo {
+    public static void main(String[] args) {
+        try(
+                PrintStream ps = new PrintStream("File-IO\\resource\\abc.txt");
+          // 实现追加数据
+								PrintStream ps = new PrintStream(new FileOutputStream("File-IO\\resource\\abc.txt",true));
+        ) {
+            ps.println(9898);
+            ps.println("我是中国人");
+            ps.println(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### PrintWriter
+
+超级多的构造器，满足你的一切打印需求。还有很多在参考文档里面。==但没有设置追加的构造器，如果要实现追加，需要对低级流进行包装即可==
+
+| 构造器                               | 说明                         |
+| ------------------------------------ | ---------------------------- |
+| public PrintWriter(OutputStream os)  | 打印流直接通向字节输出流管道 |
+| public PrintWriter (Writer w)        | 打印流直接通向字符输出流管道 |
+| public PrintWriter (File f)          | 打印流直接通向文件对象       |
+| public PrintWriter (String filepath) | 打印流直接通向文件路径       |
+
+| 方法                      | 说明                   |
+| ------------------------- | ---------------------- |
+| public void print(Xxx xx) | 打印任意类型的数据出去 |
+
+### 输出语句重新定向
+
+属于打印流的一种应用，可以把输出语句的打印位置从控制台改到文件。
+
+卧槽，原来我们之间写的`System.out.println();`一直都是打印流，只是系统打印流打印的东西默认放在控制台，并且我们可以人为改变输出位置。6666666
+
+```java
+public class PrintDemo2 {
+    public static void main(String[] args) throws Exception {
+        System.out.println("锦瑟无端五十弦");
+        System.out.println("一弦一柱思华年");
+
+        // 改变输出语句的位置（重定向）
+        PrintStream ps = new PrintStream("io-app2/src/log.txt");
+        System.setOut(ps); // 把系统打印流改成我们自己的打印流
+
+        System.out.println("庄生晓梦迷蝴蝶");
+        System.out.println("望帝春心托杜鹃");
+    }
+}
+```
+
+## 补充知识：Properties
+
+不属于IO流的东西，但需要结合IO流。他是一个MAP集合，omg。但注意key：value都是字符串。
+
+<img src="images/image-20220225204701220.png" alt="image-20220225204701220" style="zoom:67%;" />、
+
+**Properties属性集对象**
+
+- 其实就是一个Map集合，但是我们一般不会当集合使用，因为HashMap更好用。
+
+**Properties核心作用：**
+
+- Properties代表的是一个属性文件，可以把自己对象中的键值对信息存入到一个属性文件中去。
+- 属性文件：后缀是.properties结尾的文件,里面的内容都是 key=value，后续做系统配置信息的。
+
+```
+大家在后期学的很多大型框架技术中，属性文件都是很重要的系统配置文件。
+```
+
+我们需要掌握的两点就是：一、如何往配置文件里面写数据；二、如何从配置文件中读取数据。
+
+Properties和IO流结合的方法：
+
+| 方法                                                    | 说明                                                         |
+| ------------------------------------------------------- | ------------------------------------------------------------ |
+| void load(InputStream inStream)                         | 从输入字节流读取属性列表（键和元素对）                       |
+| **void load(Reader reader)**                            | 从输入字符流读取属性列表（键和元素对）                       |
+| **void store(OutputStream out, String comments)**       | 将此属性列表（键和元素对）写入此 Properties表中，以适合于使用 load(InputStream)方法的格式写入输出字节流 |
+| void store(Writer writer, String comments)              | 将此属性列表（键和元素对）写入此 Properties表中，以适合使用 load(Reader)方法的格式写入输出字符流 |
+| **public Object setProperty(String key, String value)** | 保存键值对（put）                                            |
+| **public String getProperty(String key)**               | 使用此属性列表中指定的键搜索属性值 (get)                     |
+| public Set<String> stringPropertyNames()                | 所有键的名称的集合 (keySet())                                |
+
+```java
+public class PropertiesDemo01 {
+    public static void main(String[] args) throws Exception {
+        // 需求：使用Properties把键值对信息存入到属性文件中去。
+        Properties properties = new Properties();
+        properties.setProperty("admin", "123456");
+        properties.setProperty("dlei", "003197");
+        properties.setProperty("heima", "itcast");
+        System.out.println(properties);
+
+        /**
+           参数一：保存管道 字符输出流管道
+           参数二：保存心得
+         */
+        properties.store(new FileWriter("io-app2/src/users.properties"), "this is users!! i am very happy!");
+    }
+}
+```
+
+```java
+public class PropertiesDemo02 {
+    public static void main(String[] args) throws Exception {
+        // 需求：Properties读取属性文件中的键值对信息。（读取）
+        Properties properties = new Properties();
+        System.out.println(properties);
+
+        // 加载属性文件中的键值对数据到属性对象properties中去
+        properties.load(new FileReader("io-app2/src/users.properties"));
+
+        System.out.println(properties);
+        String rs = properties.getProperty("dlei");
+        System.out.println(rs);
+        String rs1 = properties.getProperty("admin");
+        System.out.println(rs1);
+    }
+}
+```
+
+## 补充知识：IO框架
+
+- commons-io是apache开源基金组织提供的一组有关IO操作的类库，可以提高IO功能开发的效率。
+- commons-io工具包提供了很多有关io操作的类。有两个主要的类FileUtils, IOUtils
+
+FileUtils主要有如下方法:
+
+| 方法名                                                   | 说明                         |
+| -------------------------------------------------------- | ---------------------------- |
+| String readFileToString(File file, String encoding)      | 读取文件中的数据, 返回字符串 |
+| void copyFile(File srcFile, File destFile)               | 复制文件。                   |
+| void copyDirectoryToDirectory(File srcDir, File destDir) | 复制文件夹。                 |
+
+
 
 # 线程
 
@@ -7072,3 +9027,39 @@ public class DecoratorPattern {
 }
 ```
 
+# lombok
+
+作用：优雅编程。自动生成实体类中的常用方法。
+
+使用方式：一个插件+一个依赖
+
+插件：<img src="images/image-20220302111752057.png" alt="image-20220302111752057" style="zoom:80%;" />
+
+依赖：
+
+这里配置provided的原因在最下面写了
+
+```xml
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.20</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+然后在我们写好的实体类上加@Data注解。
+
+<img src="images/image-20220302111923293.png" alt="image-20220302111923293" style="zoom:80%;" />
+
+ALT + 7查看类中的成员属性（变量+方法）
+
+<img src="images/image-20220302112140513.png" alt="image-20220302112140513" style="zoom:80%;" />
+
+==为什么配置<scope>provided</scope>==
+
+我们点击进去看一下这个Data注解，
+
+<img src="images/image-20220302112520080.png" alt="image-20220302112520080" style="zoom:80%;" />
+
+这一行表明了该注解的有效范围，是在源码有效的，也就是说当源码变成字节码文件，发给别人或者服务器上时注解就失效了。但是他在源码已经给我们写好了所有方法，变成字节码文件的时候已经添上了的。所以说配置成provided，因为在字节码文件时已经无该注解，这样可以避免服务器依赖冲突。
